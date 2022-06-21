@@ -1,7 +1,7 @@
 import "./index.css";
 // import Alert from "@mui/material/Alert";
 import BackgroundImage from "../../../images/login.png";
-import useWindowSize from "../../../Hooks/useWindowSize";
+import useWindowSize from "../../../hooks/useWindowSize";
 // import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { FACEBOOK_AUTH_URL, GOOGLE_AUTH_URL } from "../../../constants";
@@ -9,7 +9,7 @@ import { FACEBOOK_AUTH_URL, GOOGLE_AUTH_URL } from "../../../constants";
 import { useState } from "react";
 import fbLogo from "../../../images/fb-logo.png";
 import googleLogo from "../../../images/google-logo.png";
-
+import { Divider } from "@mui/material";
 function SigninComponent(props) {
   const [Email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,7 +39,7 @@ function SigninComponent(props) {
     return (
       <form
         // onSubmit={handleSubmit}
-        className="col signin-form"
+        className="col-5 signin-form"
         autocomplete="on"
       >
         <h4 id="title">הרשמה</h4>
@@ -81,6 +81,8 @@ function SigninComponent(props) {
         <div className="need-acc-txt">
           כבר יש לך חשבון? <a href="/authorization/login">להתחברות</a>
         </div>
+        <Divider sx={{marginBottom:2}}>או</Divider>
+
         <SocialLogin />
       </form>
     );
@@ -90,7 +92,7 @@ function SigninComponent(props) {
     <div id="SignIncontainer">
       <div id="SignIn">
         {size.width > 768 && (
-          <div className="col login-background-container">
+          <div className="col-7 login-background-container">
             <img src={BackgroundImage} className="login-background" alt="" />
           </div>
         )}

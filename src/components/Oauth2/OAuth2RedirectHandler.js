@@ -14,7 +14,7 @@ function OAuth2RedirectHandler(props) {
     return (
       <Navigate
         to={{
-          pathname: "/authorization/profile",
+          pathname: "/dashboard",
           state: { from: props.location },
         }}
       />

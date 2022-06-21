@@ -6,3 +6,6 @@
   direction: rtl;
 }
 
+#root {
+  height: 100%;
+}

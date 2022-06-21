@@ -1,0 +1,51 @@
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    overflow:hidden;
+    max-height: 100vh;
+}
+.dashboard-header {
+    min-height: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2%;
+}
+.sidemenu-container {
+    padding-right: 2%;
+}
+
+.main {
+    padding: 0% 1% 0% 2%;
+}
+
+.main>.main-container {
+    width: 100%;
+    height: 100%;
+    background-color: rgb(213, 233, 255);
+    border-radius: 20px;
+
+}
+.main-section {
+    min-height: 100vh;
+}
+
+.main-title {
+    text-align: left;
+    margin: 1% 2%;
+}
+.dashboard-container a {
+    text-decoration: none;
+}
+
+.css-tlelie-MuiListItemText-root {
+    text-align: start !important;
+}
+
+.css-16ac5r2-MuiButtonBase-root-MuiListItemButton-root, .css-i7rae6-MuiList-root {
+    direction: rtl;
+}
+.css-16ac5r2-MuiButtonBase-root-MuiListItemButton-root {
+    border-radius: 8px !important;
+}

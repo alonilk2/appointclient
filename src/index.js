@@ -1,31 +1,54 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import App from "./App";
-import Signin from "./views/Signin";
-import Profile from "./components/Authentication/profile/Profile";
-import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Dashboard from "./components/Dashboard";
 import OAuth2RedirectHandler from "./components/Oauth2/OAuth2RedirectHandler";
-import Signup from './views/Signup';
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
+import Signin from "./views/Signin";
+import Signup from "./views/Signup";
+import useAuth from "./hooks/useAuth";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <React.StrictMode>
+
+const CustomRoutes = () => {
+  const auth = useAuth();
+  const PrivateRoute = ({ auth: isAuthenticated, children }) => {
+    console.log(isAuthenticated)
+    return isAuthenticated ? children : <Navigate to="/authorization/login" />;
+  };
+  return (
     <BrowserRouter>
       <Routes>
         <Route path="/">
           <Route index element={<App />} />
           <Route path="authorization">
             <Route path="oauth2">
-              <Route path="redirect" element={<OAuth2RedirectHandler />}></Route>
+              <Route
+                path="redirect"
+                element={<OAuth2RedirectHandler />}
+              ></Route>
             </Route>
             <Route path="login" element={<Signin />} />
             <Route path="signup" element={<Signup />} />
-            <Route path="profile" element={<Profile />} />
           </Route>
+          <Route
+            path="dashboard"
+            element={
+              <PrivateRoute auth={auth}>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
         </Route>
       </Routes>
     </BrowserRouter>
+  );
+};
+root.render(
+  <React.StrictMode>
+    <CustomRoutes />
   </React.StrictMode>
 );
 

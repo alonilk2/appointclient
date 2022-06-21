@@ -138,8 +138,10 @@
     border-radius: 8px !important;
     background-color: #0f6af9;
 }
+.login-background {
+    width: 100%;
+}
 .login-background-container {
-    width: 50%;
     overflow: hidden;
 }
 .need-acc-txt {
@@ -176,13 +178,15 @@ input {
 }
 .signin-form {
     margin: auto;
-    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 2% 8%;
-    max-width: 50%;
+    width: 100%;
+}
+.signin-form>div {
+    width: 100%;
 }
 .signin-form h5 {
     font-weight: 400;
@@ -214,7 +218,6 @@ input {
     }
     .signin-form {
         margin: auto;
-        width: 40%;
         display: flex;
         flex-direction: column;
         justify-content: center;
