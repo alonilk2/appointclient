@@ -3,9 +3,11 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import Signin from "./views/Signin";
+import Profile from "./components/Authentication/profile/Profile";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import OAuth2RedirectHandler from "./components/Oauth2/OAuth2RedirectHandler";
+import Signup from './views/Signup';
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
@@ -14,7 +16,12 @@ root.render(
         <Route path="/">
           <Route index element={<App />} />
           <Route path="authorization">
+            <Route path="oauth2">
+              <Route path="redirect" element={<OAuth2RedirectHandler />}></Route>
+            </Route>
             <Route path="login" element={<Signin />} />
+            <Route path="signup" element={<Signup />} />
+            <Route path="profile" element={<Profile />} />
           </Route>
         </Route>
       </Routes>

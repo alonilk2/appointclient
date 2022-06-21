@@ -1,25 +1,23 @@
 import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import NavDropdown from "react-bootstrap/NavDropdown";
 import "./index.css";
 
-export default function NavigationBar() {
+export default function NavigationBar(props) {
   return (
     <Navbar collapseOnSelect expand="lg">
       <Container>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav.Link href="#features">המוצר שלנו</Nav.Link>
-          <Nav.Link href="#pricing">מחירים</Nav.Link>
-          <h1 href="#home" className="main-title">APPoint</h1>
+          <a href="#features" style={props?.dark && {color: 'black'}}>המוצר שלנו</a>
+          <a href="#pricing" style={props?.dark && {color: 'black'}}>מחירים</a>
+          <a href="/" ><h1 href="#home" className="main-title" style={props?.dark && {color: 'black'}}>APPoint</h1></a>
 
-          <Nav.Link eventKey={2} href="#memes">
+          <a href="#memes" style={props?.dark && {color: 'black'}}>
             מי אנחנו
-          </Nav.Link>
-          <Nav.Link eventKey={2} href="#memes">
+          </a>
+          <a href="#memes" style={props?.dark && {color: 'black'}}>
             יצירת קשר
-          </Nav.Link>
+          </a>
         </Navbar.Collapse>
       </Container>
     </Navbar>

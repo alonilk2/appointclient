@@ -8,7 +8,7 @@ export default function LoginBox() {
         <Form.Control size="lg" type="text" placeholder="כתובת אימייל" />
         <button className="login-box-btn">הרשמה</button>
       </div>
-      <p className="login-link">כבר רשום\ה? <a href="#">להתחברות</a></p>
+      <p className="login-link">כבר רשום\ה? <a href="/authorization/login">להתחברות</a></p>
     </div>
   );
 }
