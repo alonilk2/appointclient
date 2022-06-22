@@ -1,21 +1,23 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import App from "./App";
 import Dashboard from "./components/Dashboard";
 import OAuth2RedirectHandler from "./components/Oauth2/OAuth2RedirectHandler";
+import useAuth from "./hooks/useAuth";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
+import { store } from "./store";
+import Email from "./views/EmailConfirm";
 import Signin from "./views/Signin";
 import Signup from "./views/Signup";
-import useAuth from "./hooks/useAuth";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const CustomRoutes = () => {
   const auth = useAuth();
   const PrivateRoute = ({ auth: isAuthenticated, children }) => {
-    console.log(isAuthenticated)
     return isAuthenticated ? children : <Navigate to="/authorization/login" />;
   };
   return (
@@ -30,6 +32,7 @@ const CustomRoutes = () => {
                 element={<OAuth2RedirectHandler />}
               ></Route>
             </Route>
+            <Route path="confirm-account" element={<Email />} />
             <Route path="login" element={<Signin />} />
             <Route path="signup" element={<Signup />} />
           </Route>
@@ -48,7 +51,9 @@ const CustomRoutes = () => {
 };
 root.render(
   <React.StrictMode>
-    <CustomRoutes />
+    <Provider store={store}>
+      <CustomRoutes />
+    </Provider>
   </React.StrictMode>
 );
 

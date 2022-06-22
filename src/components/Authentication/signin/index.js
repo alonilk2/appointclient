@@ -1,47 +1,67 @@
 import "./index.css";
-// import Alert from "@mui/material/Alert";
+import { Alert, AlertTitle } from "@mui/material";
 import BackgroundImage from "../../../images/login.png";
 import useWindowSize from "../../../hooks/useWindowSize";
-// import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { FACEBOOK_AUTH_URL, GOOGLE_AUTH_URL } from "../../../constants";
-// import { signin } from "../../Actions/authActions";
 import { useState } from "react";
 import fbLogo from "../../../images/fb-logo.png";
 import googleLogo from "../../../images/google-logo.png";
-import Divider from '@mui/material/Divider';
-
+import Divider from "@mui/material/Divider";
+import { _login } from "../../../features/userSlice";
+import { useNavigate } from "react-router-dom";
+import { ACCESS_TOKEN } from "../../../constants";
 function SigninComponent(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
 
-  // const dispatch = useDispatch();
-  // const errorFromServer = useSelector((state) => state.user.error);
-  // const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const errorFromServer = useSelector((state) => state.user.error);
   const location = useLocation();
   const size = useWindowSize();
+  const navigate = useNavigate();
 
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   if (location?.state?.cartFlag === true)
-  //     dispatch(
-  //       signin(
-  //         Email.toLowerCase(),
-  //         password,
-  //         location.state
-  //       )
-  //     );
-  //   else if (user.admin === true)
-  //     dispatch(signin(Email.toLowerCase(), password, null, null, null, true));
-  //   dispatch(signin(Email.toLowerCase(), password));
-  // };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    let obj = {
+      email: email,
+      password: password,
+    };
+
+    let response = await dispatch(_login(obj));
+    if (response.type == "user/login/fulfilled") {
+      localStorage.setItem(ACCESS_TOKEN, response.payload.accessToken);
+
+      navigate("/dashboard", { state: { registered: true } });
+    } else if (response.type == "user/login/rejected") {
+      setError(response);
+    }
+  };
 
   const LoginForm = (
     <form
-      // onSubmit={handleSubmit}
+      onSubmit={handleSubmit}
       className="col-5 signin-form"
       autocomplete="on"
     >
+      {location.state?.registered && (
+        <Alert severity="success">
+          <AlertTitle>משתמש חדש נרשם בהצלחה!</AlertTitle>
+          <strong>
+            נא אמת\י את חשבונך לפי ההוראות שנשלחו אלייך בהודעה בדוא"ל
+          </strong>
+        </Alert>
+      )}
+      {error && (
+        <Alert severity="error">
+          <AlertTitle>Error</AlertTitle>
+          An error occured while trying to login —{" "}
+          <strong>check credentials and try again</strong>
+        </Alert>
+      )}
       <h4 id="title">התחברות</h4>
 
       <h5>כתובת דוא"ל</h5>
@@ -75,7 +95,7 @@ function SigninComponent(props) {
       <div className="need-acc-txt">
         אין לך חשבון? <a href="/authorization/signup">להרשמה</a>
       </div>
-      <Divider sx={{marginBottom:2}}>או</Divider>
+      <Divider sx={{ marginBottom: 2 }}>או</Divider>
       <SocialLogin />
     </form>
   );

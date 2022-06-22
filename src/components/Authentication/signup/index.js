@@ -1,47 +1,59 @@
 import "./index.css";
-// import Alert from "@mui/material/Alert";
-import BackgroundImage from "../../../images/login.png";
-import useWindowSize from "../../../hooks/useWindowSize";
-// import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
-import { FACEBOOK_AUTH_URL, GOOGLE_AUTH_URL } from "../../../constants";
-// import { signin } from "../../Actions/authActions";
+import { Alert, AlertTitle, Divider } from "@mui/material";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { FACEBOOK_AUTH_URL, GOOGLE_AUTH_URL } from "../../../constants";
+import { _signup } from "../../../features/userSlice";
+import useWindowSize from "../../../hooks/useWindowSize";
 import fbLogo from "../../../images/fb-logo.png";
 import googleLogo from "../../../images/google-logo.png";
-import { Divider } from "@mui/material";
-function SigninComponent(props) {
-  const [Email, setEmail] = useState("");
+import BackgroundImage from "../../../images/login.png";
+
+function Signup(props) {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [firstName, setFirstname] = useState("");
-  const [lastName, setLastname] = useState("");
-  // const dispatch = useDispatch();
-  // const errorFromServer = useSelector((state) => state.user.error);
-  // const user = useSelector((state) => state.user);
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [error, setError] = useState("");
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
   const location = useLocation();
   const size = useWindowSize();
+  const navigate = useNavigate();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   if (location?.state?.cartFlag === true)
-  //     dispatch(
-  //       signin(
-  //         Email.toLowerCase(),
-  //         password,
-  //         location.state
-  //       )
-  //     );
-  //   else if (user.admin === true)
-  //     dispatch(signin(Email.toLowerCase(), password, null, null, null, true));
-  //   dispatch(signin(Email.toLowerCase(), password));
-  // };
+    let obj = {
+      email: email,
+      password: password,
+      firstname: firstname,
+      lastname: lastname,
+    };
+
+    let response = await dispatch(_signup(obj));
+
+    if (response.type == "user/signup/fulfilled") {
+      navigate("/authorization/login", { state: { registered: true } });
+    } else if ((response.type == "user/signup/rejected")) {
+      setError(response.error.message);
+    }
+  };
+
   function SignupForm() {
     return (
       <form
-        // onSubmit={handleSubmit}
+        onSubmit={handleSubmit}
         className="col-5 signin-form"
         autocomplete="on"
       >
+        {error && (
+          <Alert severity="error">
+            <AlertTitle>Error</AlertTitle>
+            An error occured while trying to register —{" "}
+            <strong>check credentials and try again</strong>
+          </Alert>
+        )}
         <h4 id="title">הרשמה</h4>
         <h5>שם פרטי</h5>
         <input
@@ -63,7 +75,7 @@ function SigninComponent(props) {
         <input
           className="input-field"
           type="email"
-          placeholder="Email Address"
+          placeholder="email Address"
           required
           onChange={(e) => setEmail(e.target.value)}
         ></input>
@@ -81,7 +93,7 @@ function SigninComponent(props) {
         <div className="need-acc-txt">
           כבר יש לך חשבון? <a href="/authorization/login">להתחברות</a>
         </div>
-        <Divider sx={{marginBottom:2}}>או</Divider>
+        <Divider sx={{ marginBottom: 2 }}>או</Divider>
 
         <SocialLogin />
       </form>
@@ -117,4 +129,4 @@ function SocialLogin() {
   );
 }
 
-export default SigninComponent;
+export default Signup;

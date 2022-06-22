@@ -3,8 +3,25 @@ import SideMenu from "./SideMenu";
 import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
-
+import { useState } from "react";
+import { useDispatch } from "react-redux/es/exports";
+import { useEffect } from "react";
+import { _getCurrentUser } from "../../features/userSlice";
 export default function Dashboard() {
+  const dispatch = useDispatch();
+  const [userInstance, setUserInstance] = useState();
+
+  const initializeUserInstance = async () => {
+    try{
+      let response = await dispatch(_getCurrentUser())
+      setUserInstance(response.payload)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  useEffect(()=> {
+    initializeUserInstance()
+  },[])
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
@@ -15,7 +32,7 @@ export default function Dashboard() {
         </a>
         <Stack direction="row" spacing={1}>
           <Chip
-            avatar={<Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />}
+            avatar={<Avatar alt="Natacha" src={userInstance?.imageUrl} />}
             label="Avatar"
             variant="outlined"
           />

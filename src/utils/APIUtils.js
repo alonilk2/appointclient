@@ -29,7 +29,7 @@ export function getCurrentUser() {
     }
 
     return request({
-        url: API_BASE_URL + "/user/me",
+        url: API_BASE_URL + "/users/me",
         method: 'GET'
     });
 }
@@ -47,5 +47,13 @@ export function signup(signupRequest) {
         url: API_BASE_URL + "/auth/signup",
         method: 'POST',
         body: JSON.stringify(signupRequest)
+    });
+}
+
+export function confirmEmail(confirmRequest) {
+    return request({
+        url: API_BASE_URL + "/auth/confirmemail",
+        method: 'POST',
+        body: JSON.stringify(confirmRequest)
     });
 }
