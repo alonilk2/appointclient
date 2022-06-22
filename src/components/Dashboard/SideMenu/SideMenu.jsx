@@ -1,12 +1,21 @@
-import ListSubheader from "@mui/material/ListSubheader";
+import PeopleIcon from "@mui/icons-material/Groups";
+import ListIcon from "@mui/icons-material/List";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import PeopleIcon from "@mui/icons-material/Groups";
-import ListIcon from "@mui/icons-material/List";
+import ListSubheader from "@mui/material/ListSubheader";
+import { useDispatch, useSelector } from "react-redux";
+import { selectTab } from "../../../features/dashboardSlice";
 
 export default function SideMenu() {
+  const dispatch = useDispatch();
+  const selectedTab = useSelector((state) => state.dashboard.selectedTabIndex);
+
+  const handleListItemClick = (event, index) => {
+    dispatch(selectTab(index));
+  };
+
   return (
     <div className="col-2 sidemenu-container">
       <List
@@ -19,13 +28,19 @@ export default function SideMenu() {
           </ListSubheader>
         }
       >
-        <ListItemButton>
+        <ListItemButton
+          selected={selectedTab == 0}
+          onClick={(event) => handleListItemClick(event, 0)}
+        >
           <ListItemIcon>
             <PeopleIcon />
           </ListItemIcon>
           <ListItemText primary="ניהול נותני שירות" />
         </ListItemButton>
-        <ListItemButton>
+        <ListItemButton
+          selected={selectedTab == 1}
+          onClick={(event) => handleListItemClick(event, 1)}
+        >
           <ListItemIcon>
             <ListIcon />
           </ListItemIcon>

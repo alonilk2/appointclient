@@ -3,7 +3,11 @@ import Divider from "@mui/material/Divider";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ACCESS_TOKEN, FACEBOOK_AUTH_URL, GOOGLE_AUTH_URL } from "../../../constants";
+import {
+  ACCESS_TOKEN,
+  FACEBOOK_AUTH_URL,
+  GOOGLE_AUTH_URL
+} from "../../../constants";
 import { _login } from "../../../features/userSlice";
 import useAuth from "../../../hooks/useAuth";
 import useWindowSize from "../../../hooks/useWindowSize";
@@ -11,6 +15,7 @@ import fbLogo from "../../../images/fb-logo.png";
 import googleLogo from "../../../images/google-logo.png";
 import BackgroundImage from "../../../images/login.png";
 import "./index.css";
+
 function SigninComponent(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,16 +44,8 @@ function SigninComponent(props) {
     }
   };
 
-  useEffect(()=>{
-    if(auth.loggedIn) navigate("/dashboard")
-  },[])
-
-  const LoginForm = (
-    <form
-      onSubmit={handleSubmit}
-      className="col-5 signin-form"
-      autocomplete="on"
-    >
+  const Alerts = (
+    <>
       {location.state?.registered && (
         <Alert severity="success">
           <AlertTitle>משתמש חדש נרשם בהצלחה!</AlertTitle>
@@ -64,8 +61,21 @@ function SigninComponent(props) {
           <strong>check credentials and try again</strong>
         </Alert>
       )}
-      <h4 id="title">התחברות</h4>
+    </>
+  );
 
+  useEffect(() => {
+    if (auth.loggedIn) navigate("/dashboard");
+  }, []);
+
+  const LoginForm = (
+    <form
+      onSubmit={handleSubmit}
+      className="col-5 signin-form"
+      autocomplete="on"
+    >
+      {Alerts}
+      <h4 id="title">התחברות</h4>
       <h5>כתובת דוא"ל</h5>
       <input
         className="input-field"
@@ -73,7 +83,7 @@ function SigninComponent(props) {
         placeholder="Email Address"
         required
         onChange={(e) => setEmail(e.target.value)}
-      ></input>
+      />
       <h5>סיסמה</h5>
       <input
         className="input-field"
@@ -81,7 +91,7 @@ function SigninComponent(props) {
         placeholder="Password"
         required
         onChange={(e) => setPassword(e.target.value)}
-      ></input>
+      />
       <div className="forgot-row">
         <a id="forgot" href="/forgot">
           <input type="checkbox"></input>
@@ -116,7 +126,7 @@ function SigninComponent(props) {
   );
 }
 
-function SocialLogin() {
+const SocialLogin = () => {
   return (
     <div className="social-login">
       <a className="btn btn-block social-btn google" href={GOOGLE_AUTH_URL}>
@@ -129,6 +139,6 @@ function SocialLogin() {
       </a>
     </div>
   );
-}
+};
 
 export default SigninComponent;

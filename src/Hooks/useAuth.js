@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { ACCESS_TOKEN } from "../constants";
 
 export default function useAuth() {
-  const userToken = localStorage.getItem(ACCESS_TOKEN);
+  const [userToken, setUserToken] = useState(localStorage.getItem(ACCESS_TOKEN));
 
   const Logout = () => {
     if (userToken) {
@@ -9,5 +10,8 @@ export default function useAuth() {
     }
   };
 
-  return { loggedIn: userToken ? true : false, logout: ()=>Logout() };
+  return {
+    loggedIn: userToken ? true : false,
+    logout: () => Logout(),
+  };
 }

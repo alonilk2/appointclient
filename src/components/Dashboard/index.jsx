@@ -1,20 +1,20 @@
-import "./index.css";
-import SideMenu from "./SideMenu";
-import { useState } from "react";
-import { useDispatch } from "react-redux/es/exports";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux/es/exports";
 import { _getCurrentUser } from "../../features/userSlice";
-import UserProfileChip from "./UserProfileChip";
+import "./index.css";
+import ServiceProvidersManagement from "./ServiceProvidersManagement";
+import ServicesManagement from "./ServicesManagement";
+import SideMenu from "./SideMenu/SideMenu";
+import ProfileChip from "./ProfileChip";
+
 export default function Dashboard() {
   const dispatch = useDispatch();
   const [userInstance, setUserInstance] = useState();
+  const selectedTab = useSelector((state) => state.dashboard.selectedTabIndex);
+
   const initializeUserInstance = async () => {
-    try {
-      let response = await dispatch(_getCurrentUser());
-      setUserInstance(response.payload);
-    } catch (err) {
-      console.log(err);
-    }
+    let response = await dispatch(_getCurrentUser());
+    setUserInstance(response.payload);
   };
 
   useEffect(() => {
@@ -29,15 +29,17 @@ export default function Dashboard() {
             APPoint
           </h1>
         </a>
-        {UserProfileChip(userInstance)}
+        {ProfileChip(userInstance)}
       </header>
       <section className="row main-section">
         <main className="col-10 main">
-          <div className="main-container"> </div>
+          <div className="main-container">
+            {selectedTab == 0 && <ServiceProvidersManagement />}
+            {selectedTab == 1 && <ServicesManagement />}
+          </div>
         </main>
         <SideMenu />
       </section>
     </div>
   );
 }
-
