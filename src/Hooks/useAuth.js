@@ -1,7 +1,13 @@
 import { ACCESS_TOKEN } from "../constants";
 
-export default function useAuth () {
-    const userToken = localStorage.getItem(ACCESS_TOKEN);
-    console.log(userToken)
-    return userToken ? true : false;
+export default function useAuth() {
+  const userToken = localStorage.getItem(ACCESS_TOKEN);
+
+  const Logout = () => {
+    if (userToken) {
+      localStorage.removeItem(ACCESS_TOKEN);
+    }
+  };
+
+  return { loggedIn: userToken ? true : false, logout: ()=>Logout() };
 }

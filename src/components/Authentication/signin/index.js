@@ -1,27 +1,25 @@
-import "./index.css";
 import { Alert, AlertTitle } from "@mui/material";
-import BackgroundImage from "../../../images/login.png";
-import useWindowSize from "../../../hooks/useWindowSize";
+import Divider from "@mui/material/Divider";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
-import { FACEBOOK_AUTH_URL, GOOGLE_AUTH_URL } from "../../../constants";
-import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { ACCESS_TOKEN, FACEBOOK_AUTH_URL, GOOGLE_AUTH_URL } from "../../../constants";
+import { _login } from "../../../features/userSlice";
+import useAuth from "../../../hooks/useAuth";
+import useWindowSize from "../../../hooks/useWindowSize";
 import fbLogo from "../../../images/fb-logo.png";
 import googleLogo from "../../../images/google-logo.png";
-import Divider from "@mui/material/Divider";
-import { _login } from "../../../features/userSlice";
-import { useNavigate } from "react-router-dom";
-import { ACCESS_TOKEN } from "../../../constants";
+import BackgroundImage from "../../../images/login.png";
+import "./index.css";
 function SigninComponent(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-
   const dispatch = useDispatch();
-  const errorFromServer = useSelector((state) => state.user.error);
   const location = useLocation();
   const size = useWindowSize();
   const navigate = useNavigate();
+  const auth = useAuth();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -35,11 +33,15 @@ function SigninComponent(props) {
     if (response.type == "user/login/fulfilled") {
       localStorage.setItem(ACCESS_TOKEN, response.payload.accessToken);
 
-      navigate("/dashboard", { state: { registered: true } });
+      navigate("/dashboard");
     } else if (response.type == "user/login/rejected") {
       setError(response);
     }
   };
+
+  useEffect(()=>{
+    if(auth.loggedIn) navigate("/dashboard")
+  },[])
 
   const LoginForm = (
     <form

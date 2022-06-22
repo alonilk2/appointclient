@@ -1,27 +1,26 @@
 import "./index.css";
 import SideMenu from "./SideMenu";
-import Avatar from "@mui/material/Avatar";
-import Chip from "@mui/material/Chip";
-import Stack from "@mui/material/Stack";
 import { useState } from "react";
 import { useDispatch } from "react-redux/es/exports";
 import { useEffect } from "react";
 import { _getCurrentUser } from "../../features/userSlice";
+import UserProfileChip from "./UserProfileChip";
 export default function Dashboard() {
   const dispatch = useDispatch();
   const [userInstance, setUserInstance] = useState();
-
   const initializeUserInstance = async () => {
-    try{
-      let response = await dispatch(_getCurrentUser())
-      setUserInstance(response.payload)
+    try {
+      let response = await dispatch(_getCurrentUser());
+      setUserInstance(response.payload);
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
-  useEffect(()=> {
-    initializeUserInstance()
-  },[])
+  };
+
+  useEffect(() => {
+    initializeUserInstance();
+  }, []);
+
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
@@ -30,13 +29,7 @@ export default function Dashboard() {
             APPoint
           </h1>
         </a>
-        <Stack direction="row" spacing={1}>
-          <Chip
-            avatar={<Avatar alt="Natacha" src={userInstance?.imageUrl} />}
-            label="Avatar"
-            variant="outlined"
-          />
-        </Stack>
+        {UserProfileChip(userInstance)}
       </header>
       <section className="row main-section">
         <main className="col-10 main">
@@ -47,3 +40,4 @@ export default function Dashboard() {
     </div>
   );
 }
+
