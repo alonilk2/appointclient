@@ -1,65 +1,102 @@
 .dashboard-container {
-    display: flex;
-    flex-direction: column;
-    overflow:hidden;
-    max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-height: 100vh;
+}
+.MuiBox-root {
+  background-color: white;
+  border-radius: 20px;
+  direction: rtl;
+}
+.MuiToolbar-root {
+  direction: ltr;
 }
 .dashboard-header {
-    min-height: 100px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2%;
+  direction: rtl;
+}
+.css-o943dk-MuiFormLabel-root-MuiInputLabel-root, .css-e4w4as-MuiFormLabel-root-MuiInputLabel-root{
+  left: inherit !important;
+  right: 1.75rem !important;
+  transform-origin: right !important;
+}
+.MuiDataGrid-cell {
+  background-color: white !important;
+}
+.dropzone-container {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 2%;
+    justify-content: center;
+    border: 2px dashed rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
+    color: rgba(0, 0, 0, 0.6);
+    padding: 5%;
 }
 .sidemenu-container {
-    padding-right: 2%;
+  padding-right: 2%;
 }
 .profile-chip-container {
-    position: absolute;
-    top: 3%;
-    right: 2%;
-    z-index: 3;
-    min-width: 15%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: flex-end;
+  position: absolute;
+  top: 3%;
+  right: 2%;
+  z-index: 3;
+  min-width: 15%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  width: 96%;
+}
+.css-10kp3pj-MuiButtonBase-root-MuiChip-root .MuiChip-avatar {
+  margin-right: 3px !important;
+  margin-left: -6px !important;
 }
 .main {
-    padding: 0% 1% 0% 2%;
+  padding: 0% 1% 0% 2%;
 }
 .tab-title {
-    text-align: center;
+  text-align: center;
 }
-.main>.main-container {
-    width: 100%;
-    height: 100%;
-    background-color: rgb(213, 233, 255);
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.css-r11z79-MuiDataGrid-root {
+  height: 90% !important;
+}
+
+.main > .main-container {
+  width: 100%;
+  height: 85%;
+  background-color: rgb(213, 233, 255);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3%;
 }
 .main-section {
-    min-height: 100vh;
+  min-height: 100vh;
 }
 
 .main-title {
-    text-align: left;
-    margin: 1% 2%;
+  text-align: left;
+  margin: 1% 2%;
 }
 .dashboard-container a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .css-tlelie-MuiListItemText-root {
-    text-align: start !important;
+  text-align: start !important;
 }
 
-.css-16ac5r2-MuiButtonBase-root-MuiListItemButton-root, .css-i7rae6-MuiList-root {
-    direction: rtl;
+.css-16ac5r2-MuiButtonBase-root-MuiListItemButton-root,
+.css-i7rae6-MuiList-root {
+  direction: rtl;
 }
 .css-16ac5r2-MuiButtonBase-root-MuiListItemButton-root {
-    border-radius: 8px !important;
+  border-radius: 8px !important;
 }
