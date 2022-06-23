@@ -1,3 +1,7 @@
+import {
+  FormControl,
+  InputLabel, MenuItem, Select, Stack
+} from "@mui/material";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -8,15 +12,8 @@ import TextField from "@mui/material/TextField";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import { getHours, getMinutes } from "date-fns";
 import { useState } from "react";
-import {
-  Stack,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-} from "@mui/material";
-import { useEffect } from "react";
 
 const days = [
   "יום ראשון",
@@ -32,6 +29,8 @@ export default function AddWorkdaysDialog(props) {
   const [workdays, setWorkdays] = useState({
     startTime: 0,
     endTime: 0,
+    startTimeFormatted: 0,
+    endTimeFormatted: 0,
     day: 0,
   });
 
@@ -40,13 +39,32 @@ export default function AddWorkdaysDialog(props) {
   };
 
   const daysArr = days.map((day, idx) => {
-    return <MenuItem value={idx}>{day}</MenuItem>;
+    let isExist = false;
+    props?.workdaysArr.forEach((e) => {
+      if (e.day == idx) isExist = true;
+    });
+    return isExist ? null : <MenuItem value={idx}>{day}</MenuItem>;
   });
 
   const handleChange = (e, field) => {
+    console.log(e);
     field == 0 && setWorkdays({ ...workdays, day: e.target.value });
-    field == 1 && setWorkdays({ ...workdays, startTime: e});
-    field == 2 && setWorkdays({ ...workdays, endTime: e});
+    field == 1 &&
+      setWorkdays({
+        ...workdays,
+        startTimeFormatted: formatTime(e),
+        startTime: e,
+      });
+    field == 2 &&
+      setWorkdays({
+        ...workdays,
+        endTimeFormatted: formatTime(e),
+        endTime: e,
+      });
+  };
+
+  const formatTime = (time) => {
+    return getHours(time).toString() + ":" + getMinutes(time).toString();
   };
 
   const handleSubmit = () => {
@@ -54,10 +72,6 @@ export default function AddWorkdaysDialog(props) {
     props.addWorkdays([...arr, workdays]);
     toggleDialog();
   };
-
-  useEffect(()=>{
-    console.log(workdays)
-  }, [workdays])
 
   return (
     <Dialog open={props.open} onClose={toggleDialog} dir="rtl">

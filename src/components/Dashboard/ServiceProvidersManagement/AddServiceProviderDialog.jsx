@@ -1,36 +1,37 @@
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { useDropzone } from "react-dropzone";
-import { useCallback } from "react";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  _addServiceProvider,
-  _fetchServiceProviders,
-} from "../../../features/dashboardSlice";
-import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
-import { Divider, Stack } from "@mui/material";
-import AddWorkdaysDialog from "./AddWorkdaysDialog";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import {
-  Typography,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
+  Divider,
+  Stack,
   TextField,
+  Typography,
 } from "@mui/material";
+import Fab from "@mui/material/Fab";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { useCallback, useState } from "react";
+import { useDropzone } from "react-dropzone";
+import { useDispatch } from "react-redux";
+import { _fetchServiceProviders } from "../../../features/dashboardSlice";
+import AddWorkdaysDialog from "./AddWorkdaysDialog";
 
-function createData(day, startTime, endTime) {
-  return { day, startTime, endTime };
-}
+const days = [
+  "יום ראשון",
+  "יום שני",
+  "יום שלישי",
+  "יום רביעי",
+  "יום חמישי",
+  "יום שישי",
+  "יום שבת",
+];
 
 export default function AddServiceProviderDialog(props) {
   const [firstname, setFirstname] = useState("");
@@ -44,16 +45,21 @@ export default function AddServiceProviderDialog(props) {
   const onDrop = useCallback((acceptedFiles) => {
     // Do something with the files
   }, []);
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
   const handleClose = () => {
     toggleDialog();
   };
+
   const toggleDialog = () => {
     props.toggle(!props.open);
   };
+
   const handleAddWorkdays = () => {
     setWorkdaysDialog(!workdaysDialog);
   };
+
   const handleAdd = async () => {
     let newProvider = {
       firstname: firstname,
@@ -67,6 +73,7 @@ export default function AddServiceProviderDialog(props) {
       dispatch(_fetchServiceProviders());
     }
   };
+
   const Dropzone = (
     <div className="dropzone-container" {...getRootProps()}>
       <input {...getInputProps()} />
@@ -74,34 +81,36 @@ export default function AddServiceProviderDialog(props) {
       <CloudUploadIcon sx={styles.CloudUploadIcon} />
     </div>
   );
+
   const WorkdaysRow = () => {
-    const table = (
+    let table = (
       <Table size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
-            <TableCell>יום</TableCell>
+            <TableCell align="right">יום</TableCell>
             <TableCell align="right">שעת התחלה</TableCell>
             <TableCell align="right">שעת סיום</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {workdaysArr.map((row) => {
-            console.log(row)(
+            return (
               <TableRow
                 key={row.day}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell component="th" scope="row">
-                  {row.day}
+                <TableCell align="right" component="th" scope="row">
+                  {days[row.day]}
                 </TableCell>
-                <TableCell align="right">{row?.startTime}</TableCell>
-                <TableCell align="right">{row?.endTime}</TableCell>
+                <TableCell align="right">{row?.startTimeFormatted}</TableCell>
+                <TableCell align="right">{row?.endTimeFormatted}</TableCell>
               </TableRow>
             );
           })}
         </TableBody>
       </Table>
     );
+
     return (
       <>
         <Typography variant="subtitle1" component="div">
@@ -118,6 +127,7 @@ export default function AddServiceProviderDialog(props) {
       </>
     );
   };
+
   return (
     <Dialog open={props.open} sx={styles.dialogContainer}>
       <AddWorkdaysDialog
