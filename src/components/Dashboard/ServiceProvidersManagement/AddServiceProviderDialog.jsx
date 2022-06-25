@@ -40,10 +40,11 @@ export default function AddServiceProviderDialog(props) {
   const [email, setEmail] = useState("");
   const [workdaysDialog, setWorkdaysDialog] = useState(false);
   const [workdaysArr, setWorkdaysArr] = useState([]);
+  const [file, setFile] = useState();
   const dispatch = useDispatch();
 
   const onDrop = useCallback((acceptedFiles) => {
-    // Do something with the files
+    setFile(acceptedFiles)
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
@@ -61,12 +62,23 @@ export default function AddServiceProviderDialog(props) {
   };
 
   const handleAdd = async () => {
+    const workdays = workdaysArr.map((wd)=>{
+      return {
+      starttime: wd.startTimeFormatted,
+      endtime: wd.endTimeFormatted,
+      day: wd.day
+    }
+    })
     let newProvider = {
       firstname: firstname,
       lastname: lastname,
       phone: phone,
       email: email,
+      file: file,
+      filename: '',
+      workdays: workdays
     };
+    console.log(newProvider)
     let response = await props?.add(newProvider);
     if (response?.type == "dashboard/addServiceProvider/fulfilled") {
       toggleDialog();

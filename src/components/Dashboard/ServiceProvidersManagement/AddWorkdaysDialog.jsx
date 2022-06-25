@@ -1,6 +1,9 @@
 import {
   FormControl,
-  InputLabel, MenuItem, Select, Stack
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -13,7 +16,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { getHours, getMinutes } from "date-fns";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 const days = [
   "יום ראשון",
@@ -25,14 +28,19 @@ const days = [
   "יום שבת",
 ];
 
+const formatTime = (time) => {
+  return getHours(time).toString() + ":" + getMinutes(time).toString();
+};
+
 export default function AddWorkdaysDialog(props) {
   const [workdays, setWorkdays] = useState({
-    startTime: 0,
-    endTime: 0,
-    startTimeFormatted: 0,
-    endTimeFormatted: 0,
-    day: 0,
+    startTime: new Date(),
+    endTime: new Date(),
+    startTimeFormatted: formatTime(new Date()),
+    endTimeFormatted: formatTime(new Date()),
+    day: '',
   });
+  const day = useRef(0)
 
   const toggleDialog = () => {
     props.toggle(!props.open);
@@ -41,7 +49,9 @@ export default function AddWorkdaysDialog(props) {
   const daysArr = days.map((day, idx) => {
     let isExist = false;
     props?.workdaysArr.forEach((e) => {
-      if (e.day == idx) isExist = true;
+      if (e.day == idx) {
+        isExist = true;
+      }
     });
     return isExist ? null : <MenuItem value={idx}>{day}</MenuItem>;
   });
@@ -63,10 +73,6 @@ export default function AddWorkdaysDialog(props) {
       });
   };
 
-  const formatTime = (time) => {
-    return getHours(time).toString() + ":" + getMinutes(time).toString();
-  };
-
   const handleSubmit = () => {
     let arr = props?.workdaysArr;
     props.addWorkdays([...arr, workdays]);
@@ -84,7 +90,6 @@ export default function AddWorkdaysDialog(props) {
           <Stack direction="row" spacing={2} sx={styles.stack}>
             <FormControl sx={{ width: 300 }}>
               <InputLabel id="day"> יום </InputLabel>
-
               <Select
                 value={workdays.day}
                 labelId="day"

@@ -14,13 +14,15 @@ export default function ServiceProvidersManagement() {
   const serviceProviders = useServiceProviders();
 
   const UserProfileCell = (params) => {
+    let filename = params?.value.file
+    let url = "http://localhost:8080/uploads/"+filename
     return (
       <Box sx={styles.UserProfileCell}>
         <Avatar
           alt="Remy Sharp"
-          src="https://mui.com/static/images/avatar/3.jpg"
+          src={url}
         />
-        {params?.value}
+        {params?.value?.name}
       </Box>
     );
   };
@@ -87,10 +89,10 @@ export default function ServiceProvidersManagement() {
     },
   ];
 
-  const rows = serviceProviders?.list?.map((provider) => {
+  const rows = serviceProviders.list?.map((provider) => {
     return {
       id: provider.id,
-      userprofile: provider.firstname + " " + provider.lastname,
+      userprofile: {name: provider.firstname + " " + provider.lastname, file: provider?.filename},
       phone: provider.phone,
       email: provider.email,
       actions: provider.id,
