@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ACCESS_TOKEN } from "../constants";
-
+import { useSelector } from "react-redux";
 export default function useAuth() {
-  const [userToken, setUserToken] = useState(localStorage.getItem(ACCESS_TOKEN));
+  const [userToken, setUserToken] = useState();
+  // const user = useSelector(state=>state.user?.user);
 
   const Logout = () => {
     if (userToken) {
@@ -10,8 +11,13 @@ export default function useAuth() {
     }
   };
 
+  useEffect(()=>{
+    setUserToken(localStorage.getItem(ACCESS_TOKEN))
+  },[])
+
   return {
     loggedIn: userToken ? true : false,
     logout: () => Logout(),
+    // user: user
   };
 }

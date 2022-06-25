@@ -11,6 +11,7 @@ export default function useServiceProviders() {
   const serviceProvidersList = useSelector(
     (state) => state.dashboard?.serviceProviders
   );
+  const user = useSelector(state=>state.user.user)
   const dispatch = useDispatch();
 
   const initialize = async () => {
@@ -21,6 +22,8 @@ export default function useServiceProviders() {
     try{
         let fileName = await uploadFile({ file: provider.file });
         provider.filename = fileName?.message
+        provider.manager = user
+        console.log(provider)
         let response = await dispatch(_addServiceProvider(provider));
         return response;
     }catch(e){

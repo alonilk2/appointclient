@@ -1,7 +1,7 @@
 import { Alert, AlertTitle } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   ACCESS_TOKEN,
@@ -9,7 +9,6 @@ import {
   GOOGLE_AUTH_URL
 } from "../../../constants";
 import { _login } from "../../../features/userSlice";
-import useAuth from "../../../hooks/useAuth";
 import useWindowSize from "../../../hooks/useWindowSize";
 import fbLogo from "../../../images/fb-logo.png";
 import googleLogo from "../../../images/google-logo.png";
@@ -24,8 +23,7 @@ function SigninComponent(props) {
   const location = useLocation();
   const size = useWindowSize();
   const navigate = useNavigate();
-  const auth = useAuth();
-
+  const loggedIn = localStorage.getItem(ACCESS_TOKEN);
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -65,7 +63,7 @@ function SigninComponent(props) {
   );
 
   useEffect(() => {
-    if (auth.loggedIn) navigate("/dashboard");
+    if (loggedIn) navigate("/dashboard");
   }, []);
 
   const LoginForm = (

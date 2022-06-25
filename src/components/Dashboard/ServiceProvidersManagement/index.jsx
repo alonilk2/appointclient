@@ -9,10 +9,11 @@ import { useState } from "react";
 import AddServiceProviderDialog from "./AddServiceProviderDialog";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
+
 export default function ServiceProvidersManagement() {
   const [toggleDialog, setToggleDialog] = useState(false);
   const serviceProviders = useServiceProviders();
-
+  
   const UserProfileCell = (params) => {
     let filename = params?.value.file
     let url = "http://localhost:8080/uploads/"+filename

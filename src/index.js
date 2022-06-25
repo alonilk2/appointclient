@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import App from "./App";
 import Dashboard from "./components/Dashboard";
@@ -12,14 +12,11 @@ import { store } from "./store";
 import Email from "./views/EmailConfirm";
 import Signin from "./views/Signin";
 import Signup from "./views/Signup";
-
+import { ACCESS_TOKEN } from "./constants";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const CustomRoutes = () => {
-  const auth = useAuth();
-  const PrivateRoute = ({ auth: isAuthenticated, children }) => {
-    return isAuthenticated ? children : <Navigate to="/authorization/login" />;
-  };
+  const loggedIn = useAuth()
   return (
     <BrowserRouter>
       <Routes>
@@ -39,9 +36,7 @@ const CustomRoutes = () => {
           <Route
             path="dashboard"
             element={
-              <PrivateRoute auth={auth}>
-                <Dashboard />
-              </PrivateRoute>
+              loggedIn.loggedIn ? <Dashboard /> : <Navigate to="/authorization/login" />
             }
           />
         </Route>

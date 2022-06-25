@@ -4,11 +4,9 @@ import { useEffect } from "react";
 
 function OAuth2RedirectHandler(props) {
   const [searchParams] = useSearchParams();
-  let token = searchParams.get('token')
-  let error = searchParams.get('error')
+  let token = searchParams.get("token");
+  let error = searchParams.get("error");
 
-  useEffect(()=>{
-    console.log(error)})
   if (token) {
     localStorage.setItem(ACCESS_TOKEN, token);
     return (
