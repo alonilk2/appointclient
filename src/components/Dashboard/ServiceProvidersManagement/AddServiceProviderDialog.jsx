@@ -22,6 +22,10 @@ import { useDropzone } from "react-dropzone";
 import { useDispatch } from "react-redux";
 import { _fetchServiceProviders } from "../../../features/dashboardSlice";
 import AddWorkdaysDialog from "./AddWorkdaysDialog";
+import { useEffect } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from "@mui/material/IconButton";
+import { Alert } from "@mui/material";
 
 const days = [
   "יום ראשון",
@@ -40,11 +44,12 @@ export default function AddServiceProviderDialog(props) {
   const [email, setEmail] = useState("");
   const [workdaysDialog, setWorkdaysDialog] = useState(false);
   const [workdaysArr, setWorkdaysArr] = useState([]);
-  const [file, setFile] = useState();
+  const [file, setFile] = useState([]);
+  const [firstDayAvailable, setFirstDayAvailable] = useState(0);
+  const [error, setError] = useState(false);
   const dispatch = useDispatch();
-
   const onDrop = useCallback((acceptedFiles) => {
-    setFile(acceptedFiles)
+    setFile(acceptedFiles);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
@@ -61,24 +66,55 @@ export default function AddServiceProviderDialog(props) {
     setWorkdaysDialog(!workdaysDialog);
   };
 
-  const handleAdd = async () => {
-    const workdays = workdaysArr.map((wd)=>{
-      return {
-      starttime: wd.startTimeFormatted,
-      endtime: wd.endTimeFormatted,
-      day: wd.day
+  const handleRemove = (dayId) => {
+    workdaysArr.forEach((e, idx) => {
+      if (e.day === dayId) {
+        console.log(e.day + " - " + idx + "-" + dayId);
+        let tempArr = [...workdaysArr];
+        tempArr.splice(idx, 1);
+        setWorkdaysArr(tempArr);
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (props?.providerForEdit) {
+      setFirstname(props?.providerForEdit.firstname);
+      setPhone(props?.providerForEdit.phone);
+      setLastname(props?.providerForEdit.lastname);
+      setEmail(props?.providerForEdit.email);
+      setWorkdaysArr(props?.providerForEdit?.workdays);
     }
-    })
+  }, [props?.providerForEdit]);
+
+  const handleAdd = async () => {
+    if (
+      firstname === "" ||
+      lastname === "" ||
+      email === "" ||
+      phone === "" ||
+      file.length === 0
+    )
+      return setError(true);
+
+    const workdays = workdaysArr.map((wd) => {
+      return {
+        starttime: wd.startTimeFormatted,
+        endtime: wd.endTimeFormatted,
+        day: wd.day,
+      };
+    });
+
     let newProvider = {
       firstname: firstname,
       lastname: lastname,
       phone: phone,
       email: email,
       file: file,
-      filename: '',
-      workdays: workdays
+      filename: "",
+      workdays: workdays,
     };
-    console.log(newProvider)
+
     let response = await props?.add(newProvider);
     if (response?.type == "dashboard/addServiceProvider/fulfilled") {
       toggleDialog();
@@ -87,12 +123,40 @@ export default function AddServiceProviderDialog(props) {
   };
 
   const Dropzone = (
-    <div className="dropzone-container" {...getRootProps()}>
+    <div
+      className="dropzone-container"
+      {...getRootProps()}
+      style={
+        error && file?.length === 0
+          ? { borderColor: "red", borderWidth: "3px", color: "red" }
+          : null
+      }
+    >
       <input {...getInputProps()} />
       <p>גרור ושחרר קובץ, או לחץ לבחירה</p>
       <CloudUploadIcon sx={styles.CloudUploadIcon} />
     </div>
   );
+
+  const findFirstDayAvailable = () => {
+    for (let idx = 0; idx < 7; idx++) {
+      let found = false;
+      workdaysArr.forEach((e) => {
+        if (e.day === idx) {
+          found = true;
+          return;
+        }
+      });
+      if (found === false) {
+        setFirstDayAvailable(idx);
+        idx = 7;
+      }
+    }
+  };
+
+  useEffect(() => {
+    findFirstDayAvailable();
+  }, [workdaysArr, setFirstDayAvailable]);
 
   const WorkdaysRow = () => {
     let table = (
@@ -102,6 +166,7 @@ export default function AddServiceProviderDialog(props) {
             <TableCell align="right">יום</TableCell>
             <TableCell align="right">שעת התחלה</TableCell>
             <TableCell align="right">שעת סיום</TableCell>
+            <TableCell align="right">מחיקה</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -116,6 +181,16 @@ export default function AddServiceProviderDialog(props) {
                 </TableCell>
                 <TableCell align="right">{row?.startTimeFormatted}</TableCell>
                 <TableCell align="right">{row?.endTimeFormatted}</TableCell>
+                <TableCell align="right">
+                  <IconButton
+                    aria-label="delete"
+                    color="error"
+                    size="small"
+                    onClick={() => handleRemove(row.day)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             );
           })}
@@ -130,39 +205,55 @@ export default function AddServiceProviderDialog(props) {
         </Typography>
         <Divider />
         {workdaysArr.length > 0 && table}
-        <Stack direction="column" sx={styles.addWorkdays}>
-          <Fab color="primary" aria-label="add" onClick={handleAddWorkdays}>
-            <AddIcon />
-          </Fab>
-          <p>הוספת ימי ושעות עבודה</p>
-        </Stack>
+        {workdaysArr.length != 7 && (
+          <Stack direction="column" sx={styles.addWorkdays}>
+            <Fab color="primary" aria-label="add" onClick={handleAddWorkdays}>
+              <AddIcon />
+            </Fab>
+            <p>הוספת ימי ושעות עבודה</p>
+          </Stack>
+        )}
       </>
     );
   };
 
   return (
     <Dialog open={props.open} sx={styles.dialogContainer}>
-      <AddWorkdaysDialog
-        open={workdaysDialog}
-        toggle={setWorkdaysDialog}
-        addWorkdays={setWorkdaysArr}
-        workdaysArr={workdaysArr}
-      />
+      {workdaysDialog && (
+        <AddWorkdaysDialog
+          open={workdaysDialog}
+          toggle={setWorkdaysDialog}
+          addWorkdays={setWorkdaysArr}
+          workdaysArr={workdaysArr}
+          firstDayAvailable={firstDayAvailable}
+        />
+      )}
+
       <DialogTitle>הוסף נותן שירות</DialogTitle>
       <DialogContent>
+        {error && (
+          <Alert severity="error">
+            יש למלא את כל השדות ולהוסיף קובץ תמונה להעלאה
+          </Alert>
+        )}
+
         <TextField
           required
+          error={error && firstname.length === 0 && true}
           id="outlined-required"
           variant="filled"
           label="שם פרטי"
+          value={firstname}
           sx={styles.textField}
           onChange={(e) => setFirstname(e.target.value)}
           fullWidth
         />
         <TextField
           required
+          error={error && lastname.length === 0 && true}
           id="outlined-required"
           variant="filled"
+          value={lastname}
           label="שם משפחה"
           sx={styles.textField}
           onChange={(e) => setLastname(e.target.value)}
@@ -170,6 +261,8 @@ export default function AddServiceProviderDialog(props) {
         />
         <TextField
           required
+          value={email}
+          error={error && email.length === 0 && true}
           id="outlined-required"
           variant="filled"
           label='דוא"ל'
@@ -179,6 +272,8 @@ export default function AddServiceProviderDialog(props) {
         />
         <TextField
           required
+          value={phone}
+          error={error && phone.length === 0 && true}
           id="outlined-required"
           variant="filled"
           label="מספר טלאפון"
@@ -188,6 +283,11 @@ export default function AddServiceProviderDialog(props) {
         />
         {WorkdaysRow()}
         {Dropzone}
+        {file && (
+          <p>
+            {file[0]?.name} - {file[0]?.size}
+          </p>
+        )}
       </DialogContent>
       <DialogActions>
         <Button variant="text" onClick={handleClose}>

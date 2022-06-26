@@ -17,7 +17,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { getHours, getMinutes } from "date-fns";
 import { useRef, useState } from "react";
-
+import {Alert} from "@mui/material";
+import { useEffect } from "react";
 const days = [
   "יום ראשון",
   "יום שני",
@@ -38,13 +39,17 @@ export default function AddWorkdaysDialog(props) {
     endTime: new Date(),
     startTimeFormatted: formatTime(new Date()),
     endTimeFormatted: formatTime(new Date()),
-    day: '',
+    day: props?.firstDayAvailable,
   });
-  const day = useRef(0)
+  const [error, setError] = useState({field1: null, field2: null});
 
   const toggleDialog = () => {
     props.toggle(!props.open);
   };
+
+  useEffect(()=>{
+    console.log(error)
+  },[error])
 
   const daysArr = days.map((day, idx) => {
     let isExist = false;
@@ -53,24 +58,38 @@ export default function AddWorkdaysDialog(props) {
         isExist = true;
       }
     });
-    return isExist ? null : <MenuItem value={idx}>{day}</MenuItem>;
+    if(isExist) return null
+    return  <MenuItem value={idx}>{day}</MenuItem>;
   });
 
   const handleChange = (e, field) => {
-    console.log(e);
+    let timeObj = new Date(e)
     field == 0 && setWorkdays({ ...workdays, day: e.target.value });
-    field == 1 &&
+    if(field == 1){
       setWorkdays({
         ...workdays,
         startTimeFormatted: formatTime(e),
         startTime: e,
+        endTime: timeObj.setHours(timeObj.getHours()+1),
+        endTimeFormatted: formatTime(timeObj.setHours(timeObj.getHours()))
       });
-    field == 2 &&
+    }
+    if(field == 2){
       setWorkdays({
         ...workdays,
         endTimeFormatted: formatTime(e),
         endTime: e,
       });
+    }
+    if(e == "Invalid Date"){
+      if(field == 1) {
+        return setError({...error, field1: "Invalid Date"})
+      }
+      return setError({...error, field2: "Invalid Date"})
+    }
+    if(field == 1) setError({...error, field1: null})
+    setError({...error, field2: null})
+
   };
 
   const handleSubmit = () => {
@@ -79,10 +98,14 @@ export default function AddWorkdaysDialog(props) {
     toggleDialog();
   };
 
+
   return (
     <Dialog open={props.open} onClose={toggleDialog} dir="rtl">
       <DialogTitle>הוספת יום ושעות</DialogTitle>
       <DialogContent>
+        {error.field1 && <Alert severity="error">Invalid Date</Alert>}
+        {error.field2 && <Alert severity="error">Invalid Date</Alert>}
+
         <DialogContentText>
           בחרו את היום, ולאחר מכן בחרו את שעת ההתחלה והסיום:
         </DialogContentText>
@@ -114,6 +137,7 @@ export default function AddWorkdaysDialog(props) {
               value={workdays.endTime}
               label="שעת סיום"
               onChange={(e) => handleChange(e, 2)}
+              minTime={workdays.startTime}
               renderInput={(params) => (
                 <TextField sx={styles.space2} {...params} />
               )}

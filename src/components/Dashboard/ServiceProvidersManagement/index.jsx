@@ -12,6 +12,7 @@ import Stack from "@mui/material/Stack";
 
 export default function ServiceProvidersManagement() {
   const [toggleDialog, setToggleDialog] = useState(false);
+  const [providerForEdit, setProviderForEdit] = useState();
   const serviceProviders = useServiceProviders();
   
   const UserProfileCell = (params) => {
@@ -38,12 +39,23 @@ export default function ServiceProvidersManagement() {
 
   const handleRemove = (params) => {
     return async () => {
-      let response = await serviceProviders?.remove(params?.value)
+      let response = await serviceProviders?.remove(params?.value?.id)
       if(response?.type == "dashboard/removeServiceProvider/fulfilled"){
         serviceProviders.refresh();
       }
     };
   };
+
+  const handleEdit = (params) => {
+    return async () => {
+      console.log(params)
+      setProviderForEdit(params.value)
+      setToggleDialog(!toggleDialog)
+      }
+    };
+
+
+
 
   const ActionsCell = (params) => {
     return (
@@ -55,7 +67,7 @@ export default function ServiceProvidersManagement() {
         >
           <DeleteIcon />
         </IconButton>
-        <IconButton color="primary" aria-label="add an alarm">
+        <IconButton color="primary" aria-label="add an alarm" onClick={handleEdit(params)}>
           <EditIcon />
         </IconButton>
       </Stack>
@@ -96,7 +108,7 @@ export default function ServiceProvidersManagement() {
       userprofile: {name: provider.firstname + " " + provider.lastname, file: provider?.filename},
       phone: provider.phone,
       email: provider.email,
-      actions: provider.id,
+      actions: provider,
     };
   });
 
@@ -106,6 +118,7 @@ export default function ServiceProvidersManagement() {
         open={toggleDialog}
         toggle={setToggleDialog}
         add={serviceProviders?.add}
+        providerForEdit={providerForEdit}
       />
       <CardHeader
         title="ניהול נותני שירות"

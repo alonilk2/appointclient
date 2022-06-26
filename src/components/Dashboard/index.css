@@ -29,6 +29,18 @@
 .MuiDataGrid-cell {
   background-color: white !important;
 }
+.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root{
+  transform: translate(16px, 16px) scale(1);
+  left: inherit !important;
+  right: 38px !important;
+}
+.css-hfutr2-MuiSvgIcon-root-MuiSelect-icon, .css-bpeome-MuiSvgIcon-root-MuiSelect-icon {
+  left: 7px !important;
+  right: inherit !important;
+}
+.css-6hp17o-MuiList-root-MuiMenu-list{
+  direction: rtl !important;
+}
 .dropzone-container {
     display: flex;
     flex-direction: row;
