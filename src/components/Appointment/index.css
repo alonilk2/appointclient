@@ -1,0 +1,44 @@
+.phone-registration-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.appointment-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: 'Assistant', 'Roboto', sans-serif;
+}
+
+.form-container {
+  flex: 3;
+}
+.image-container {
+  flex: 5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 119, 255, 0.527);
+  background-blend-mode: multiply;
+  color: white;
+}
+
+.image-container>h1{
+  font-size: 68px;
+}
+
+.image-container>h3{
+  font-weight: 100;
+}
+
+.appoint-btn {
+  width: 200px;
+  border: 0px;
+  border-radius: 50px;
+  padding: 0.5% 1%;
+  font-size: 26px;
+  font-weight: 300;
+  margin: 1%;
+}

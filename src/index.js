@@ -13,15 +13,18 @@ import Email from "./views/EmailConfirm";
 import Signin from "./views/Signin";
 import Signup from "./views/Signup";
 import { ACCESS_TOKEN } from "./constants";
+import Appointment from "./components/Appointment";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const CustomRoutes = () => {
-  const loggedIn = useAuth()
+  const loggedIn = useAuth();
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/">
           <Route index element={<App />} />
+          <Route path="appoint" element={<Appointment />} />
           <Route path="authorization">
             <Route path="oauth2">
               <Route
@@ -36,7 +39,11 @@ const CustomRoutes = () => {
           <Route
             path="dashboard"
             element={
-              loggedIn.loggedIn ? <Dashboard /> : <Navigate to="/authorization/login" />
+              loggedIn.loggedIn ? (
+                <Dashboard />
+              ) : (
+                <Navigate to="/authorization/login" />
+              )
             }
           />
         </Route>

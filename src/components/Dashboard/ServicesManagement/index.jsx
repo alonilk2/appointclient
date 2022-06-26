@@ -61,6 +61,8 @@ export default function ServicesManagement() {
       width: 180,
     },
     { field: "cost", headerName: "עלות", width: 200 },
+    { field: "period", headerName: "אורך פגישה (דקות)", width: 200 },
+
     {
       field: "actions",
       headerName: "פעולות",
@@ -74,6 +76,7 @@ export default function ServicesManagement() {
       id: service.id,
       name: service.name,
       cost: service.cost,
+      period: service.period,
       actions: service,
     };
   });
