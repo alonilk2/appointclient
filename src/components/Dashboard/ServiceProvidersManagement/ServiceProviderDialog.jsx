@@ -1,7 +1,8 @@
 import AddIcon from "@mui/icons-material/Add";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import DeleteIcon from "@mui/icons-material/Delete";
 import {
-  Button,
+  Alert, Button,
   Dialog,
   DialogActions,
   DialogContent,
@@ -9,23 +10,20 @@ import {
   Divider,
   Stack,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 import Fab from "@mui/material/Fab";
+import IconButton from "@mui/material/IconButton";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useDispatch } from "react-redux";
 import { _fetchServiceProviders } from "../../../features/dashboardSlice";
 import AddWorkdaysDialog from "./AddWorkdaysDialog";
-import { useEffect } from "react";
-import DeleteIcon from "@mui/icons-material/Delete";
-import IconButton from "@mui/material/IconButton";
-import { Alert } from "@mui/material";
 
 const days = [
   "יום ראשון",
@@ -106,6 +104,7 @@ export default function AddServiceProviderDialog(props) {
     });
 
     let newProvider = {
+      id: props?.providerForEdit.id || null,
       firstname: firstname,
       lastname: lastname,
       phone: phone,
@@ -116,7 +115,7 @@ export default function AddServiceProviderDialog(props) {
     };
 
     let response = await props?.add(newProvider);
-    if (response?.type == "dashboard/addServiceProvider/fulfilled") {
+    if (response?.type == "dashboard/addServiceProvider/fulfilled" || response?.type == "dashboard/updateServiceProvider/fulfilled") {
       toggleDialog();
       dispatch(_fetchServiceProviders());
     }

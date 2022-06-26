@@ -1,55 +1,35 @@
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Divider, Button, Avatar } from "@mui/material";
 import CardHeader from "@mui/material/CardHeader";
-import useServiceProviders from "../../../hooks/Dashboard/useServiceProviders";
+import useServices from "../../../hooks/Dashboard/useServices";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
-import AddServiceProviderDialog from "./ServiceProviderDialog";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
+import ServicesDialog from "./ServicesDialog";
 
-export default function ServiceProvidersManagement() {
+export default function ServicesManagement() {
   const [toggleDialog, setToggleDialog] = useState(false);
-  const [providerForEdit, setProviderForEdit] = useState();
-  const serviceProviders = useServiceProviders();
-
-  const UserProfileCell = (params) => {
-    let filename = params?.value.file;
-    let url = "http://localhost:8080/uploads/" + filename;
-    return (
-      <Box sx={styles.UserProfileCell}>
-        <Avatar alt="Remy Sharp" src={url} />
-        {params?.value?.name}
-      </Box>
-    );
-  };
-
-  const WorkdaysCell = () => {
-    return (
-      <IconButton color="primary" aria-label="add an alarm">
-        <EditIcon />
-      </IconButton>
-    );
-  };
+  const [serviceForEdit, setServiceForEdit] = useState();
+  const services = useServices();
 
   const handleRemove = (params) => {
     return async () => {
-      let response = await serviceProviders?.remove(params?.value?.id);
-      if (response?.type == "dashboard/removeServiceProvider/fulfilled") {
-        serviceProviders.refresh();
+      let response = await services?.remove(params?.value?.id)
+      if(response?.type == "dashboard/removeServices/fulfilled"){
+        services.refresh();
       }
     };
   };
 
   const handleEdit = (params) => {
     return async () => {
-      console.log(params);
-      setProviderForEdit(params.value);
-      setToggleDialog(!toggleDialog);
+      setServiceForEdit(params.value)
+      setToggleDialog(!toggleDialog)
+      }
     };
-  };
 
   const ActionsCell = (params) => {
     return (
@@ -61,37 +41,26 @@ export default function ServiceProvidersManagement() {
         >
           <DeleteIcon />
         </IconButton>
-        <IconButton
-          color="primary"
-          aria-label="add an alarm"
-          onClick={handleEdit(params)}
-        >
+        <IconButton color="primary" aria-label="add an alarm" onClick={handleEdit(params)}>
           <EditIcon />
         </IconButton>
       </Stack>
     );
   };
 
-  const handleAddServiceProvider = () => {
+  const handleAddService = () => {
+    setServiceForEdit(null)
     setToggleDialog(true);
   };
 
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
     {
-      field: "userprofile",
-      headerName: "נותן השירות",
+      field: "name",
+      headerName: "שם השירות",
       width: 180,
-      renderCell: UserProfileCell,
     },
-    { field: "phone", headerName: "טלפון", width: 200 },
-    { field: "email", headerName: `דוא"ל`, width: 280 },
-    {
-      field: "workdays",
-      headerName: "ימי עבודה",
-      width: 150,
-      renderCell: WorkdaysCell,
-    },
+    { field: "cost", headerName: "עלות", width: 200 },
     {
       field: "actions",
       headerName: "פעולות",
@@ -100,38 +69,35 @@ export default function ServiceProvidersManagement() {
     },
   ];
 
-  const rows = serviceProviders.list?.map((provider) => {
+  const rows = services.list?.map((service) => {
     return {
-      id: provider.id,
-      userprofile: {
-        name: provider.firstname + " " + provider.lastname,
-        file: provider?.filename,
-      },
-      phone: provider.phone,
-      email: provider.email,
-      actions: provider,
+      id: service.id,
+      name: service.name,
+      cost: service.cost,
+      actions: service,
     };
   });
 
   return (
     <Box sx={styles.Box}>
-      <AddServiceProviderDialog
+      <ServicesDialog
         open={toggleDialog}
         toggle={setToggleDialog}
-        add={serviceProviders?.add}
-        providerForEdit={providerForEdit}
+        add={services.add}
+        serviceForEdit={serviceForEdit}
+        update={services.update}
       />
       <CardHeader
-        title="ניהול נותני שירות"
+        title="ניהול שירותים"
         sx={styles.CardHeader}
         action={
           <Button
             variant="contained"
             endIcon={<AddIcon />}
             sx={styles.AddButton}
-            onClick={handleAddServiceProvider}
+            onClick={handleAddService}
           >
-            הוסף נותן שירות
+            הוסף שירות
           </Button>
         }
       />

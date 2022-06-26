@@ -1,9 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { addServiceProvider, fetchServiceProvidersList, removeServiceProvider } from "../utils/DashboardAPI";
+import {
+  addServiceProvider,
+  fetchServiceProvidersList,
+  removeServiceProvider,
+  fetchServicesList,
+  addServices,
+  removeServices,
+  updateServices
+} from "../utils/DashboardAPI";
 const initialState = {
   selectedTabIndex: 0,
   serviceProviders: null,
-  services: null
+  services: null,
 };
 
 export const _fetchServiceProviders = createAsyncThunk(
@@ -42,6 +50,54 @@ export const _removeServiceProvider = createAsyncThunk(
   }
 );
 
+export const _fetchServices = createAsyncThunk(
+  "dashboard/fetchServices",
+  async (thunkAPI) => {
+    try {
+      const response = await fetchServicesList();
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
+export const _addServices = createAsyncThunk(
+  "dashboard/addServices",
+  async (service, thunkAPI) => {
+    try {
+      const response = await addServices(service);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
+export const _removeServices = createAsyncThunk(
+  "dashboard/removeServices",
+  async (id, thunkAPI) => {
+    try {
+      const response = await removeServices(id);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
+export const _updateServices = createAsyncThunk(
+  "dashboard/updateServices",
+  async (service, thunkAPI) => {
+    try {
+      const response = await updateServices(service);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
 export const dashboardSlice = createSlice({
   name: "dashboard",
   initialState,
@@ -52,20 +108,26 @@ export const dashboardSlice = createSlice({
   },
   extraReducers: {
     [_fetchServiceProviders.fulfilled]: (state, action) => {
-      state.serviceProviders = action.payload
+      state.serviceProviders = action.payload;
     },
     [_fetchServiceProviders.rejected]: (state, action) => {
-      state.serviceProviders = null
+      state.serviceProviders = null;
     },
-    [_addServiceProvider.fulfilled]: (state, action) => {
+    [_fetchServices.fulfilled]: (state, action) => {
+      state.services = action.payload;
     },
-    [_addServiceProvider.rejected]: (state, action) => {
+    [_fetchServices.rejected]: (state, action) => {
+      state.services = null;
     },
-    [_removeServiceProvider.fulfilled]: (state, action) => {
-    },
-    [_removeServiceProvider.rejected]: (state, action) => {
-    }
-  }
+    [_addServiceProvider.fulfilled]: (state, action) => {},
+    [_addServiceProvider.rejected]: (state, action) => {},
+    [_removeServiceProvider.fulfilled]: (state, action) => {},
+    [_removeServiceProvider.rejected]: (state, action) => {},
+    [_addServices.fulfilled]: (state, action) => {},
+    [_addServices.rejected]: (state, action) => {},
+    [_removeServices.fulfilled]: (state, action) => {},
+    [_removeServices.rejected]: (state, action) => {},
+  },
 });
 
 export const { selectTab } = dashboardSlice.actions;
