@@ -2,7 +2,8 @@ import AddIcon from "@mui/icons-material/Add";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
-  Alert, Button,
+  Alert,
+  Button,
   Dialog,
   DialogActions,
   DialogContent,
@@ -10,7 +11,7 @@ import {
   Divider,
   Stack,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
 import Fab from "@mui/material/Fab";
 import IconButton from "@mui/material/IconButton";
@@ -46,6 +47,7 @@ export default function AddServiceProviderDialog(props) {
   const [firstDayAvailable, setFirstDayAvailable] = useState(0);
   const [error, setError] = useState(false);
   const dispatch = useDispatch();
+
   const onDrop = useCallback((acceptedFiles) => {
     setFile(acceptedFiles);
   }, []);
@@ -115,7 +117,10 @@ export default function AddServiceProviderDialog(props) {
     };
 
     let response = await props?.add(newProvider);
-    if (response?.type == "dashboard/addServiceProvider/fulfilled" || response?.type == "dashboard/updateServiceProvider/fulfilled") {
+    if (
+      response?.type == "dashboard/addServiceProvider/fulfilled" ||
+      response?.type == "dashboard/updateServiceProvider/fulfilled"
+    ) {
       toggleDialog();
       dispatch(_fetchServiceProviders());
     }

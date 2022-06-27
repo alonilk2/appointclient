@@ -52,14 +52,13 @@ export const _signup = createAsyncThunk(
 );
 
 export const _updateUser = createAsyncThunk(
-  "user/signup",
+  "user/update",
   async (user, thunkAPI) => {
     try {
       const response = await updateUser(user);
       return response.data;
     } catch (error) {
-      console.log(error);
-      return thunkAPI.rejectWithValue();
+      if(error != "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
     }
   }
 );
@@ -71,7 +70,6 @@ export const _getCurrentUser = createAsyncThunk(
       const response = await getCurrentUser();
       return response;
     } catch (error) {
-      console.log(error);
       return thunkAPI.rejectWithValue();
     }
   }

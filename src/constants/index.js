@@ -1,4 +1,6 @@
 export const API_BASE_URL = 'http://localhost:8080';
+export const API_UPLOADS_URL = 'http://localhost:8080/uploads/';
+
 export const ACCESS_TOKEN = 'accessToken';
 
 export const OAUTH2_REDIRECT_URI = 'http://localhost:3000/authorization/oauth2/redirect'

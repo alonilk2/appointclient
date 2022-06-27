@@ -23,13 +23,11 @@ export default function useServiceProviders() {
         let fileName = await uploadFile({ file: provider.file });
         provider.filename = fileName?.message
         provider.manager = user
-        console.log(provider)
         let response = await dispatch(_addServiceProvider(provider));
         return response;
     }catch(e){
         console.log(e)
     }
-
   };
 
   const removeServiceProvider = async (id) => {
