@@ -6,6 +6,7 @@ import ServiceProvidersManagement from "./ServiceProvidersManagement";
 import ServicesManagement from "./ServicesManagement";
 import SideMenu from "./SideMenu/SideMenu";
 import ProfileChip from "./ProfileChip";
+import BusinessDetailsManagement from "./BusinessDetailsManagement";
 
 export default function Dashboard() {
   const dispatch = useDispatch();
@@ -36,6 +37,7 @@ export default function Dashboard() {
           <div className="main-container">
             {selectedTab == 0 && <ServiceProvidersManagement />}
             {selectedTab == 1 && <ServicesManagement />}
+            {selectedTab == 2 && <BusinessDetailsManagement />}
           </div>
         </main>
         <SideMenu />

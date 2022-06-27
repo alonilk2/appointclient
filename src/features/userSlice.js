@@ -1,15 +1,21 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { login, signup, getCurrentUser, confirmEmail } from "../utils/AuthAPI";
+import {
+  login,
+  signup,
+  getCurrentUser,
+  confirmEmail,
+  updateUser,
+} from "../utils/AuthAPI";
 
 const initialState = {
   loggedIn: false,
-  user: null
+  user: null,
 };
 
 export const _confirmEmail = createAsyncThunk(
   "user/confirmemail",
   async (confirmRequest, thunkAPI) => {
-    console.log(confirmRequest)
+    console.log(confirmRequest);
     try {
       const response = await confirmEmail(confirmRequest);
       return response.data;
@@ -19,7 +25,6 @@ export const _confirmEmail = createAsyncThunk(
     }
   }
 );
-
 
 export const _login = createAsyncThunk(
   "user/login",
@@ -46,18 +51,31 @@ export const _signup = createAsyncThunk(
   }
 );
 
-export const _getCurrentUser = createAsyncThunk(
-    "user/getcurrentuser",
-    async (thunkAPI) => {
-      try {
-        const response = await getCurrentUser();
-        return response;
-      } catch (error) {
-        console.log(error);
-        return thunkAPI.rejectWithValue();
-      }
+export const _updateUser = createAsyncThunk(
+  "user/signup",
+  async (user, thunkAPI) => {
+    try {
+      const response = await updateUser(user);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue();
     }
-  );
+  }
+);
+
+export const _getCurrentUser = createAsyncThunk(
+  "user/getcurrentuser",
+  async (thunkAPI) => {
+    try {
+      const response = await getCurrentUser();
+      return response;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
 
 //   const logout = createAsyncThunk("user/logout", async (logoutRequest, thunkAPI) => {
 //     try {
@@ -87,11 +105,16 @@ export const userSlice = createSlice({
       state.isLoggedIn = false;
     },
     [_getCurrentUser.fulfilled]: (state, action) => {
-        state.loggedIn = true;
-        state.user = action.payload;
+      state.loggedIn = true;
+      state.user = action.payload;
     },
     [_getCurrentUser.rejected]: (state, action) => {
-      state.user = null
+      state.user = null;
+    },
+    [_updateUser.fulfilled]: (state, action) => {
+      state.user = action.payload;
+    },
+    [_updateUser.rejected]: (state, action) => {
     },
     // [logout.fulfilled]: (state, action) => {
     //     state.isLoggedIn = false;

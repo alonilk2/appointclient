@@ -57,3 +57,12 @@ export function confirmEmail(confirmRequest) {
         body: JSON.stringify(confirmRequest)
     });
 }
+
+export function updateUser(user) {
+    console.log(user)
+    return request({
+        url: API_BASE_URL + "/users/"+user.id,
+        method: 'PUT',
+        body: JSON.stringify(user)
+    });
+}

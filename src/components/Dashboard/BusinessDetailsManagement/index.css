@@ -1,0 +1,60 @@
+.business-details-container {
+    display: flex;
+    direction: rtl;
+    width: 100%;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.header-bar {
+    flex: 1;
+    padding: 1%;
+    justify-content: space-between;
+    border: 1px solid #afd4ff;
+    background-color: white;
+    border-radius: 10px;
+    max-height: 65px;
+}
+
+.formcontainer {
+    width: 100%;
+    margin: 2% 0;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid #afd4ff;
+    display: flex;
+    flex-direction: row;
+    padding: 2%;
+}
+
+.MuiCardHeader-title {
+    font-size: 18px !important;
+}
+
+.MuiFormControl-root{
+    margin: 1.5% 0 !important;
+}
+
+.MuiCardContent-root {
+    display: flex;
+    flex-direction: column;
+}
+
+.MuiDivider-root {
+    border-color: #dae0e7;
+}
+
+.MuiCard-root {
+    width: 50%;
+    margin: 1%;
+}
+
+.MuiFilledInput-root {
+    background-color: rgba(0,0,0,0.03) !important;
+}
+
+.profile-logo {
+    max-height: 250px;
+    object-fit: contain;
+}
