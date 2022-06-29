@@ -6,7 +6,7 @@ import ServiceProvidersManagement from "./ServiceProvidersManagement";
 import ServicesManagement from "./ServicesManagement";
 import SideMenu from "./SideMenu/SideMenu";
 import ProfileChip from "./ProfileChip";
-import BusinessDetailsManagement from "./BusinessDetailsManagement";
+import BusinessDetailsManagement from "./BusinessProfileManagement";
 
 export default function Dashboard() {
   const dispatch = useDispatch();

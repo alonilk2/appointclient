@@ -4,18 +4,30 @@ import img1 from "./img1.jpg";
 import img2 from "./img2.jpg";
 import img3 from "./img3.jpg";
 import img4 from "./img4.jpg";
+import useBusiness from '../../hooks/useBusiness'
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { API_BASE_URL, API_UPLOADS_URL } from "../../constants";
 
-export default function Appointment() {
+export default function Appointment(props) {
+  const { businessId } = useParams();
+  const business = useBusiness(businessId)
+  let businessImg = API_UPLOADS_URL + business?.img;
+  console.log(business)
   const ImageContainer = () => {
     return (
       <div className="image-container" style={styles.imageContainer}>
-        <h1>מרכז רפואי מרפ"ם</h1>
+        <h1>{business?.name}</h1>
         <h3>המרכז לבריאות האישה</h3>
+        <img src={businessImg} className="business-logo" alt="business logo" />
         <button className="appoint-btn">קביעת תור</button>
       </div>
     );
   };
 
+  useEffect(()=>{
+    console.log(businessId)
+  },[businessId])
   const OpeningHours = <div className="open-times">
     <div className="day-column" style={{ justifyContent: "flex-end" }}>
       <p>שעת פתיחה</p>

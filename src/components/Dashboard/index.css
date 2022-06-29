@@ -1,16 +1,22 @@
 .dashboard-container {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   max-height: 100vh;
+  overflow-x: hidden;
 }
 .MuiBox-root {
   background-color: white;
   border-radius: 20px;
   direction: rtl;
+  width: 96% !important;
+  height: 96% !important;
+  margin-top: 2%;
 }
 .MuiToolbar-root {
   direction: ltr;
+}
+.MuiListSubheader-root {
+  position: inherit !important;
 }
 .dashboard-header {
   min-height: 100px;
@@ -20,6 +26,11 @@
   align-items: center;
   padding: 0 2%;
   direction: rtl;
+  width: 100%;
+  background-color: white;
+  position: fixed;
+  top: 0;
+  z-index: 2;
 }
 .css-o943dk-MuiFormLabel-root-MuiInputLabel-root, .css-e4w4as-MuiFormLabel-root-MuiInputLabel-root{
   left: inherit !important;
@@ -52,10 +63,13 @@
 }
 .sidemenu-container {
   padding-right: 2%;
+  position: fixed;
+  right: 0;
+  top: 100px;
 }
 .profile-chip-container {
   position: absolute;
-  top: 3%;
+  top: 35px;
   right: 2%;
   z-index: 3;
   min-width: 15%;
@@ -81,13 +95,13 @@
 
 .main > .main-container {
   width: 100%;
-  height: 85%;
+  height: 95%;
   background-color: rgb(213, 233, 255);
   border-radius: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 3%;
+  margin-top: 110px;
 }
 .main-section {
   min-height: 100vh;

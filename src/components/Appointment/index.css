@@ -92,3 +92,10 @@
   color: #f25f5c;
   font-weight: 900;
 }
+
+
+.business-logo {
+  max-width: 100px;
+  border: 1px solid #a1a1a186;
+  border-radius: 50%;
+}

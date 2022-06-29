@@ -24,7 +24,9 @@ const CustomRoutes = () => {
       <Routes>
         <Route path="/">
           <Route index element={<App />} />
-          <Route path="appoint" element={<Appointment />} />
+          <Route path="appoint">
+            <Route path=":businessId" element={<Appointment />} />
+          </Route>
           <Route path="authorization">
             <Route path="oauth2">
               <Route

@@ -6,7 +6,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
-import AddServiceProviderDialog from "./ServiceProviderDialog";
+import AddServiceProviderDialog from "./Dialog/ServiceProviderDialog";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 
@@ -152,7 +152,7 @@ const styles = {
   AddButton: { direction: "ltr", backgroundColor: "#0369ff" },
   DeleteIcon: { marginLeft: "20%", color: "red" },
   EditIcon: { marginRight: "20%" },
-  Box: { height: "100%", width: "100%" },
+  Box: { height: "100%", width: "100%"},
   CardHeader: { textAlign: "right" },
   UserProfileCell: {
     display: "flex",

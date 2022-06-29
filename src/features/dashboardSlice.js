@@ -9,7 +9,7 @@ import {
   updateServices
 } from "../utils/DashboardAPI";
 const initialState = {
-  selectedTabIndex: 0,
+  selectedTabIndex: 2,
   serviceProviders: null,
   services: null,
 };

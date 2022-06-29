@@ -1,6 +1,4 @@
-import AddIcon from "@mui/icons-material/Add";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Alert,
   Button,
@@ -8,33 +6,14 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Divider,
-  Stack,
   TextField,
-  Typography,
 } from "@mui/material";
-import Fab from "@mui/material/Fab";
-import IconButton from "@mui/material/IconButton";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useDispatch } from "react-redux";
-import { _fetchServiceProviders } from "../../../features/dashboardSlice";
-import AddWorkdaysDialog from "./AddWorkdaysDialog";
-
-const days = [
-  "יום ראשון",
-  "יום שני",
-  "יום שלישי",
-  "יום רביעי",
-  "יום חמישי",
-  "יום שישי",
-  "יום שבת",
-];
+import { _fetchServiceProviders } from "../../../../features/dashboardSlice";
+import AddWorkdaysDialog from "../../AddWorkdayDialog/AddWorkdaysDialog";
+import WorkdaysTable from "../../WorkdaysTable";
 
 export default function AddServiceProviderDialog(props) {
   const [firstname, setFirstname] = useState("");
@@ -60,21 +39,6 @@ export default function AddServiceProviderDialog(props) {
 
   const toggleDialog = () => {
     props.toggle(!props.open);
-  };
-
-  const handleAddWorkdays = () => {
-    setWorkdaysDialog(!workdaysDialog);
-  };
-
-  const handleRemove = (dayId) => {
-    workdaysArr.forEach((e, idx) => {
-      if (e.day === dayId) {
-        console.log(e.day + " - " + idx + "-" + dayId);
-        let tempArr = [...workdaysArr];
-        tempArr.splice(idx, 1);
-        setWorkdaysArr(tempArr);
-      }
-    });
   };
 
   useEffect(() => {
@@ -115,12 +79,8 @@ export default function AddServiceProviderDialog(props) {
       filename: "",
       workdays: workdays,
     };
-
     let response = await props?.add(newProvider);
-    if (
-      response?.type == "dashboard/addServiceProvider/fulfilled" ||
-      response?.type == "dashboard/updateServiceProvider/fulfilled"
-    ) {
+    if (response?.type.endsWith("fulfilled")) {
       toggleDialog();
       dispatch(_fetchServiceProviders());
     }
@@ -161,65 +121,6 @@ export default function AddServiceProviderDialog(props) {
   useEffect(() => {
     findFirstDayAvailable();
   }, [workdaysArr, setFirstDayAvailable]);
-
-  const WorkdaysRow = () => {
-    let table = (
-      <Table size="small" aria-label="a dense table">
-        <TableHead>
-          <TableRow>
-            <TableCell align="right">יום</TableCell>
-            <TableCell align="right">שעת התחלה</TableCell>
-            <TableCell align="right">שעת סיום</TableCell>
-            <TableCell align="right">מחיקה</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {workdaysArr.map((row) => {
-            return (
-              <TableRow
-                key={row.day}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell align="right" component="th" scope="row">
-                  {days[row.day]}
-                </TableCell>
-                <TableCell align="right">{row?.startTimeFormatted}</TableCell>
-                <TableCell align="right">{row?.endTimeFormatted}</TableCell>
-                <TableCell align="right">
-                  <IconButton
-                    aria-label="delete"
-                    color="error"
-                    size="small"
-                    onClick={() => handleRemove(row.day)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    );
-
-    return (
-      <>
-        <Typography variant="subtitle1" component="div">
-          ימי ושעות עבודה
-        </Typography>
-        <Divider />
-        {workdaysArr.length > 0 && table}
-        {workdaysArr.length != 7 && (
-          <Stack direction="column" sx={styles.addWorkdays}>
-            <Fab color="primary" aria-label="add" onClick={handleAddWorkdays}>
-              <AddIcon />
-            </Fab>
-            <p>הוספת ימי ושעות עבודה</p>
-          </Stack>
-        )}
-      </>
-    );
-  };
 
   return (
     <Dialog open={props.open} sx={styles.dialogContainer}>
@@ -285,7 +186,15 @@ export default function AddServiceProviderDialog(props) {
           onChange={(e) => setPhone(e.target.value)}
           fullWidth
         />
-        {WorkdaysRow()}
+
+        {
+          <WorkdaysTable
+            workdaysArr={workdaysArr}
+            setWorkdaysArr={setWorkdaysArr}
+            openDialog={workdaysDialog}
+            setOpenDialog={setWorkdaysDialog}
+          />
+        }
         {Dropzone}
         {file && (
           <p>

@@ -15,11 +15,12 @@
     background-color: white;
     border-radius: 10px;
     max-height: 65px;
+    margin: 2% 2% 0 2%;
 }
 
 .formcontainer {
-    width: 100%;
-    margin: 2% 0;
+    width: 48%;
+    margin: 2% 2% 0 0;
     background-color: white;
     border-radius: 10px;
     border: 1px solid #afd4ff;
@@ -27,7 +28,12 @@
     flex-direction: row;
     padding: 2%;
 }
-
+.widget-container {
+    display: flex;
+    flex-direction: row;
+    padding-left: 2%;
+    flex-wrap: wrap;
+}
 .MuiCardHeader-title {
     font-size: 18px !important;
 }
@@ -46,7 +52,7 @@
 }
 
 .MuiCard-root {
-    width: 50%;
+    width: 100%;
     margin: 1%;
 }
 

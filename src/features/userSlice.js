@@ -56,7 +56,7 @@ export const _updateUser = createAsyncThunk(
   async (user, thunkAPI) => {
     try {
       const response = await updateUser(user);
-      return response.data;
+      return response;
     } catch (error) {
       if(error != "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
     }

@@ -19,15 +19,7 @@ import { getHours, getMinutes } from "date-fns";
 import { useRef, useState } from "react";
 import {Alert} from "@mui/material";
 import { useEffect } from "react";
-const days = [
-  "יום ראשון",
-  "יום שני",
-  "יום שלישי",
-  "יום רביעי",
-  "יום חמישי",
-  "יום שישי",
-  "יום שבת",
-];
+import { daysArray } from "../util";
 
 const formatTime = (time) => {
   return getHours(time).toString() + ":" + getMinutes(time).toString();
@@ -51,7 +43,7 @@ export default function AddWorkdaysDialog(props) {
     console.log(error)
   },[error])
 
-  const daysArr = days.map((day, idx) => {
+  const daysMenuItemsArray = daysArray.map((day, idx) => {
     let isExist = false;
     props?.workdaysArr.forEach((e) => {
       if (e.day == idx) {
@@ -121,7 +113,7 @@ export default function AddWorkdaysDialog(props) {
                 onChange={(e) => handleChange(e, 0)}
                 sx={styles.space2}
               >
-                {daysArr}
+                {daysMenuItemsArray}
               </Select>
             </FormControl>
 
