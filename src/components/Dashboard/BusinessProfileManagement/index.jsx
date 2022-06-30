@@ -3,7 +3,7 @@ import { useState } from "react";
 import BusinessDetailsCard from "./BusinessDetails/BusinessDetailsCard";
 import "./index.css";
 import ProfileImageCard from "./ProfileImage/ProfileImageCard";
-import ProfileImageUploadDialog from "./ProfileImageUploadDialog";
+import ProfileImageUploadDialog from "./ProfileImage/ProfileImageUploadDialog";
 import WorkdaysCard from "./Workdays/WorkdaysCard";
 
 export default function BusinessProfileManagement() {

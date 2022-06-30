@@ -8,8 +8,8 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import useUser from "../../../../hooks/Dashboard/useUser";
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-
-export default function ProfileImageUploadDialog(props) {
+import { Alert } from "@mui/material";
+export default function ImageUploadDialog(props) {
   const [file, setFile] = useState([]);
   const [error, setError] = useState(false);
   const { user, update } = useUser();
@@ -47,17 +47,28 @@ export default function ProfileImageUploadDialog(props) {
     let tempUser = { ...user };
     tempUser.business = {
       ...tempUser.business,
-      img: file,
+      headerImg: file,
     };
-    let response = await update(tempUser);
-    if (response?.type === "user/update/fulfilled") {
-      toggleDialog();
+    try {
+      let response = await update(tempUser);
+      if (response?.type === "user/update/fulfilled") 
+        toggleDialog();
+
+    } catch (error) {
+      setError(true);
+
     }
+
   };
 
   return (
     <Dialog open={props.open} onClose={handleClose} sx={styles.container}>
-      <DialogTitle>העלאת תמונת פרופיל</DialogTitle>
+      {error && (
+        <Alert severity="error">
+          אירעה שגיאה
+        </Alert>
+      )}
+      <DialogTitle>החלפת רקע לראש העמוד</DialogTitle>
       <DialogContent>
         <DialogContentText>
           ניתן לגרור קובץ תמונה ולהניח בתוך המסגרת, או לחילופין ללחוץ במסגרת

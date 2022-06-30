@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetchBusinessDetails } from "../utils/BusinessAPI";
+
 const initialState = {
   business: null,
 };
 
 export const _fetchBusinessDetails = createAsyncThunk(
-    "user/getcurrentuser",
+    "business/getbusiness",
     async (businessId, thunkAPI) => {
       try {
         const response = await fetchBusinessDetails(businessId);
@@ -16,8 +17,8 @@ export const _fetchBusinessDetails = createAsyncThunk(
     }
   );
 
-  export const userSlice = createSlice({
-    name: "user",
+  export const businessSlice = createSlice({
+    name: "business",
     initialState,
     extraReducers: {
       [_fetchBusinessDetails.fulfilled]: (state, action) => {
@@ -29,5 +30,5 @@ export const _fetchBusinessDetails = createAsyncThunk(
     },
   });
   
-  export default userSlice.reducer;
+  export default businessSlice.reducer;
   

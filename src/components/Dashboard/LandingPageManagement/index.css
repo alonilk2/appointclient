@@ -1,0 +1,159 @@
+.landing-page-container {
+  display: flex;
+  direction: rtl;
+  width: 100%;
+  flex-direction: column;
+  height: 100%;
+  margin-bottom: 2%;
+  overflow: hidden;
+  flex: 1;
+  padding-left: 2%;
+  font-family: "Assistant", "Roboto", sans-serif;
+  letter-spacing: 0.8px;
+}
+
+.header-bar {
+  flex: 1;
+  padding: 1%;
+  justify-content: space-between;
+  border: 1px solid #afd4ff;
+  background-color: white;
+  border-radius: 10px;
+  max-height: 65px;
+  margin: 2% 2% 0 0;
+}
+.second-row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.gallery-column {
+  flex:3;
+}
+.header-background img {
+  width: 100%;
+
+  object-fit: cover;
+  max-height: 350px;
+}
+.cover {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+.cover h5 {
+  font-weight: 100;
+}
+.business-logo {
+  max-width: 100px;
+  object-fit: contain;
+  height: unset !important;
+  border: unset !important;
+}
+.first-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.appoint-btn-demo {
+  width: 150px;
+  border: 0px;
+  border-radius: 50px;
+  padding: 0.5% 1%;
+  font-size: 18px;
+  font-weight: 300;
+  margin: 1%;
+  background-color: #f25f5c;
+}
+
+.appoint-btn-demo:hover {
+  background-color: rgba(128, 128, 128, 0.493);
+}
+
+.cover:hover {
+  z-index: 2;
+  background-color: rgba(131, 71, 126, 0.692);
+}
+.header-background {
+  width: 100%;
+  position: relative;
+}
+
+
+.open-times {
+  flex: 2;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  padding: 2%;
+  margin: 2% 0;
+}
+
+.day-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.day-column > h5 {
+  color: #f25f5c;
+  font-weight: 900;
+}
+
+.formcontainer {
+  width: 48%;
+  margin: 2% 2% 0 0;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid #afd4ff;
+  display: flex;
+  flex-direction: row;
+  padding: 2%;
+}
+.landing-page-main {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  background-color: white;
+  margin: 2% 2% 0 0;
+  border-radius: 10px;
+  border: 1px solid #afd4ff;
+  height: 85%;
+  flex: 1;
+}
+.MuiCardHeader-title {
+  font-size: 18px !important;
+}
+
+.MuiFormControl-root {
+  margin: 1.5% 0 !important;
+}
+
+.MuiCardContent-root {
+  display: flex;
+  flex-direction: column;
+}
+
+.MuiDivider-root {
+  border-color: #dae0e7;
+}
+
+.MuiCard-root {
+  width: 100%;
+  margin: 1%;
+}
+
+.MuiFilledInput-root {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+}
+
+.profile-logo {
+  max-height: 250px;
+  object-fit: contain;
+}

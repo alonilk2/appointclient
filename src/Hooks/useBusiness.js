@@ -8,6 +8,7 @@ export default function useBusiness(businessId) {
     const business = useSelector(state => state.business?.business)
     
     const initialize = () => {
+        console.log(businessId)
         dispatch(_fetchBusinessDetails(businessId))
     }
 

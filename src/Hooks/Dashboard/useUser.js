@@ -4,14 +4,23 @@ import { _updateUser } from "../../features/userSlice";
 import { uploadFile } from "../../utils/FilesAPI";
 import { _getCurrentUser } from "../../features/userSlice";
 import { useEffect } from "react";
+
 export default function useUser() {
   const user = useSelector((state) => state.user?.user);
   const dispatch = useDispatch();
 
   const updateUser = async (user) => {
-      if(user?.business?.img) {
+
+      if(typeof(user?.business?.img) == "object") {
+        console.log(user)
+
         let fileName = await uploadFile({ file: user?.business?.img });
         user.business.img = fileName?.message
+      }
+      if (typeof(user?.business?.headerImg) == "object") {
+        console.log(user?.business)
+        let fileName = await uploadFile({ file: user?.business?.headerImg });
+        user.business.headerImg = fileName?.message
       }
       let response = await dispatch(_updateUser(user))
       return response
@@ -20,11 +29,6 @@ export default function useUser() {
   const getUserInstance = async () => {
     dispatch(_getCurrentUser());
   }
-
-  useEffect(() => {
-    console.log(user)
-
-  }, [user])
   
   return {
     user: user,

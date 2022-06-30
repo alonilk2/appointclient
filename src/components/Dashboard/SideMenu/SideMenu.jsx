@@ -7,7 +7,8 @@ import ListItemText from "@mui/material/ListItemText";
 import ListSubheader from "@mui/material/ListSubheader";
 import { useDispatch, useSelector } from "react-redux";
 import { selectTab } from "../../../features/dashboardSlice";
-import SettingsIcon from '@mui/icons-material/Settings';
+import SettingsIcon from "@mui/icons-material/Settings";
+import HomeIcon from '@mui/icons-material/Home';
 export default function SideMenu() {
   const dispatch = useDispatch();
   const selectedTab = useSelector((state) => state.dashboard.selectedTabIndex);
@@ -34,9 +35,17 @@ export default function SideMenu() {
           <ListItemIcon>
             <SettingsIcon />
           </ListItemIcon>
-          <ListItemText primary="ניהול פרופיל העסק" />
+          <ListItemText primary="ניהול פרטי העסק" />
         </ListItemButton>
-
+        <ListItemButton
+          selected={selectedTab == 3}
+          onClick={(event) => handleListItemClick(event, 3)}
+        >
+          <ListItemIcon>
+            <HomeIcon />
+          </ListItemIcon>
+          <ListItemText primary="ניהול דף נחיתה" />
+        </ListItemButton>
         <ListSubheader component="div" id="nested-list-subheader">
           שירותים ומוצרים
         </ListSubheader>
