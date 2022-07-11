@@ -21,16 +21,21 @@ import {Alert} from "@mui/material";
 import { useEffect } from "react";
 import { daysArray } from "../util";
 
+Date.prototype.addHours = function(h){
+  this.setHours(this.getHours()+h);
+  return this;
+}
+
 const formatTime = (time) => {
   return getHours(time).toString() + ":" + getMinutes(time).toString();
 };
 
 export default function AddWorkdaysDialog(props) {
   const [workdays, setWorkdays] = useState({
-    startTime: new Date(),
-    endTime: new Date(),
+    starttime: new Date(),
+    endtime: new Date().addHours(1),
     startTimeFormatted: formatTime(new Date()),
-    endTimeFormatted: formatTime(new Date()),
+    endTimeFormatted: formatTime(new Date().addHours(1)),
     day: props?.firstDayAvailable,
   });
   const [error, setError] = useState({field1: null, field2: null});
@@ -38,10 +43,6 @@ export default function AddWorkdaysDialog(props) {
   const toggleDialog = () => {
     props.toggle(!props.open);
   };
-
-  useEffect(()=>{
-    console.log(error)
-  },[error])
 
   const daysMenuItemsArray = daysArray.map((day, idx) => {
     let isExist = false;
@@ -55,22 +56,19 @@ export default function AddWorkdaysDialog(props) {
   });
 
   const handleChange = (e, field) => {
-    let timeObj = new Date(e)
     field == 0 && setWorkdays({ ...workdays, day: e.target.value });
     if(field == 1){
       setWorkdays({
         ...workdays,
         startTimeFormatted: formatTime(e),
-        startTime: e,
-        endTime: timeObj.setHours(timeObj.getHours()+1),
-        endTimeFormatted: formatTime(timeObj.setHours(timeObj.getHours()))
+        starttime: e
       });
     }
     if(field == 2){
       setWorkdays({
         ...workdays,
         endTimeFormatted: formatTime(e),
-        endTime: e,
+        endtime: e,
       });
     }
     if(e == "Invalid Date"){
@@ -118,7 +116,7 @@ export default function AddWorkdaysDialog(props) {
             </FormControl>
 
             <TimePicker
-              value={workdays.startTime}
+              value={workdays.starttime}
               label="שעת התחלה"
               onChange={(e) => handleChange(e, 1)}
               renderInput={(params) => (
@@ -126,10 +124,10 @@ export default function AddWorkdaysDialog(props) {
               )}
             />
             <TimePicker
-              value={workdays.endTime}
+              value={workdays.endtime}
               label="שעת סיום"
               onChange={(e) => handleChange(e, 2)}
-              minTime={workdays.startTime}
+              minTime={workdays.starttime}
               renderInput={(params) => (
                 <TextField sx={styles.space2} {...params} />
               )}

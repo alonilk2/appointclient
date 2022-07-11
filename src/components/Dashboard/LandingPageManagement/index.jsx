@@ -12,9 +12,13 @@ import { API_UPLOADS_URL } from "../../../constants";
 import useUser from "../../../hooks/Dashboard/useUser";
 import ImageUploadDialog from "./ImageUploadDialog";
 import "./index.css";
-import { SliderPicker } from "react-color";
+import { HuePicker } from "react-color";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { useEffect } from "react";
+import { OpeningHours } from "../../OpeningHours";
+import img1 from "../../../images/img1.jpg";
+import img2 from "../../../images/img2.jpg";
+import img3 from "../../../images/img3.jpg";
 
 export default function LandingPageManagement() {
   const { user, update } = useUser();
@@ -45,49 +49,6 @@ export default function LandingPageManagement() {
     }
   };
 
-  const OpeningHours = (
-    <div className="open-times">
-      <div className="day-column" style={{ justifyContent: "center" }}>
-        <p>שעת פתיחה</p>
-        <p>שעת סגירה</p>
-      </div>
-      <div className="day-column">
-        <h5 style={{color: color}}>ראשון</h5>
-        <p>10:00</p>
-        <p>18:00</p>
-      </div>
-      <div className="day-column">
-        <h5 style={{color: color}}>שני</h5>
-        <p>10:00</p>
-        <p>18:00</p>
-      </div>
-      <div className="day-column">
-        <h5 style={{color: color}}>שלישי</h5>
-        <p>10:00</p>
-        <p>18:00</p>
-      </div>
-      <div className="day-column">
-        <h5 style={{color: color}}>רביעי</h5>
-        <p>10:00</p>
-        <p>18:00</p>
-      </div>
-      <div className="day-column">
-        <h5 style={{color: color}}>חמישי</h5>
-        <p>10:00</p>
-        <p>18:00</p>
-      </div>
-      <div className="day-column">
-        <h5 style={{color: color}}>שישי</h5>
-        <p>10:00</p>
-        <p>18:00</p>
-      </div>
-      <div className="day-column">
-        <h5 style={{color: color}}>שבת</h5>
-        <p>-</p>
-      </div>
-    </div>
-  );
-
   useEffect(() => {
     if (user) {
       setColor(user?.business?.pageColor);
@@ -107,7 +68,11 @@ export default function LandingPageManagement() {
             <CardHeader title="צבעים" />
             <Divider />
             <CardContent>
-              <SliderPicker color={color} onChange={handleChangeColor} />
+              <HuePicker
+                color={color}
+                onChange={handleChangeColor}
+                width={"100%"}
+              />
             </CardContent>
             <CardActions>
               <Button variant="contained" onClick={handleSubmit}>
@@ -151,8 +116,14 @@ export default function LandingPageManagement() {
           />
         </div>
         <div className="second-row">
-          {OpeningHours}
-          <div className="gallery-column">abc</div>
+          <div className="form-container">
+            {OpeningHours(user?.business?.workdays, user?.business?.pageColor)}
+            <div className="gallery">
+              <img src={img1}></img>
+              <img src={img2}></img>
+              <img src={img3}></img>
+            </div>
+          </div>
         </div>
       </div>
     </div>

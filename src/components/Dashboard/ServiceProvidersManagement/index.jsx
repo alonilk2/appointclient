@@ -45,7 +45,6 @@ export default function ServiceProvidersManagement() {
 
   const handleEdit = (params) => {
     return async () => {
-      console.log(params);
       setProviderForEdit(params.value);
       setToggleDialog(!toggleDialog);
     };

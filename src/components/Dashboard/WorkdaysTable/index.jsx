@@ -10,11 +10,18 @@ import {
   TableHead,
   TableRow
 } from "@mui/material";
+import { useState } from "react";
+import { useEffect } from "react";
 import { daysArray } from "../util";
 
 export default function WorkdaysTable(props) {
-  let workdaysArr = props?.workdaysArr
-  let workdaysDialog = props?.openDialog
+  const [workdaysArr, setWorkdaysArr] = useState(props?.workdaysArr)
+  const [workdaysDialog, setWorkdaysDialog] = useState(props?.workdaysDialog)
+
+  useEffect(()=>{
+    setWorkdaysArr(props?.workdaysArr)
+    console.log(props?.workdaysArr)
+  }, [props?.workdaysArr])
 
   const handleAddWorkdays = () => {
     props?.setOpenDialog(!workdaysDialog);
@@ -50,8 +57,8 @@ export default function WorkdaysTable(props) {
               <TableCell align="right" component="th" scope="row">
                 {daysArray[row.day]}
               </TableCell>
-              <TableCell align="right">{row?.startTimeFormatted}</TableCell>
-              <TableCell align="right">{row?.endTimeFormatted}</TableCell>
+              <TableCell align="right">{row?.startTimeFormatted || row?.starttime}</TableCell>
+              <TableCell align="right">{row?.endTimeFormatted || row?.endtime}</TableCell>
               <TableCell align="right">
                 <IconButton
                   aria-label="delete"

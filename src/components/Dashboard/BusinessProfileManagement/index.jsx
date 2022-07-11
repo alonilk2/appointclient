@@ -5,10 +5,13 @@ import "./index.css";
 import ProfileImageCard from "./ProfileImage/ProfileImageCard";
 import ProfileImageUploadDialog from "./ProfileImage/ProfileImageUploadDialog";
 import WorkdaysCard from "./Workdays/WorkdaysCard";
-
+import useUser from '../../../hooks/Dashboard/useUser'
+import useBusiness from "../../../hooks/useBusiness";
 export default function BusinessProfileManagement() {
   const [open, setOpen] = useState();
+  const {object: business, update} = useBusiness();
 
+  console.log(business)
   return (
     <div className="business-details-container">
       <ProfileImageUploadDialog open={open} toggle={setOpen} />
@@ -23,7 +26,7 @@ export default function BusinessProfileManagement() {
           <ProfileImageCard openDialog={open} setOpenDialog={setOpen} />
         </div>
         <div className="formcontainer">
-          <WorkdaysCard />
+          <WorkdaysCard business={business} update={update}/>
         </div>
       </div>
     </div>

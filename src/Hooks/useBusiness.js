@@ -1,20 +1,27 @@
 import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { _fetchBusinessDetails } from "../features/businessSlice"
-
+import { _fetchBusinessDetails, _updateBusiness } from "../features/businessSlice"
 
 export default function useBusiness(businessId) {
     const dispatch = useDispatch()
-    const business = useSelector(state => state.business?.business)
+    const business = useSelector(state => state.user?.user?.business)
+    const secBusiness = useSelector(state => state?.business?.business)
     
+    const update = async (businessObj) => {
+        let response = await dispatch(_updateBusiness(businessObj))
+        return response
+    }
+
     const initialize = () => {
-        console.log(businessId)
         dispatch(_fetchBusinessDetails(businessId))
     }
 
-    useEffect(()=>{
-        initialize()   
-    }, [])
+    useEffect(()=> {
+        initialize()
+    },[])
 
-    return business
+    return {
+        object: business || secBusiness,
+        update: update
+    }
 }

@@ -10,17 +10,35 @@ import { useState, useEffect } from "react";
 import AddWorkdaysDialog from "../../AddWorkdayDialog/AddWorkdaysDialog";
 import WorkdaysTable from "../../WorkdaysTable";
 
-export default function WorkdaysCard() {
+export default function WorkdaysCard(props) {
   const [workdaysDialog, setWorkdaysDialog] = useState(false);
-  const [workdaysArr, setWorkdaysArr] = useState([]);
+  const [workdaysArr, setWorkdaysArr] = useState(props?.business?.workdays);
   const [firstDayAvailable, setFirstDayAvailable] = useState(0);
 
-  const handleSubmitForm = () => {};
+  useEffect(()=>{
+    setWorkdaysArr(props?.business?.workdays)
+  }, [props?.business?.workdays])
+
+  const handleSubmitForm =async () => {
+    const workdays = workdaysArr.map((wd) => {
+      console.log(wd)
+      if(wd.startTimeFormatted) return {
+        starttime: wd.startTimeFormatted,
+        endtime: wd.endTimeFormatted,
+        day: wd.day,
+      };
+    });
+    let businessObj = {
+      ...props?.business,
+      workdays: workdays
+    };
+    let response = await props?.update(businessObj);
+  };
 
   const findFirstDayAvailable = () => {
     for (let idx = 0; idx < 7; idx++) {
       let found = false;
-      workdaysArr.forEach((e) => {
+      workdaysArr?.forEach((e) => {
         if (e.day === idx) {
           found = true;
           return;

@@ -14,6 +14,8 @@ import Signin from "./views/Signin";
 import Signup from "./views/Signup";
 import { ACCESS_TOKEN } from "./constants";
 import Appointment from "./components/Appointment";
+import PhoneRegistration from "./components/Appointment/PhoneRegistration";
+import Firebase, { FirebaseContext } from "./components/Firebase";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -25,7 +27,10 @@ const CustomRoutes = () => {
         <Route path="/">
           <Route index element={<App />} />
           <Route path="appoint">
-            <Route path=":businessId" element={<Appointment />} />
+            <Route path=":businessId">
+              <Route index element={<Appointment />} />
+              <Route path="authorization" element={<PhoneRegistration />} />
+            </Route>
           </Route>
           <Route path="authorization">
             <Route path="oauth2">
@@ -56,7 +61,9 @@ const CustomRoutes = () => {
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <CustomRoutes />
+      <FirebaseContext.Provider value={new Firebase()}>
+        <CustomRoutes />
+      </FirebaseContext.Provider>
     </Provider>
   </React.StrictMode>
 );

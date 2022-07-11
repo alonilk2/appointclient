@@ -7,6 +7,18 @@ import {
   updateUser,
 } from "../utils/AuthAPI";
 
+const sortWorkdaysArray = (arr) => {
+  let sortedArr = []
+  for(let i=0; i<7; i++){
+      for(let j=0; j<arr.length; j++){
+          if(arr[j].day === i){
+              sortedArr.push(arr[j])
+          }
+      }
+  }
+  return sortedArr;
+}
+
 const initialState = {
   loggedIn: false,
   user: null,
@@ -67,7 +79,8 @@ export const _getCurrentUser = createAsyncThunk(
   "user/getcurrentuser",
   async (thunkAPI) => {
     try {
-      const response = await getCurrentUser();
+      let response = await getCurrentUser();
+      response.business.workdays = sortWorkdaysArray(response.business.workdays)
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue();
