@@ -1,13 +1,14 @@
-import "./index.css";
+import "../index.css";
 import { useState, useRef, useEffect } from "react";
 import {
   getAuth,
   RecaptchaVerifier,
   signInWithPhoneNumber,
 } from "firebase/auth";
-import useBusiness from "../../hooks/useBusiness";
-import { useParams } from "react-router-dom";
-import loginImg from '../../images/password.png'
+import useBusiness from "../../../hooks/useBusiness";
+import { useNavigate, useParams } from "react-router-dom";
+import loginImg from '../../../images/password.png'
+
 export default function PhoneRegistration() {
   const [code, setCode] = useState(null);
   const [codeVerify, setCodeVerify] = useState(false);
@@ -16,6 +17,7 @@ export default function PhoneRegistration() {
   const auth = getAuth();
   const { businessId } = useParams();
   const { object: business } = useBusiness(businessId);
+  const navigate = useNavigate();
 
   useEffect(() => {
     appVerifier.current = new RecaptchaVerifier(
@@ -36,6 +38,8 @@ export default function PhoneRegistration() {
         .confirm(code)
         .then((result) => {
           const user = result.user;
+          navigate("/appoint/"+businessId+"/registration", {state: user})
+          console.log(result)
         })
         .catch((error) => {
           console.log(error);
@@ -112,7 +116,7 @@ export default function PhoneRegistration() {
   return (
     <div id="auth-container" className="auth-container">
       <div className="col appoint-form-container">
-        <img src={loginImg} className="auth-icon"/>
+        <img src={loginImg} className="auth-icon" alt="login icon"/>
         <h1 className="auth-title">אימות פלאפון </h1>
         {!codeVerify ? PhoneNumberInputComponent : CodeVerifyComponent}
       </div>

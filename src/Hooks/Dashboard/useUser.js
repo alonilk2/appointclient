@@ -10,7 +10,6 @@ export default function useUser() {
   const dispatch = useDispatch();
 
   const updateUser = async (user) => {
-
       if(typeof(user?.business?.img) == "object") {
         console.log(user)
 

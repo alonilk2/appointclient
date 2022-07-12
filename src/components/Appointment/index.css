@@ -90,7 +90,6 @@
   font-weight: 900;
 }
 
-
 .business-logo {
   max-width: 100px;
   border: 1px solid #a1a1a186;
@@ -104,17 +103,16 @@
   align-items: center;
   height: 100vh;
   direction: rtl;
-  font-family: 'Assistant', 'Roboto', sans-serif;
+  font-family: "Assistant", "Roboto", sans-serif;
 }
 
-.auth-container>.image-background {
-  background-image: url('../../images/img1.jpg');
+.auth-container > .image-background {
+  background-image: url("../../images/img1.jpg");
   background-size: cover;
   height: 100%;
 }
 
 .appoint-form-container {
-
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -139,7 +137,7 @@
 
 .auth-button {
   border: 0px;
-  border-radius:7px;
+  border-radius: 7px;
   min-width: 100%;
   padding: 1.5% 1%;
   font-size: 22px;
@@ -148,4 +146,62 @@
 .auth-icon {
   width: 80px;
   margin: 2%;
+}
+
+.customer-registration-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  background-color: #e9b7ce;
+  background: hsla(332, 53%, 82%, 1);
+
+  background: radial-gradient(
+      66.32% 66.32% at 54.13% 113.95%,
+      rgba(38, 125, 255, 0.2) 0,
+      rgba(89, 106, 255, 0) 100%
+    ),
+    linear-gradient(
+      320deg,
+      rgba(65, 241, 174, 0.2) 25%,
+      rgba(45, 143, 234, 0) 68.7%
+    ),
+    radial-gradient(
+      100% 100% at 28.65% 0,
+      #56c792 0,
+      rgba(247, 249, 254, 0) 100%
+    );
+    padding: 6% 15%;
+}
+
+.customer-registration-container .form-container {
+  background-color: white;
+  border-radius: 25px;
+  font-family: "Assistant", "Roboto", sans-serif;
+  direction: rtl;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  min-width: 25vw;
+  position: relative;
+  padding: 2% 2%;
+}
+
+.customer-registration-container .form-container p {
+  margin-top: 5%;
+}
+
+.customer-registration-container .form-container h1 {
+  margin: 5%;
+}
+.customer-registration-container .form-container button {
+  margin-top: 8%;
+}
+
+.registration-intro {
+  align-self: flex-start;
+  margin-bottom: 5%;
+  margin-top: 0 !important;
 }

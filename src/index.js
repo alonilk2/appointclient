@@ -14,8 +14,10 @@ import Signin from "./views/Signin";
 import Signup from "./views/Signup";
 import { ACCESS_TOKEN } from "./constants";
 import Appointment from "./components/Appointment";
-import PhoneRegistration from "./components/Appointment/PhoneRegistration";
+import PhoneRegistration from "./components/Appointment/Authentication/PhoneRegistration";
 import Firebase, { FirebaseContext } from "./components/Firebase";
+import CustomerRegistration from "./components/Appointment/Authentication/CustomerRegistration";
+import AppointDashboard from "./components/Appointment/AppointDashboard/AppointDashboard";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -30,6 +32,9 @@ const CustomRoutes = () => {
             <Route path=":businessId">
               <Route index element={<Appointment />} />
               <Route path="authorization" element={<PhoneRegistration />} />
+              <Route path="registration" element={<CustomerRegistration />} />
+              <Route path="dashboard" element={<AppointDashboard />} />
+
             </Route>
           </Route>
           <Route path="authorization">
