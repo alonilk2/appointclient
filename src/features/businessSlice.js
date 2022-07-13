@@ -12,6 +12,7 @@ export const _fetchBusinessDetails = createAsyncThunk(
       let response = await fetchBusinessDetails(businessId);
       return response;
     } catch (error) {
+      console.log(error)
       return thunkAPI.rejectWithValue();
     }
   }

@@ -7,6 +7,11 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  Typography,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  Divider,
 } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
@@ -14,6 +19,7 @@ import { useDispatch } from "react-redux";
 import { _fetchServiceProviders } from "../../../../features/dashboardSlice";
 import AddWorkdaysDialog from "../../AddWorkdayDialog/AddWorkdaysDialog";
 import WorkdaysTable from "../../WorkdaysTable";
+import useServices from "../../../../hooks/Dashboard/useServices";
 
 export default function AddServiceProviderDialog(props) {
   const [firstname, setFirstname] = useState("");
@@ -25,6 +31,8 @@ export default function AddServiceProviderDialog(props) {
   const [file, setFile] = useState([]);
   const [firstDayAvailable, setFirstDayAvailable] = useState(0);
   const [error, setError] = useState(false);
+  const [chosenServices, setChosenServices] = useState([])
+  const services = useServices();
   const dispatch = useDispatch();
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -70,7 +78,7 @@ export default function AddServiceProviderDialog(props) {
     });
 
     let newProvider = {
-      id: props?.providerForEdit.id || null,
+      id: props?.providerForEdit?.id || null,
       firstname: firstname,
       lastname: lastname,
       phone: phone,
@@ -78,6 +86,7 @@ export default function AddServiceProviderDialog(props) {
       file: file,
       filename: "",
       workdays: workdays,
+      services: chosenServices
     };
     let response = await props?.add(newProvider);
     if (response?.type.endsWith("fulfilled")) {
@@ -118,9 +127,29 @@ export default function AddServiceProviderDialog(props) {
     }
   };
 
+  const handleCheck = (e, service) => {
+    if(e.target.checked) setChosenServices([...chosenServices, service])
+    else {
+      let tempServices = [...chosenServices];
+      tempServices = tempServices.filter((_service) => _service.id !== service.id)
+      console.log(tempServices)
+      setChosenServices(tempServices)
+    }
+  }
+
   useEffect(() => {
     findFirstDayAvailable();
   }, [workdaysArr, setFirstDayAvailable]);
+
+  const ServicesCheckboxes = services?.list?.map((service) => {
+    return (
+      <FormControlLabel
+        control={<Checkbox onChange={(e)=>handleCheck(e, service)}/>}
+        label={service?.name}
+        sx={{margin: '1%'}}
+      />
+    );
+  });
 
   return (
     <Dialog open={props.open} sx={styles.dialogContainer}>
@@ -186,7 +215,10 @@ export default function AddServiceProviderDialog(props) {
           onChange={(e) => setPhone(e.target.value)}
           fullWidth
         />
-
+        <Typography variant="subtitle1" gutterBottom component="div">
+          ימי ושעות עבודה
+        </Typography>
+        <Divider />
         {
           <WorkdaysTable
             workdaysArr={workdaysArr}
@@ -195,6 +227,18 @@ export default function AddServiceProviderDialog(props) {
             setOpenDialog={setWorkdaysDialog}
           />
         }
+        <Typography variant="subtitle1" gutterBottom component="div">
+          תחומי שירות
+        </Typography>
+        <Divider />
+        <div className="services-container">
+          {ServicesCheckboxes}
+        </div>
+        <Typography variant="subtitle1" gutterBottom component="div">
+          תמונת פרופיל
+        </Typography>
+        <Divider />
+        <br />
         {Dropzone}
         {file && (
           <p>

@@ -5,43 +5,51 @@ import { API_UPLOADS_URL } from "../../../constants";
 import { useDispatch } from "react-redux";
 import { initCustomer, _addCustomer } from "../../../features/customerSlice";
 import { Alert, AlertTitle, Divider } from "@mui/material";
+import { useLocation } from "react-router-dom";
+import { TextField } from "@mui/material";
 
-export default function CustomerRegistration(props) {
+export default function CustomerRegistration() {
+  const location = useLocation();
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState(location?.state);
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState();
   const { businessId } = useParams();
-  const { object: business } = useBusiness(businessId);
+  const { business } = useBusiness(businessId);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    if(email.length === 0 || firstname.length === 0 || lastname.length === 0) {
+      return setError(true)
+    }
 
     let obj = {
       email: email,
       phone: phone,
       firstname: firstname,
       lastname: lastname,
-      business: business
+      business: business,
     };
 
     let response = await dispatch(_addCustomer(obj));
 
     if (response.type == "customer/addCustomer/fulfilled") {
       dispatch(initCustomer(response.payload));
-      navigate("/appoint/"+businessId+"/dashboard", { state: response });
+      navigate("/appoint/" + businessId + "/dashboard", {
+        state: { response },
+      });
     } else if (response.type == "customer/addCustomer/rejected") {
       setError(response.error.message);
     }
   };
 
+  // if (!phone) return navigate("/");
   return (
-    <div className="customer-registration-container">
+    <div className="customer-registration-container" dir="rtl">
       <div className="form-container">
-        {error && (
+        {typeof error == String && (
           <Alert severity="error">
             <AlertTitle>Error</AlertTitle>
             An error occured while trying to register —{" "}
@@ -57,38 +65,47 @@ export default function CustomerRegistration(props) {
           <br />
           רק בואו נכיר לפני כן, כדי שנדע למי לצפות :)
         </p>
-        <p>שם פרטי</p>
-        <input
-          className="input-field"
+        <TextField
+          id="outlined-basic"
+          fullWidth
+          label="שם פרטי"
+          error={firstname.length === 0 && error === true}
+          variant="outlined"
           type="text"
-          placeholder="שם פרטי"
           required
           onChange={(e) => setFirstname(e.target.value)}
-        ></input>
-        <p>שם משפחה</p>
-        <input
-          className="input-field"
+        ></TextField>
+        <TextField
+          id="outlined-basic"
+          fullWidth
+          error={lastname.length === 0 && error === true}
+          variant="outlined"
           type="text"
-          placeholder="שם משפחה"
+          label="שם משפחה"
           required
           onChange={(e) => setLastname(e.target.value)}
-        ></input>
-        <p>מספר פלאפון</p>
-        <input
-          className="input-field"
-          type="number"
-          placeholder="מספר פלאפון"
+        ></TextField>
+        <TextField
+          id="outlined-basic"
+          fullWidth
+          variant="outlined"
+          type="text"
+          value={phone}
+          label="מספר פלאפון"
           required
+          disabled
           onChange={(e) => setPhone(e.target.value)}
-        ></input>
-        <p>דואר אלקטרוני</p>
-        <input
-          className="input-field"
+        ></TextField>
+        <TextField
+          id="outlined-basic"
+          fullWidth
+          variant="outlined"
+          error={email.length === 0 && error === true}
           type="email"
-          placeholder="דואר אלקטרוני"
+          label="דואר אלקטרוני"
           required
           onChange={(e) => setEmail(e.target.value)}
-        ></input>
+        ></TextField>
 
         <button
           className="home-btn signin-custom-btn"

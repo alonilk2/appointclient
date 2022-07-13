@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Appointment(props) {
   const { businessId } = useParams();
-  const {object: business} = useBusiness(businessId);
+  const {business} = useBusiness(businessId);
   let businessImg = API_UPLOADS_URL + business?.img;
   let navigate = useNavigate();
 

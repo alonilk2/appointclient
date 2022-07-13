@@ -7,7 +7,7 @@ import {
 } from "firebase/auth";
 import useBusiness from "../../../hooks/useBusiness";
 import { useNavigate, useParams } from "react-router-dom";
-import loginImg from '../../../images/password.png'
+import loginImg from "../../../images/password.png";
 
 export default function PhoneRegistration() {
   const [code, setCode] = useState(null);
@@ -16,7 +16,7 @@ export default function PhoneRegistration() {
   const phoneNumber = useRef();
   const auth = getAuth();
   const { businessId } = useParams();
-  const { object: business } = useBusiness(businessId);
+  const { business } = useBusiness(businessId);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,18 +33,16 @@ export default function PhoneRegistration() {
   }, []);
 
   const onCodeSubmit = async () => {
-    try {
-      window.confirmationResult
-        .confirm(code)
-        .then((result) => {
-          const user = result.user;
-          navigate("/appoint/"+businessId+"/registration", {state: user})
-          console.log(result)
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } catch (error) {}
+    window.confirmationResult
+      .confirm(code)
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+        navigate("/appoint/" + businessId + "/registration", { state: user.phoneNumber });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const onSignInSubmit = async () => {
@@ -90,9 +88,7 @@ export default function PhoneRegistration() {
   const PhoneNumberInputComponent = (
     <>
       <div className="input-row">
-        <span>
-          הכנס מספר פלאפון למשלוח SMS לאימות:
-        </span>
+        <span>הכנס מספר פלאפון למשלוח SMS לאימות:</span>
         <input
           type="phone"
           className="auth-input"
@@ -116,7 +112,7 @@ export default function PhoneRegistration() {
   return (
     <div id="auth-container" className="auth-container">
       <div className="col appoint-form-container">
-        <img src={loginImg} className="auth-icon" alt="login icon"/>
+        <img src={loginImg} className="auth-icon" alt="login icon" />
         <h1 className="auth-title">אימות פלאפון </h1>
         {!codeVerify ? PhoneNumberInputComponent : CodeVerifyComponent}
       </div>

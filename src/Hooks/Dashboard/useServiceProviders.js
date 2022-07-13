@@ -6,12 +6,14 @@ import {
   _removeServiceProvider,
 } from "../../features/dashboardSlice";
 import { uploadFile } from "../../utils/FilesAPI";
+import useBusiness from '../../hooks/useBusiness'
 
 export default function useServiceProviders() {
-  const serviceProvidersList = useSelector(
-    (state) => state.dashboard?.serviceProviders
-  );
+
   const user = useSelector(state=>state.user.user)
+  const serviceProvidersList = useSelector(
+    (state) => state.user.user?.business?.serviceProviders
+  );
   const dispatch = useDispatch();
 
   const initialize = async () => {

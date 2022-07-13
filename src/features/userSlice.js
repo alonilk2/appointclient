@@ -8,6 +8,7 @@ import {
 } from "../utils/AuthAPI";
 
 const sortWorkdaysArray = (arr) => {
+  if(!arr) return;
   let sortedArr = []
   for(let i=0; i<7; i++){
       for(let j=0; j<arr.length; j++){
@@ -83,6 +84,7 @@ export const _getCurrentUser = createAsyncThunk(
       response.business.workdays = sortWorkdaysArray(response.business.workdays)
       return response;
     } catch (error) {
+      console.log(error)
       return thunkAPI.rejectWithValue();
     }
   }

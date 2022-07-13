@@ -18,6 +18,19 @@ import PhoneRegistration from "./components/Appointment/Authentication/PhoneRegi
 import Firebase, { FirebaseContext } from "./components/Firebase";
 import CustomerRegistration from "./components/Appointment/Authentication/CustomerRegistration";
 import AppointDashboard from "./components/Appointment/AppointDashboard/AppointDashboard";
+import rtlPlugin from "stylis-plugin-rtl";
+import { CacheProvider } from "@emotion/react";
+import createCache from "@emotion/cache";
+import { prefixer } from "stylis";
+
+const cacheRtl = createCache({
+  key: "muirtl",
+  stylisPlugins: [prefixer, rtlPlugin],
+});
+
+function RTL(props) {
+  return <CacheProvider value={cacheRtl}>{props.children}</CacheProvider>;
+}
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -34,7 +47,6 @@ const CustomRoutes = () => {
               <Route path="authorization" element={<PhoneRegistration />} />
               <Route path="registration" element={<CustomerRegistration />} />
               <Route path="dashboard" element={<AppointDashboard />} />
-
             </Route>
           </Route>
           <Route path="authorization">
@@ -67,7 +79,9 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <FirebaseContext.Provider value={new Firebase()}>
-        <CustomRoutes />
+        <RTL>
+          <CustomRoutes />
+        </RTL>
       </FirebaseContext.Provider>
     </Provider>
   </React.StrictMode>

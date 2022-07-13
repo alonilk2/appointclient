@@ -126,3 +126,22 @@
 .css-16ac5r2-MuiButtonBase-root-MuiListItemButton-root {
   border-radius: 8px !important;
 }
+
+.MuiListItemButton-root {
+  flex-direction: row-reverse !important;
+}
+
+.MuiListItemIcon-root {
+  display: block !important;
+}
+
+.MuiListSubheader-root, .MuiTypography-root {
+  text-align: right !important;
+}
+
+
+.services-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}

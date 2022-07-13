@@ -130,6 +130,7 @@
 }
 .MuiCardHeader-title {
   font-size: 18px !important;
+  text-align: right;
 }
 
 .MuiFormControl-root {

@@ -99,7 +99,7 @@ export default function ServiceProvidersManagement() {
     },
   ];
 
-  const rows = serviceProviders.list?.map((provider) => {
+  const rows = serviceProviders?.list?.map((provider) => {
     return {
       id: provider.id,
       userprofile: {

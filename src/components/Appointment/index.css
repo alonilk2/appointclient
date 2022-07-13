@@ -190,7 +190,7 @@
 }
 
 .customer-registration-container .form-container p {
-  margin-top: 5%;
+  margin: 2% 0 0 0  ;
 }
 
 .customer-registration-container .form-container h1 {
@@ -202,6 +202,10 @@
 
 .registration-intro {
   align-self: flex-start;
-  margin-bottom: 5%;
+  margin-bottom: 5% !important;
   margin-top: 0 !important;
+}
+
+.MuiOutlinedInput-root {
+  border-radius: 8px !important;
 }
