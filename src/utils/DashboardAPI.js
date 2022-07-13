@@ -38,16 +38,6 @@ export async function removeServiceProvider(id) {
   return response?.data;
 }
 
-export async function fetchServicesList() {
-  if (!localStorage.getItem(ACCESS_TOKEN)) {
-    return Promise.reject("No access token set.");
-  }
-  let response = await Axios.get(API_BASE_URL + "/services", {
-    headers: { Authorization: "Bearer " + localStorage.getItem(ACCESS_TOKEN) },
-  });
-  return response?.data;
-}
-
 export async function addServices(service) {
   if (!localStorage.getItem(ACCESS_TOKEN)) {
     return Promise.reject("No access token set.");

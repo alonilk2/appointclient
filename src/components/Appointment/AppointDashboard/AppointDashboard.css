@@ -39,7 +39,7 @@
     padding: 2% 2%;
   }
 
-  .appoint-dashboard-container .MuiDivider-root {
+  .appoint-dashboard-container .css-1i1qbzr-MuiDivider-root {
     height: 100% !important;
   }
 
@@ -49,3 +49,26 @@
     height: 100%;
     justify-content: center;
   }
+
+  .service-providers-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .services-row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-evenly;
+    height: 50%;
+    align-items: center;
+}
+.providers-row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-evenly;
+    height: 50%;
+    align-items: center;
+}

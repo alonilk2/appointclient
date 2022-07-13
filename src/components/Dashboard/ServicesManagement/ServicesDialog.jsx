@@ -1,20 +1,22 @@
 import {
-  Alert, Button,
+  Alert,
+  Button,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle, TextField
+  DialogTitle,
+  TextField,
 } from "@mui/material";
+import useUser from "../../../hooks/Dashboard/useUser";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { _fetchServices } from "../../../features/dashboardSlice";
 
 export default function ServicesDialog(props) {
   const [name, setName] = useState("");
   const [cost, setCost] = useState(0);
   const [error, setError] = useState(false);
   const dispatch = useDispatch();
-
+  const user = useUser();
   const handleClose = () => {
     toggleDialog();
   };
@@ -28,8 +30,8 @@ export default function ServicesDialog(props) {
       setName(props?.serviceForEdit.name);
       setCost(props?.serviceForEdit.cost);
     } else {
-      setName("")
-      setCost(0)
+      setName("");
+      setCost(0);
     }
   }, [props?.serviceForEdit]);
 
@@ -37,18 +39,22 @@ export default function ServicesDialog(props) {
     if (name === "" || cost === "") return setError(true);
 
     let newService = {
-      id: props?.serviceForEdit.id || null,
+      id: props?.serviceForEdit?.id || null,
       name: name,
       cost: cost,
+      business: user?.business,
     };
-    
-    let response
-    if(props.serviceForEdit) response = await props.update(newService)
+
+    let response;
+    if (props.serviceForEdit) response = await props.update(newService);
     else response = await props?.add(newService);
 
-    if (response?.type == "dashboard/addServices/fulfilled" || response?.type == "dashboard/updateServices/fulfilled") {
+    if (
+      response?.type == "dashboard/addServices/fulfilled" ||
+      response?.type == "dashboard/updateServices/fulfilled"
+    ) {
       toggleDialog();
-      dispatch(_fetchServices());
+      props?.refresh();
     }
   };
 
@@ -56,11 +62,7 @@ export default function ServicesDialog(props) {
     <Dialog open={props.open} sx={styles.dialogContainer}>
       <DialogTitle>הוסף שירות</DialogTitle>
       <DialogContent>
-        {error && (
-          <Alert severity="error">
-            יש למלא את כל השדות!
-          </Alert>
-        )}
+        {error && <Alert severity="error">יש למלא את כל השדות!</Alert>}
         <TextField
           required
           error={error && name.length === 0 && true}

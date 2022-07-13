@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { _fetchServices, _addServices, _removeServices, _updateServices } from "../../features/dashboardSlice";
+import useUser from "./useUser";
 
 export default function useServices() {
-  const services = useSelector((state) => state.dashboard.services);
+  const user = useUser();
+  const services = useSelector((state) => user?.business?.services);
   const dispatch = useDispatch();
 
   const addServices = async (service) => {
@@ -30,7 +32,7 @@ export default function useServices() {
   };
 
   const initialize = async () => {
-    await dispatch(_fetchServices());
+    user?.refresh()
   };
 
   useEffect(() => {

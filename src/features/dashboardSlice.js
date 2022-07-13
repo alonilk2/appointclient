@@ -3,11 +3,11 @@ import {
   addServiceProvider,
   fetchServiceProvidersList,
   removeServiceProvider,
-  fetchServicesList,
   addServices,
   removeServices,
   updateServices
 } from "../utils/DashboardAPI";
+
 const initialState = {
   selectedTabIndex: 2,
   serviceProviders: null,
@@ -43,18 +43,6 @@ export const _removeServiceProvider = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       const response = await removeServiceProvider(id);
-      return response;
-    } catch (error) {
-      return thunkAPI.rejectWithValue();
-    }
-  }
-);
-
-export const _fetchServices = createAsyncThunk(
-  "dashboard/fetchServices",
-  async (thunkAPI) => {
-    try {
-      const response = await fetchServicesList();
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue();
@@ -112,12 +100,6 @@ export const dashboardSlice = createSlice({
     },
     [_fetchServiceProviders.rejected]: (state, action) => {
       state.serviceProviders = null;
-    },
-    [_fetchServices.fulfilled]: (state, action) => {
-      state.services = action.payload;
-    },
-    [_fetchServices.rejected]: (state, action) => {
-      state.services = null;
     },
     [_addServiceProvider.fulfilled]: (state, action) => {},
     [_addServiceProvider.rejected]: (state, action) => {},

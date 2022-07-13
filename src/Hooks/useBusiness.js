@@ -21,7 +21,8 @@ export default function useBusiness(businessId) {
     },[])
 
     return {
-        object: business || secBusiness,
-        update: update
+        business: business || secBusiness,
+        update: update,
+        refresh: initialize
     }
 }

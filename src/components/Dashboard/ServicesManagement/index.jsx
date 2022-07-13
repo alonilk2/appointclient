@@ -9,11 +9,13 @@ import { useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import ServicesDialog from "./ServicesDialog";
+import useUser from "../../../hooks/Dashboard/useUser";
 
 export default function ServicesManagement() {
   const [toggleDialog, setToggleDialog] = useState(false);
   const [serviceForEdit, setServiceForEdit] = useState();
-  const services = useServices();
+  const user = useUser();
+  const services = useServices(user?.business?.id);
 
   const handleRemove = (params) => {
     return async () => {
@@ -89,6 +91,7 @@ export default function ServicesManagement() {
         add={services.add}
         serviceForEdit={serviceForEdit}
         update={services.update}
+        refresh={services.refresh}
       />
       <CardHeader
         title="ניהול שירותים"
