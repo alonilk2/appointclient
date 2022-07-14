@@ -39,7 +39,7 @@
     padding: 2% 2%;
   }
 
-  .appoint-dashboard-container .css-1i1qbzr-MuiDivider-root {
+  .muirtl-1i1qbzr-MuiDivider-root {
     height: 100% !important;
   }
 
@@ -77,3 +77,13 @@
   margin: auto;
   text-align: center;
 }
+
+.service-wrapper {
+  background-color: rgb(255, 255, 255);
+  border-radius: 50%;
+  padding: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
