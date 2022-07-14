@@ -2,6 +2,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Box, Divider, Button, Avatar } from "@mui/material";
 import CardHeader from "@mui/material/CardHeader";
 import useServiceProviders from "../../../hooks/Dashboard/useServiceProviders";
+import useUser from "../../../hooks/Dashboard/useUser";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
@@ -14,6 +15,7 @@ export default function ServiceProvidersManagement() {
   const [toggleDialog, setToggleDialog] = useState(false);
   const [providerForEdit, setProviderForEdit] = useState();
   const serviceProviders = useServiceProviders();
+  const user = useUser();
 
   const UserProfileCell = (params) => {
     let filename = params?.value.file;
@@ -38,7 +40,7 @@ export default function ServiceProvidersManagement() {
     return async () => {
       let response = await serviceProviders?.remove(params?.value?.id);
       if (response?.type == "dashboard/removeServiceProvider/fulfilled") {
-        serviceProviders.refresh();
+        user.refresh();
       }
     };
   };

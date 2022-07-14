@@ -1,24 +1,18 @@
-import useCustomer from "../../../hooks/useCustomer";
-import useBusiness from "../../../hooks/useBusiness";
-import "./AppointDashboard.css";
-import { Divider } from "@mui/material";
-import { Avatar } from "@mui/material";
-import { API_UPLOADS_URL } from "../../../constants";
 import PageviewIcon from "@mui/icons-material/Pageview";
-import AssignmentIcon from "@mui/icons-material/Assignment";
+import { Avatar, Divider } from "@mui/material";
 import randomColor from "random-material-color";
-import img1 from "../../../images/female1022804150971.jpg";
-import img2 from "../../../images/female1022983696228.jpg";
-import img3 from "../../../images/male20171086063338989.jpg";
-import { ImageSearch } from "@mui/icons-material";
+import { useCallback, useState } from "react";
 import Slide from "react-reveal/Slide";
-import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { API_UPLOADS_URL } from "../../../constants";
+import useBusiness from "../../../hooks/useBusiness";
+import useCustomer from "../../../hooks/useCustomer";
+import "./AppointDashboard.css";
 
 export default function AppointDashboard(props) {
   const { customer } = useCustomer();
   const [showProviders, setShowProviders] = useState(false);
-  const [clickedService, setClickedService] = useState();
+  const [clickedService, setClickedService] = useState(); // +1 added
   const { businessId } = useParams();
   const { business } = useBusiness(businessId);
 
@@ -30,45 +24,79 @@ export default function AppointDashboard(props) {
     }, [500]);
   };
 
+  const FilterProvidersByService = () => {
+    let filteredProviders = [];
+    business?.serviceProviders?.forEach((provider) => {
+      provider.services?.forEach((service) => {
+        if (service.id === business?.services[clickedService - 1]?.id)
+          filteredProviders.push(provider);
+      });
+    });
+    return filteredProviders;
+  };
+
   const Services = business?.services?.map((service, idx) => {
     return (
       <Slide big left>
         <div className="service-col">
-          <Avatar
-            sx={
+          <div
+            className="service-wrapper"
+            style={
               clickedService === idx + 1
-                ? {
-                    bgcolor: randomColor.getColor(),
-                    width: 80,
-                    height: 80,
-                    borderRadius: "50%",
-                    border: "4px solid #ff5707",
-                  }
-                : { bgcolor: randomColor.getColor(), width: 80, height: 80 }
+                ? { border: "4px solid rgba(158, 158, 158, 0.678)" }
+                : null
             }
-            onClick={() => handleClick(idx + 1)}
           >
-            <PageviewIcon
+            <Avatar
               sx={
                 clickedService === idx + 1
-                  ? { fontSize: "50px" }
-                  : { fontSize: "50px" }
+                  ? {
+                      bgcolor: randomColor.getColor(),
+                      width: 80,
+                      height: 80,
+                    }
+                  : { bgcolor: randomColor.getColor(), width: 80, height: 80 }
               }
-            />
-          </Avatar>
+              onClick={() => handleClick(idx + 1)}
+            >
+              <PageviewIcon
+                sx={
+                  clickedService === idx + 1
+                    ? { fontSize: "50px" }
+                    : { fontSize: "50px" }
+                }
+              />
+            </Avatar>
+          </div>
+
           <p className="service-name">{service?.name}</p>
         </div>
       </Slide>
     );
   });
 
-  const ServiceProviders = business?.services[clickedService]?.serviceProviderSet?.map(provider => {
-    return (
-      <Slide left big delay={0} when={showProviders}>
-      <Avatar alt="" sx={{ width: 80, height: 80 }} src={img1}></Avatar>
-    </Slide>
-    )
-  })
+  const ServiceProviders = () => {
+    let filteredProviders = FilterProvidersByService();
+    let delay = 0;
+    const providers = filteredProviders.map((provider) => {
+      delay += 100;
+      return (
+        <Slide left big delay={delay} duration={700} when={showProviders}>
+          <div className="service-col">
+            <Avatar
+              alt=""
+              sx={{ width: 80, height: 80 }}
+              src={API_UPLOADS_URL + provider?.filename}
+            ></Avatar>
+            <p className="service-name">
+              {provider.firstname + " " + provider.lastname}
+            </p>
+          </div>
+        </Slide>
+      );
+    });
+    return providers;
+  };
 
   return (
     <div className="appoint-dashboard-container">
@@ -86,6 +114,11 @@ export default function AppointDashboard(props) {
             sit amet interdum libero dolor ac enim. Praesent bibendum augue
             pharetra metus aliquet vulputate.
           </p>
+
+          <h4>תורים קרובים:</h4>
+          <div className="services-row">{ServiceProviders()}</div>
+
+
         </div>
         <Divider orientation="vertical" flexItem sx={{ height: "100%" }} />
 
@@ -96,10 +129,7 @@ export default function AppointDashboard(props) {
           <Divider />
           <h4> בחר נותן שירות:</h4>
 
-          <div className="providers-row">
-
-            {ServiceProviders}
-          </div>
+          <div className="providers-row">{ServiceProviders()}</div>
         </div>
       </div>
     </div>

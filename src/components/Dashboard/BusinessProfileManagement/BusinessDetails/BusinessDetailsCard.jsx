@@ -39,33 +39,33 @@ export default function BusinessDetailsCard() {
       <CardContent>
         <TextField
           fieldWidth
-          id="filled-basic"
+          id="outlined-basic"
           label="שם העסק"
-          variant="filled"
+          variant="outlined"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
         <TextField
           fieldWidth
-          id="filled-basic"
+          id="outlined-basic"
           label="כתובת"
-          variant="filled"
+          variant="outlined"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
         />
         <TextField
           fieldWidth
-          id="filled-basic"
+          id="outlined-basic"
           label="מס' טלאפון"
-          variant="filled"
+          variant="outlined"
           value={phone1}
           onChange={(e) => setPhone1(e.target.value)}
         />
         <TextField
           fieldWidth
-          id="filled-basic"
+          id="outlined-basic"
           label=" מס' טלאפון נוסף"
-          variant="filled"
+          variant="outlined"
           value={phone2}
           onChange={(e) => setPhone2(e.target.value)}
         />

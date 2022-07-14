@@ -20,6 +20,8 @@ import { _fetchServiceProviders } from "../../../../features/dashboardSlice";
 import AddWorkdaysDialog from "../../AddWorkdayDialog/AddWorkdaysDialog";
 import WorkdaysTable from "../../WorkdaysTable";
 import useServices from "../../../../hooks/Dashboard/useServices";
+import useBusiness from "../../../../hooks/useBusiness";
+import useUser from "../../../../hooks/Dashboard/useUser";
 
 export default function AddServiceProviderDialog(props) {
   const [firstname, setFirstname] = useState("");
@@ -33,8 +35,9 @@ export default function AddServiceProviderDialog(props) {
   const [error, setError] = useState(false);
   const [chosenServices, setChosenServices] = useState([])
   const services = useServices();
+  const user = useUser()
   const dispatch = useDispatch();
-
+  console.log(props)
   const onDrop = useCallback((acceptedFiles) => {
     setFile(acceptedFiles);
   }, []);
@@ -56,6 +59,7 @@ export default function AddServiceProviderDialog(props) {
       setLastname(props?.providerForEdit.lastname);
       setEmail(props?.providerForEdit.email);
       setWorkdaysArr(props?.providerForEdit?.workdays);
+      setChosenServices(props?.providerForEdit?.services);
     }
   }, [props?.providerForEdit]);
 
@@ -86,12 +90,13 @@ export default function AddServiceProviderDialog(props) {
       file: file,
       filename: "",
       workdays: workdays,
-      services: chosenServices
+      services: chosenServices,
+      business: user?.business
     };
     let response = await props?.add(newProvider);
-    if (response?.type.endsWith("fulfilled")) {
+    if (response?.type.endsWith("fuloutlined")) {
       toggleDialog();
-      dispatch(_fetchServiceProviders());
+      user.refresh();
     }
   };
 
@@ -175,7 +180,7 @@ export default function AddServiceProviderDialog(props) {
           required
           error={error && firstname.length === 0 && true}
           id="outlined-required"
-          variant="filled"
+          variant="outlined"
           label="שם פרטי"
           value={firstname}
           sx={styles.textField}
@@ -186,7 +191,7 @@ export default function AddServiceProviderDialog(props) {
           required
           error={error && lastname.length === 0 && true}
           id="outlined-required"
-          variant="filled"
+          variant="outlined"
           value={lastname}
           label="שם משפחה"
           sx={styles.textField}
@@ -198,7 +203,7 @@ export default function AddServiceProviderDialog(props) {
           value={email}
           error={error && email.length === 0 && true}
           id="outlined-required"
-          variant="filled"
+          variant="outlined"
           label='דוא"ל'
           sx={styles.textField}
           onChange={(e) => setEmail(e.target.value)}
@@ -209,7 +214,7 @@ export default function AddServiceProviderDialog(props) {
           value={phone}
           error={error && phone.length === 0 && true}
           id="outlined-required"
-          variant="filled"
+          variant="outlined"
           label="מספר טלאפון"
           sx={styles.textField}
           onChange={(e) => setPhone(e.target.value)}

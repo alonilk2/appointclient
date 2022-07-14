@@ -9,7 +9,6 @@ import { uploadFile } from "../../utils/FilesAPI";
 import useBusiness from '../../hooks/useBusiness'
 
 export default function useServiceProviders() {
-
   const user = useSelector(state=>state.user.user)
   const serviceProvidersList = useSelector(
     (state) => state.user.user?.business?.serviceProviders
