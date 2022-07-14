@@ -149,3 +149,22 @@
 .MuiFormControl-root {
   overflow: visible !important;
 }
+
+.sidemenu-container .business-logo {
+  width: 60px;
+  margin: 2%;
+}
+
+.sidemenu-container .business-link-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+}
+
+.sidemenu-container .links {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}

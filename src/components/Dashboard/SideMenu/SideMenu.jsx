@@ -8,8 +8,11 @@ import ListSubheader from "@mui/material/ListSubheader";
 import { useDispatch, useSelector } from "react-redux";
 import { selectTab } from "../../../features/dashboardSlice";
 import SettingsIcon from "@mui/icons-material/Settings";
-import HomeIcon from '@mui/icons-material/Home';
-export default function SideMenu() {
+import HomeIcon from "@mui/icons-material/Home";
+import { Divider } from "@mui/material";
+import { API_BASE_URL, API_UPLOADS_URL, FRONT_BASE_URL } from "../../../constants";
+
+export default function SideMenu(props) {
   const dispatch = useDispatch();
   const selectedTab = useSelector((state) => state.dashboard.selectedTabIndex);
 
@@ -25,6 +28,25 @@ export default function SideMenu() {
         aria-labelledby="nested-list-subheader"
         subheader={<li />}
       >
+        <ListSubheader component="div" id="nested-list-subheader">
+          עמוד העסק
+        </ListSubheader>
+        <div className="business-link-row">
+        <div className="links">
+          <div className="row">
+            {props?.user?.business?.name}
+          </div>
+          <div className="row">
+            <a href={FRONT_BASE_URL+"appoint/"+props?.user?.business?.id} style={{fontSize: '14px'}}>
+              לכניסה לעמוד העסק
+            </a>
+          </div>
+        </div>
+        <img src={API_UPLOADS_URL+props?.user?.business?.img} className="business-logo" alt="business logo" />
+
+
+        </div>
+        <Divider />
         <ListSubheader component="div" id="nested-list-subheader">
           פרופיל העסק
         </ListSubheader>

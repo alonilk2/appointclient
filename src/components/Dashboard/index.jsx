@@ -8,21 +8,12 @@ import SideMenu from "./SideMenu/SideMenu";
 import ProfileChip from "./ProfileChip";
 import BusinessDetailsManagement from "./BusinessProfileManagement";
 import LandingPageManagement from "./LandingPageManagement";
-
+import useUser from "../../hooks/Dashboard/useUser";
 export default function Dashboard() {
   const dispatch = useDispatch();
-  const [userInstance, setUserInstance] = useState();
   const selectedTab = useSelector((state) => state.dashboard.selectedTabIndex);
-
-  const initializeUserInstance = async () => {
-    let response = await dispatch(_getCurrentUser());
-    setUserInstance(response.payload);
-  };
-
-  useEffect(() => {
-    initializeUserInstance();
-  }, []);
-
+  const { user } = useUser();
+  console.log(user)
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
@@ -31,7 +22,7 @@ export default function Dashboard() {
             APPoint
           </h1>
         </a>
-        {ProfileChip(userInstance)}
+        {ProfileChip(user)}
       </header>
       <section className="row main-section">
         <main className="col-10 main">
@@ -43,7 +34,7 @@ export default function Dashboard() {
 
           </div>
         </main>
-        <SideMenu />
+        <SideMenu user={user}/>
       </section>
     </div>
   );

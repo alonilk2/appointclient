@@ -34,6 +34,10 @@ export default function useUser() {
     dispatch(_getCurrentUser());
   };
 
+  useEffect(()=> {
+    getUserInstance()
+  }, [])
+
   return {
     user: user,
     business: user?.business,

@@ -8,9 +8,12 @@ import {
 import useBusiness from "../../../hooks/useBusiness";
 import { useNavigate, useParams } from "react-router-dom";
 import loginImg from "../../../images/password.png";
+import useCustomer from "../../../hooks/useCustomer";
+import { useDispatch, useSelector } from "react-redux";
+import { _fetchCustomer } from "../../../features/customerSlice";
 
 export default function PhoneRegistration() {
-  const [code, setCode] = useState(null);
+  const [code, setCode] = useState("");
   const [codeVerify, setCodeVerify] = useState(false);
   const appVerifier = useRef();
   const phoneNumber = useRef();
@@ -18,6 +21,16 @@ export default function PhoneRegistration() {
   const { businessId } = useParams();
   const { business } = useBusiness(businessId);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const customer = useSelector((state) => state.customer?.customer);
+
+  useEffect(() => {
+    if (customer) {
+      return navigate("/appoint/" + businessId + "/dashboard", {
+        state: customer,
+      });
+    }
+  }, [customer]);
 
   useEffect(() => {
     appVerifier.current = new RecaptchaVerifier(
@@ -35,10 +48,12 @@ export default function PhoneRegistration() {
   const onCodeSubmit = async () => {
     window.confirmationResult
       .confirm(code)
-      .then((result) => {
+      .then(async (result) => {
         const user = result.user;
-        console.log(user);
-        navigate("/appoint/" + businessId + "/registration", { state: user.phoneNumber });
+        let response = await dispatch(_fetchCustomer(user?.phoneNumber));
+        if(!response?.payload?.phone)return navigate("/appoint/" + businessId + "/registration", {
+          state: user.phoneNumber,
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -62,15 +77,16 @@ export default function PhoneRegistration() {
   const CodeVerifyComponent = (
     <>
       <div className="input-row">
-        <span className="phone-ttl" id="phone-ttl">
+        <span className="phone-title" id="code-title">
           הכנס\י את הקוד שקיבלת בSMS:
         </span>
         <input
-          type="phone"
+          type="text"
           className="auth-input"
-          placeholder="Phone Number"
-          aria-label="Phone Number"
-          aria-describedby="phone-ttl"
+          placeholder="Code"
+          aria-label="Code"
+          aria-describedby="code-title"
+          value={code}
           onChange={(e) => setCode(e.target.value)}
         />
       </div>
@@ -95,6 +111,7 @@ export default function PhoneRegistration() {
           placeholder="Phone Number"
           aria-label="Phone Number"
           aria-describedby="phone-ttl"
+          value={phoneNumber.current}
           onChange={(e) => (phoneNumber.current = e.target.value)}
         />
       </div>

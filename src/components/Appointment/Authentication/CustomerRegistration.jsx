@@ -21,8 +21,8 @@ export default function CustomerRegistration() {
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
-    if(email.length === 0 || firstname.length === 0 || lastname.length === 0) {
-      return setError(true)
+    if (email.length === 0 || firstname.length === 0 || lastname.length === 0) {
+      return setError(true);
     }
 
     let obj = {
@@ -30,7 +30,7 @@ export default function CustomerRegistration() {
       phone: phone,
       firstname: firstname,
       lastname: lastname,
-      business: business,
+      business: [business],
     };
 
     let response = await dispatch(_addCustomer(obj));

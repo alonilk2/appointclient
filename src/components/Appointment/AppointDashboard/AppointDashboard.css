@@ -87,3 +87,20 @@
   align-items: center;
 }
 
+.schedule-container {
+  height: 100%;
+  width: 100%;
+}
+
+.calendar {
+  width: 65%;
+  height: 100%;
+}
+
+.fc .fc-daygrid-day-top {
+  justify-content: center !important;
+}
+
+.fc-theme-standard td:hover {
+  background-color: #afafaf0f;
+}
