@@ -3,7 +3,7 @@ import { Avatar, Divider } from "@mui/material";
 import randomColor from "random-material-color";
 import { useCallback, useState } from "react";
 import Slide from "react-reveal/Slide";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { API_UPLOADS_URL } from "../../../constants";
 import useBusiness from "../../../hooks/useBusiness";
 import useCustomer from "../../../hooks/useCustomer";
@@ -15,7 +15,7 @@ export default function AppointDashboard(props) {
   const [clickedService, setClickedService] = useState(); // +1 added
   const { businessId } = useParams();
   const { business } = useBusiness(businessId);
-
+  const navigate = useNavigate()
   const handleClick = (serviceId) => {
     setClickedService(serviceId / clickedService === 1 ? null : serviceId);
     setShowProviders(false);
@@ -75,6 +75,10 @@ export default function AppointDashboard(props) {
     );
   });
 
+  const handleProviderClick = (provider) => {
+    navigate('../schedule', {state: {provider: provider, business: business, clickedService: clickedService}});
+  }
+
   const ServiceProviders = () => {
     let filteredProviders = FilterProvidersByService();
     let delay = 0;
@@ -82,7 +86,7 @@ export default function AppointDashboard(props) {
       delay += 100;
       return (
         <Slide left big delay={delay} duration={700} when={showProviders}>
-          <div className="service-col">
+          <div className="service-col" onClick={()=>handleProviderClick(provider)}>
             <Avatar
               alt=""
               sx={{ width: 80, height: 80 }}

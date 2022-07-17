@@ -2,7 +2,6 @@ import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { _fetchCustomer } from "../features/customerSlice"
 
-// ;;;;;;;;;Change customer-business to manytomany ;;;;;;;;;//
 
 export default function useCustomer(phone) {
     const dispatch = useDispatch()

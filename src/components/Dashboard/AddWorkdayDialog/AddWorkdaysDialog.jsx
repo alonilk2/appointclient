@@ -46,7 +46,7 @@ export default function AddWorkdaysDialog(props) {
 
   const daysMenuItemsArray = daysArray.map((day, idx) => {
     let isExist = false;
-    props?.workdaysArr.forEach((e) => {
+    props?.workdaysArr?.forEach((e) => {
       if (e.day == idx) {
         isExist = true;
       }

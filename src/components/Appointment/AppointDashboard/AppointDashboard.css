@@ -90,6 +90,7 @@
 .schedule-container {
   height: 100%;
   width: 100%;
+
 }
 
 .calendar {
@@ -103,4 +104,8 @@
 
 .fc-theme-standard td:hover {
   background-color: #afafaf0f;
+}
+
+.right-column {
+  margin: 2% 2% 2% 0 !important;
 }

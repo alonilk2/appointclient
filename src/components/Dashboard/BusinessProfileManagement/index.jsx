@@ -9,9 +9,8 @@ import useUser from '../../../hooks/Dashboard/useUser'
 import useBusiness from "../../../hooks/useBusiness";
 export default function BusinessProfileManagement() {
   const [open, setOpen] = useState();
-  const {object: business, update} = useBusiness();
+  const {business, update} = useBusiness();
 
-  console.log(business)
   return (
     <div className="business-details-container">
       <ProfileImageUploadDialog open={open} toggle={setOpen} />
