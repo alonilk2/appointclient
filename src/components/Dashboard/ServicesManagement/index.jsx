@@ -5,22 +5,22 @@ import useServices from "../../../hooks/Dashboard/useServices";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import ServicesDialog from "./ServicesDialog";
-import useUser from "../../../hooks/Dashboard/useUser";
+import UserContext from "../UserContext";
 
-export default function ServicesManagement() {
+export default function ServicesManagement(props) {
   const [toggleDialog, setToggleDialog] = useState(false);
   const [serviceForEdit, setServiceForEdit] = useState();
-  const user = useUser();
-  const services = useServices(user?.business?.id);
+  const user = useContext(UserContext)
+  const services = useServices(user);
 
   const handleRemove = (params) => {
     return async () => {
-      let response = await services?.remove(params?.value?.id)
-      if(response?.type == "dashboard/removeServices/fulfilled"){
+      let response = await services?.remove(params?.value?.id);
+      if (response?.type == "dashboard/removeServices/fulfilled") {
         services.refresh();
       }
     };
@@ -28,10 +28,10 @@ export default function ServicesManagement() {
 
   const handleEdit = (params) => {
     return async () => {
-      setServiceForEdit(params.value)
-      setToggleDialog(!toggleDialog)
-      }
+      setServiceForEdit(params.value);
+      setToggleDialog(!toggleDialog);
     };
+  };
 
   const ActionsCell = (params) => {
     return (
@@ -43,7 +43,11 @@ export default function ServicesManagement() {
         >
           <DeleteIcon />
         </IconButton>
-        <IconButton color="primary" aria-label="add an alarm" onClick={handleEdit(params)}>
+        <IconButton
+          color="primary"
+          aria-label="add an alarm"
+          onClick={handleEdit(params)}
+        >
           <EditIcon />
         </IconButton>
       </Stack>
@@ -51,7 +55,7 @@ export default function ServicesManagement() {
   };
 
   const handleAddService = () => {
-    setServiceForEdit(null)
+    setServiceForEdit(null);
     setToggleDialog(true);
   };
 
@@ -63,7 +67,7 @@ export default function ServicesManagement() {
       width: 180,
     },
     { field: "cost", headerName: "עלות", width: 200 },
-    { field: "period", headerName: "אורך פגישה (דקות)", width: 200 },
+    { field: "duration", headerName: "אורך פגישה (דקות)", width: 200 },
 
     {
       field: "actions",
@@ -78,7 +82,7 @@ export default function ServicesManagement() {
       id: service.id,
       name: service.name,
       cost: service.cost,
-      period: service.period,
+      duration: service.duration,
       actions: service,
     };
   });

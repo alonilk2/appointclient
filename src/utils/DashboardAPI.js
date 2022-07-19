@@ -28,6 +28,22 @@ export async function addServiceProvider(serviceProvider) {
   return response?.data;
 }
 
+export async function updateServiceProvider(serviceProvider) {
+  if (!localStorage.getItem(ACCESS_TOKEN)) {
+    return Promise.reject("No access token set.");
+  }
+  let response = await Axios.put(
+    API_BASE_URL + "/serviceproviders/"+serviceProvider?.id,
+    serviceProvider,
+    {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem(ACCESS_TOKEN),
+      },
+    }
+  );
+  return response?.data;
+}
+
 export async function removeServiceProvider(id) {
   if (!localStorage.getItem(ACCESS_TOKEN)) {
     return Promise.reject("No access token set.");

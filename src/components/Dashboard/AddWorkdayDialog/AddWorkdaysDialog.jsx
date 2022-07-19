@@ -56,28 +56,28 @@ export default function AddWorkdaysDialog(props) {
   });
 
   const handleChange = (e, field) => {
-    field == 0 && setWorkdays({ ...workdays, day: e.target.value });
-    if(field == 1){
+    field === 0 && setWorkdays({ ...workdays, day: e.target.value });
+    if(field === 1){
       setWorkdays({
         ...workdays,
         startTimeFormatted: formatTime(e),
         starttime: e
       });
     }
-    if(field == 2){
+    if(field === 2){
       setWorkdays({
         ...workdays,
         endTimeFormatted: formatTime(e),
         endtime: e,
       });
     }
-    if(e == "Invalid Date"){
-      if(field == 1) {
+    if(e === "Invalid Date"){
+      if(field === 1) {
         return setError({...error, field1: "Invalid Date"})
       }
       return setError({...error, field2: "Invalid Date"})
     }
-    if(field == 1) setError({...error, field1: null})
+    if(field === 1) setError({...error, field1: null})
     setError({...error, field2: null})
 
   };

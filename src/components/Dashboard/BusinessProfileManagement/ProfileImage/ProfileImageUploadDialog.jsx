@@ -6,13 +6,14 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import useUser from "../../../../hooks/Dashboard/useUser";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext } from "react";
 import { useDropzone } from "react-dropzone";
+import UserContext from "../../UserContext";
 
 export default function ProfileImageUploadDialog(props) {
   const [file, setFile] = useState([]);
   const [error, setError] = useState(false);
-  const { user, update } = useUser();
+  const { user, update } = useContext(UserContext)
 
   const onDrop = useCallback((acceptedFiles) => {
     setFile(acceptedFiles);

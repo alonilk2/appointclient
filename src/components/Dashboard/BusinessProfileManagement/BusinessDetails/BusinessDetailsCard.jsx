@@ -7,11 +7,11 @@ import {
   Divider,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
-import useUser from "../../../../hooks/Dashboard/useUser";
+import { useContext, useState } from "react";
+import UserContext from "../../UserContext";
 
 export default function BusinessDetailsCard() {
-  const { user, update, refresh } = useUser();
+  const { user, update, refresh } = useContext(UserContext)
   const [name, setName] = useState(user?.business?.name || "");
   const [address, setAddress] = useState(user?.business?.address || "");
   const [phone1, setPhone1] = useState(user?.business?.phone1 || "");

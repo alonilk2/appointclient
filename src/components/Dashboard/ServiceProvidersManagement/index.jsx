@@ -10,12 +10,14 @@ import { useState } from "react";
 import AddServiceProviderDialog from "./Dialog/ServiceProviderDialog";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
+import { useContext } from "react";
+import UserContext from "../UserContext";
 
 export default function ServiceProvidersManagement() {
   const [toggleDialog, setToggleDialog] = useState(false);
   const [providerForEdit, setProviderForEdit] = useState();
   const serviceProviders = useServiceProviders();
-  const user = useUser();
+  const user = useContext(UserContext)
 
   const UserProfileCell = (params) => {
     let filename = params?.value.file;
@@ -119,7 +121,7 @@ export default function ServiceProvidersManagement() {
       <AddServiceProviderDialog
         open={toggleDialog}
         toggle={setToggleDialog}
-        add={serviceProviders?.add}
+        providers={serviceProviders}
         providerForEdit={providerForEdit}
       />
       <CardHeader

@@ -6,17 +6,21 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  ButtonGroup,
+  Typography,
 } from "@mui/material";
 import useUser from "../../../hooks/Dashboard/useUser";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useContext } from "react";
+import UserContext from "../UserContext";
 
 export default function ServicesDialog(props) {
   const [name, setName] = useState("");
   const [cost, setCost] = useState(0);
   const [error, setError] = useState(false);
-  const dispatch = useDispatch();
-  const user = useUser();
+  const [duration, setDuration] = useState(0);
+  const user = useContext(UserContext)
+
   const handleClose = () => {
     toggleDialog();
   };
@@ -29,11 +33,20 @@ export default function ServicesDialog(props) {
     if (props?.serviceForEdit) {
       setName(props?.serviceForEdit.name);
       setCost(props?.serviceForEdit.cost);
+      setCost(props?.serviceForEdit.duration);
     } else {
       setName("");
       setCost(0);
     }
   }, [props?.serviceForEdit]);
+
+  const handleSubDuration = () => {
+    setDuration((duration) => duration - 5);
+  };
+
+  const handleAddDuration = () => {
+    setDuration((duration) => duration + 5);
+  };
 
   const handleAdd = async () => {
     if (name === "" || cost === "") return setError(true);
@@ -43,6 +56,7 @@ export default function ServicesDialog(props) {
       name: name,
       cost: cost,
       business: user?.business,
+      duration: duration
     };
 
     let response;
@@ -67,7 +81,7 @@ export default function ServicesDialog(props) {
           required
           error={error && name.length === 0 && true}
           id="outlined-required"
-          variant="filled"
+          variant="outlined"
           label="שם השירות"
           value={name}
           sx={styles.textField}
@@ -77,13 +91,33 @@ export default function ServicesDialog(props) {
         <TextField
           required
           id="outlined-required"
-          variant="filled"
+          variant="outlined"
           value={cost}
           label="מחיר השירות"
           sx={styles.textField}
           onChange={(e) => setCost(e.target.value)}
           fullWidth
         />
+        <Typography variant="subtitle2" component="div">
+          :אורך הפגישה (בדקות)
+        </Typography>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+          }}
+        >
+          <ButtonGroup
+            size="large"
+            aria-label="large button group"
+            sx={{ direction: "ltr", margin: "2% 0", justifySelf: "center" }}
+          >
+            <Button onClick={handleAddDuration}>+</Button>
+            <Button>{duration}</Button>
+            <Button onClick={handleSubDuration}>-</Button>
+          </ButtonGroup>
+        </div>
       </DialogContent>
       <DialogActions>
         <Button variant="text" onClick={handleClose}>

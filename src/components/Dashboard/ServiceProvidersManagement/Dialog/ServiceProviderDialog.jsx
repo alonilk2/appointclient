@@ -2,26 +2,22 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import {
   Alert,
   Button,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  Divider,
+  FormControlLabel,
   TextField,
   Typography,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  Divider,
 } from "@mui/material";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { useDispatch } from "react-redux";
-import { _fetchServiceProviders } from "../../../../features/dashboardSlice";
-import AddWorkdaysDialog from "../../AddWorkdayDialog/AddWorkdaysDialog";
-import WorkdaysTable from "../../WorkdaysTable";
 import useServices from "../../../../hooks/Dashboard/useServices";
-import useBusiness from "../../../../hooks/useBusiness";
-import useUser from "../../../../hooks/Dashboard/useUser";
+import AddWorkdaysDialog from "../../AddWorkdayDialog/AddWorkdaysDialog";
+import UserContext from "../../UserContext";
+import WorkdaysTable from "../../WorkdaysTable";
 
 export default function AddServiceProviderDialog(props) {
   const [firstname, setFirstname] = useState("");
@@ -33,11 +29,10 @@ export default function AddServiceProviderDialog(props) {
   const [file, setFile] = useState([]);
   const [firstDayAvailable, setFirstDayAvailable] = useState(0);
   const [error, setError] = useState(false);
-  const [chosenServices, setChosenServices] = useState([])
-  const services = useServices();
-  const user = useUser()
-  const dispatch = useDispatch();
-  console.log(props)
+  const [chosenServices, setChosenServices] = useState([]);
+  const user = useContext(UserContext);
+  const services = useServices(user);
+
   const onDrop = useCallback((acceptedFiles) => {
     setFile(acceptedFiles);
   }, []);
@@ -75,8 +70,9 @@ export default function AddServiceProviderDialog(props) {
 
     const workdays = workdaysArr.map((wd) => {
       return {
-        starttime: wd.startTimeFormatted,
-        endtime: wd.endTimeFormatted,
+        id: wd?.id,
+        starttime: wd.startTimeFormatted || wd.starttime,
+        endtime: wd.endTimeFormatted || wd.endtime,
         day: wd.day,
       };
     });
@@ -91,9 +87,15 @@ export default function AddServiceProviderDialog(props) {
       filename: "",
       workdays: workdays,
       services: chosenServices,
-      business: user?.business
+      business: user?.business,
     };
-    let response = await props?.add(newProvider);
+
+    console.log(newProvider)
+
+    let response;
+    if (props?.providerForEdit) await props?.providers.update(newProvider);
+    else await props?.providers.add(newProvider);
+
     if (response?.type.endsWith("fuloutlined")) {
       toggleDialog();
       user.refresh();
@@ -133,14 +135,15 @@ export default function AddServiceProviderDialog(props) {
   };
 
   const handleCheck = (e, service) => {
-    if(e.target.checked) setChosenServices([...chosenServices, service])
+    if (e.target.checked) setChosenServices([...chosenServices, service]);
     else {
       let tempServices = [...chosenServices];
-      tempServices = tempServices.filter((_service) => _service.id !== service.id)
-      console.log(tempServices)
-      setChosenServices(tempServices)
+      tempServices = tempServices.filter(
+        (_service) => _service.id !== service.id
+      );
+      setChosenServices(tempServices);
     }
-  }
+  };
 
   useEffect(() => {
     findFirstDayAvailable();
@@ -149,9 +152,9 @@ export default function AddServiceProviderDialog(props) {
   const ServicesCheckboxes = services?.list?.map((service) => {
     return (
       <FormControlLabel
-        control={<Checkbox onChange={(e)=>handleCheck(e, service)}/>}
+        control={<Checkbox onChange={(e) => handleCheck(e, service)} />}
         label={service?.name}
-        sx={{margin: '1%'}}
+        sx={{ margin: "1%" }}
       />
     );
   });
@@ -224,21 +227,17 @@ export default function AddServiceProviderDialog(props) {
           ימי ושעות עבודה
         </Typography>
         <Divider />
-        {
-          <WorkdaysTable
-            workdaysArr={workdaysArr}
-            setWorkdaysArr={setWorkdaysArr}
-            openDialog={workdaysDialog}
-            setOpenDialog={setWorkdaysDialog}
-          />
-        }
+        <WorkdaysTable
+          workdaysArr={workdaysArr}
+          setWorkdaysArr={setWorkdaysArr}
+          openDialog={workdaysDialog}
+          setOpenDialog={setWorkdaysDialog}
+        />
         <Typography variant="subtitle1" gutterBottom component="div">
           תחומי שירות
         </Typography>
         <Divider />
-        <div className="services-container">
-          {ServicesCheckboxes}
-        </div>
+        <div className="services-container">{ServicesCheckboxes}</div>
         <Typography variant="subtitle1" gutterBottom component="div">
           תמונת פרופיל
         </Typography>

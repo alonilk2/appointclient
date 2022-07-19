@@ -1,21 +1,25 @@
 import PageviewIcon from "@mui/icons-material/Pageview";
 import { Avatar, Divider } from "@mui/material";
 import randomColor from "random-material-color";
-import { useCallback, useState } from "react";
+import { useMemo } from "react";
+import { useState } from "react";
 import Slide from "react-reveal/Slide";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { API_UPLOADS_URL } from "../../../constants";
 import useBusiness from "../../../hooks/useBusiness";
-import useCustomer from "../../../hooks/useCustomer";
+import Breadcrumb from "../../Breadcrumb";
 import "./AppointDashboard.css";
 
 export default function AppointDashboard(props) {
-  const { customer } = useCustomer();
   const [showProviders, setShowProviders] = useState(false);
   const [clickedService, setClickedService] = useState(); // +1 added
   const { businessId } = useParams();
   const { business } = useBusiness(businessId);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const location = useLocation();
+  const customer = location.state;
+  const [colors, setColors] = useState([]);
+
   const handleClick = (serviceId) => {
     setClickedService(serviceId / clickedService === 1 ? null : serviceId);
     setShowProviders(false);
@@ -36,6 +40,8 @@ export default function AppointDashboard(props) {
   };
 
   const Services = business?.services?.map((service, idx) => {
+    colors.length < business.services.length &&
+      setColors([...colors, randomColor.getColor()]);
     return (
       <Slide big left>
         <div className="service-col">
@@ -51,11 +57,11 @@ export default function AppointDashboard(props) {
               sx={
                 clickedService === idx + 1
                   ? {
-                      bgcolor: randomColor.getColor(),
+                      bgcolor: colors[idx],
                       width: 80,
                       height: 80,
                     }
-                  : { bgcolor: randomColor.getColor(), width: 80, height: 80 }
+                  : { bgcolor: colors[idx], width: 80, height: 80 }
               }
               onClick={() => handleClick(idx + 1)}
             >
@@ -74,10 +80,15 @@ export default function AppointDashboard(props) {
       </Slide>
     );
   });
-
   const handleProviderClick = (provider) => {
-    navigate('../schedule', {state: {provider: provider, business: business, clickedService: clickedService}});
-  }
+    navigate("../schedule", {
+      state: {
+        provider: provider,
+        business: business,
+        clickedService: clickedService - 1,
+      },
+    });
+  };
 
   const ServiceProviders = () => {
     let filteredProviders = FilterProvidersByService();
@@ -86,7 +97,10 @@ export default function AppointDashboard(props) {
       delay += 100;
       return (
         <Slide left big delay={delay} duration={700} when={showProviders}>
-          <div className="service-col" onClick={()=>handleProviderClick(provider)}>
+          <div
+            className="service-col"
+            onClick={() => handleProviderClick(provider)}
+          >
             <Avatar
               alt=""
               sx={{ width: 80, height: 80 }}
@@ -102,27 +116,55 @@ export default function AppointDashboard(props) {
     return providers;
   };
 
+  const futureAppointments = () => {
+    let delay = 0;
+    const appointments = customer?.appointments?.map((appointment) => {
+      delay += 100;
+      return (
+        <Slide right big delay={delay} duration={600}>
+          <div className="service-col">
+            <Avatar
+              alt=""
+              sx={{ width: 80, height: 80 }}
+              src={API_UPLOADS_URL + appointment?.serviceProvider?.filename}
+            ></Avatar>
+            <p className="service-name">{appointment.day}</p>
+          </div>
+        </Slide>
+      );
+    });
+    return appointments;
+  };
+
   return (
     <div className="appoint-dashboard-container">
       <div className="form-container">
+        <Breadcrumb
+          pageArr={[
+            {
+              name: business?.name + " - עמוד העסק",
+              url: "/appoint/" + business?.id,
+            },
+            {
+              name: "לובי זימון תורים",
+            },
+          ]}
+          sx={{ position: "absolute", top: "3%", left: "3%" }}
+        />
         <div className="col introduction">
           <img
             src={API_UPLOADS_URL + customer?.business?.img}
             alt=""
             width={100}
           />
-
           <h2> ברוך\ה הבא\ה {customer?.firstname}</h2>
           <p>
             Sed dapibus, massa non gravida vestibulum, ligula nisi sodales sem,
             sit amet interdum libero dolor ac enim. Praesent bibendum augue
             pharetra metus aliquet vulputate.
           </p>
-
           <h4>תורים קרובים:</h4>
-          <div className="services-row">{ServiceProviders()}</div>
-
-
+          <div className="services-row">{futureAppointments()}</div>
         </div>
         <Divider orientation="vertical" flexItem sx={{ height: "100%" }} />
 

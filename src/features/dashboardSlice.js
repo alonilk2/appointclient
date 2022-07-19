@@ -5,7 +5,8 @@ import {
   removeServiceProvider,
   addServices,
   removeServices,
-  updateServices
+  updateServices,
+  updateServiceProvider
 } from "../utils/DashboardAPI";
 
 const initialState = {
@@ -31,6 +32,18 @@ export const _addServiceProvider = createAsyncThunk(
   async (provider, thunkAPI) => {
     try {
       const response = await addServiceProvider(provider);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
+export const _updateServiceProvider = createAsyncThunk(
+  "dashboard/updateServiceProvider",
+  async (provider, thunkAPI) => {
+    try {
+      const response = await updateServiceProvider(provider);
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue();

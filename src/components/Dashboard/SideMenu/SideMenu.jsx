@@ -1,21 +1,25 @@
 import PeopleIcon from "@mui/icons-material/Groups";
+import HomeIcon from "@mui/icons-material/Home";
 import ListIcon from "@mui/icons-material/List";
+import SettingsIcon from "@mui/icons-material/Settings";
+import { Divider } from "@mui/material";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ListSubheader from "@mui/material/ListSubheader";
+import { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { API_UPLOADS_URL, FRONT_BASE_URL } from "../../../constants";
 import { selectTab } from "../../../features/dashboardSlice";
-import SettingsIcon from "@mui/icons-material/Settings";
-import HomeIcon from "@mui/icons-material/Home";
-import { Divider } from "@mui/material";
-import { API_BASE_URL, API_UPLOADS_URL, FRONT_BASE_URL } from "../../../constants";
+import UserContext from "../UserContext";
 
-export default function SideMenu(props) {
+
+export default function SideMenu() {
   const dispatch = useDispatch();
   const selectedTab = useSelector((state) => state.dashboard.selectedTabIndex);
-
+  const user = useContext(UserContext)
+  
   const handleListItemClick = (event, index) => {
     dispatch(selectTab(index));
   };
@@ -34,15 +38,15 @@ export default function SideMenu(props) {
         <div className="business-link-row">
         <div className="links">
           <div className="row">
-            {props?.user?.business?.name}
+            {user?.business?.name}
           </div>
           <div className="row">
-            <a href={FRONT_BASE_URL+"appoint/"+props?.user?.business?.id} style={{fontSize: '14px'}}>
+            <a href={FRONT_BASE_URL+"appoint/"+user?.business?.id} style={{fontSize: '14px'}}>
               לכניסה לעמוד העסק
             </a>
           </div>
         </div>
-        <img src={API_UPLOADS_URL+props?.user?.business?.img} className="business-logo" alt="business logo" />
+        <img src={API_UPLOADS_URL+user?.business?.img} className="business-logo" alt="business logo" />
 
 
         </div>
@@ -51,7 +55,7 @@ export default function SideMenu(props) {
           פרופיל העסק
         </ListSubheader>
         <ListItemButton
-          selected={selectedTab == 2}
+          selected={selectedTab === 2}
           onClick={(event) => handleListItemClick(event, 2)}
         >
           <ListItemIcon>
@@ -60,7 +64,7 @@ export default function SideMenu(props) {
           <ListItemText primary="ניהול פרטי העסק" />
         </ListItemButton>
         <ListItemButton
-          selected={selectedTab == 3}
+          selected={selectedTab === 3}
           onClick={(event) => handleListItemClick(event, 3)}
         >
           <ListItemIcon>
@@ -72,7 +76,7 @@ export default function SideMenu(props) {
           שירותים ומוצרים
         </ListSubheader>
         <ListItemButton
-          selected={selectedTab == 0}
+          selected={selectedTab === 0}
           onClick={(event) => handleListItemClick(event, 0)}
         >
           <ListItemIcon>
@@ -81,7 +85,7 @@ export default function SideMenu(props) {
           <ListItemText primary="ניהול נותני שירות" />
         </ListItemButton>
         <ListItemButton
-          selected={selectedTab == 1}
+          selected={selectedTab === 1}
           onClick={(event) => handleListItemClick(event, 1)}
         >
           <ListItemIcon>

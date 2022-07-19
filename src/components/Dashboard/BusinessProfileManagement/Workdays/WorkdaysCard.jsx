@@ -4,9 +4,11 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  Divider,
+  Divider
 } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { _updateBusiness } from "../../../../features/businessSlice";
 import AddWorkdaysDialog from "../../AddWorkdayDialog/AddWorkdaysDialog";
 import WorkdaysTable from "../../WorkdaysTable";
 
@@ -14,6 +16,7 @@ export default function WorkdaysCard(props) {
   const [workdaysDialog, setWorkdaysDialog] = useState(false);
   const [workdaysArr, setWorkdaysArr] = useState(props?.business?.workdays);
   const [firstDayAvailable, setFirstDayAvailable] = useState(0);
+  const dispatch = useDispatch()
 
   useEffect(()=>{
     setWorkdaysArr(props?.business?.workdays)
@@ -21,18 +24,19 @@ export default function WorkdaysCard(props) {
 
   const handleSubmitForm =async () => {
     const workdays = workdaysArr.map((wd) => {
-      console.log(wd)
       if(wd.startTimeFormatted) return {
         starttime: wd.startTimeFormatted,
         endtime: wd.endTimeFormatted,
         day: wd.day,
       };
     });
+
     let businessObj = {
       ...props?.business,
       workdays: workdays
     };
-    let response = await props?.update(businessObj);
+
+    dispatch(_updateBusiness(businessObj))
   };
 
   const findFirstDayAvailable = () => {

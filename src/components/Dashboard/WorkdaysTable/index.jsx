@@ -11,34 +11,29 @@ import {
   TableRow
 } from "@mui/material";
 import { useState } from "react";
-import { useEffect } from "react";
+import { useMemo } from "react";
 import { daysArray } from "../util";
 
 export default function WorkdaysTable(props) {
-  const [workdaysArr, setWorkdaysArr] = useState(props?.workdaysArr)
-  const [workdaysDialog, setWorkdaysDialog] = useState(props?.workdaysDialog)
-
-  useEffect(()=>{
-    setWorkdaysArr(props?.workdaysArr)
-    console.log(props?.workdaysArr)
-  }, [props?.workdaysArr])
-
   const handleAddWorkdays = () => {
-    props?.setOpenDialog(!workdaysDialog);
+    props?.setOpenDialog(!props?.workdaysDialog);
   };
 
   const handleRemove = (dayId) => {
-    workdaysArr.forEach((e, idx) => {
+    let tempArr = [...props?.workdaysArr];
+    console.log(tempArr)
+    props?.workdaysArr.forEach((e, idx) => {
       if (e.day === dayId) {
-        let tempArr = [...workdaysArr];
         tempArr.splice(idx, 1);
-        props?.setWorkdaysArr(tempArr);
       }
     });
+    props?.setWorkdaysArr(tempArr);
+    console.log(tempArr)
   };
 
-  let table = (
-    <Table size="small" aria-label="a dense table">
+
+  let table = useMemo(()=>(
+    <Table size="small" aria-label="a dense table" sx={{direction: 'ltr'}}>
       <TableHead>
         <TableRow>
           <TableCell align="right">יום</TableCell>
@@ -48,7 +43,7 @@ export default function WorkdaysTable(props) {
         </TableRow>
       </TableHead>
       <TableBody>
-        {workdaysArr?.map((row) => {
+        {props?.workdaysArr?.map((row) => {
           return (
             <TableRow
               key={row.day}
@@ -74,12 +69,12 @@ export default function WorkdaysTable(props) {
         })}
       </TableBody>
     </Table>
-  );
+  ), [props?.workdaysArr]);
 
   return (
     <>
-      {workdaysArr?.length > 0 && table}
-      {workdaysArr?.length != 7 && (
+      {props?.workdaysArr?.length > 0 && table}
+      {props?.workdaysArr?.length !== 7 && (
         <Stack direction="column" sx={styles.addWorkdays}>
           <Fab color="primary" aria-label="add" onClick={handleAddWorkdays}>
             <AddIcon />

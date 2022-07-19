@@ -4,12 +4,13 @@ import {
   _addServiceProvider,
   _fetchServiceProviders,
   _removeServiceProvider,
+  _updateServiceProvider
 } from "../../features/dashboardSlice";
 import { uploadFile } from "../../utils/FilesAPI";
-import useBusiness from '../../hooks/useBusiness'
+import useBusiness from "../../hooks/useBusiness";
 
 export default function useServiceProviders() {
-  const user = useSelector(state=>state.user.user)
+  const user = useSelector((state) => state.user.user);
   const serviceProvidersList = useSelector(
     (state) => state.user.user?.business?.serviceProviders
   );
@@ -20,14 +21,27 @@ export default function useServiceProviders() {
   };
 
   const addServiceProvider = async (provider) => {
-    try{
+    try {
+      let fileName = await uploadFile({ file: provider.file });
+      provider.filename = fileName?.message;
+      provider.manager = user;
+      let response = await dispatch(_addServiceProvider(provider));
+      return response;
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const updateServiceProvider = async (provider) => {
+    try {
+      if (provider.file) {
         let fileName = await uploadFile({ file: provider.file });
-        provider.filename = fileName?.message
-        provider.manager = user
-        let response = await dispatch(_addServiceProvider(provider));
-        return response;
-    }catch(e){
-        console.log(e)
+        provider.filename = fileName?.message;
+      }
+      let response = await dispatch(_updateServiceProvider(provider));
+      return response;
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -45,5 +59,6 @@ export default function useServiceProviders() {
     add: addServiceProvider,
     remove: removeServiceProvider,
     refresh: initialize,
+    update: updateServiceProvider
   };
 }

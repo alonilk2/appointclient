@@ -7,7 +7,7 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { API_UPLOADS_URL } from "../../../constants";
 import useUser from "../../../hooks/Dashboard/useUser";
 import ImageUploadDialog from "./ImageUploadDialog";
@@ -19,9 +19,10 @@ import { OpeningHours } from "../../OpeningHours";
 import img1 from "../../../images/img1.jpg";
 import img2 from "../../../images/img2.jpg";
 import img3 from "../../../images/img3.jpg";
+import UserContext from "../UserContext";
 
 export default function LandingPageManagement() {
-  const { user, update } = useUser();
+  const user = useContext(UserContext)
   const [open, setOpen] = useState(false);
   const [color, setColor] = useState("#f25f5c");
   const [success, setSuccess] = useState(false);
@@ -35,12 +36,12 @@ export default function LandingPageManagement() {
   };
 
   const handleSubmit = async () => {
-    let tempUser = { ...user };
+    let tempUser = { ...user?.user };
     tempUser.business = {
       ...tempUser.business,
       pageColor: color,
     };
-    let response = await update(tempUser);
+    let response = await user?.update(tempUser);
     if (response?.type === "user/update/fulfilled") {
       setSuccess(true);
       setTimeout(() => {
@@ -51,7 +52,7 @@ export default function LandingPageManagement() {
 
   useEffect(() => {
     if (user) {
-      setColor(user?.business?.pageColor);
+      setColor(user.user?.business?.pageColor);
     }
   }, [user]);
 
@@ -112,7 +113,7 @@ export default function LandingPageManagement() {
           </div>
           <img
             alt="header background"
-            src={API_UPLOADS_URL + user?.business.headerImg}
+            src={API_UPLOADS_URL + user?.business?.headerImg}
           />
         </div>
         <div className="second-row">

@@ -5,13 +5,14 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  Divider,
+  Divider
 } from "@mui/material";
+import { useContext } from "react";
 import { API_UPLOADS_URL } from "../../../../constants";
-import useUser from "../../../../hooks/Dashboard/useUser";
+import UserContext from "../../UserContext";
 
 export default function ProfileImageCard(props) {
-  const { user, update, refresh } = useUser();
+  const user = useContext(UserContext)
   let openDialog = props?.openDialog;
   let setOpenDialog = props?.setOpenDialog;
 

@@ -58,7 +58,6 @@ export const customerSlice = createSlice({
       state.customer = action.payload;
     },
     [_fetchCustomer.rejected]: (state, action) => {
-      state.customer = null;
     },
     [_addCustomer.fulfilled]: (state, action) => {},
     [_addCustomer.rejected]: (state, action) => {},
