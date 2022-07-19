@@ -22,8 +22,10 @@ export default function TimeDialog(props) {
   const [day, setDay] = useState();
   const [chosenTime, setChosenTime] = useState(new Date());
   const serviceProvider = props?.serviceProvider;
-  const meetingLength = props?.meetingLength;
+  const service = props?.service;
   const chosenDate = props?.chosenDate;
+  const business = props?.business;
+  // Business open & close times
   const startTime = useRef();
   const endTime = useRef();
   const dispatch = useDispatch();
@@ -41,29 +43,31 @@ export default function TimeDialog(props) {
     serviceProvider?.workdays?.forEach((wd) => {
       if (wd.day === chosenDate?.getDay() && wd.starttime != null) {
         setWorkday(wd);
-        console.log(wd.starttime);
         startTime.current = parse(wd.starttime, "HH:mm", new Date(chosenDate));
         endTime.current = parse(wd.endtime, "HH:mm", new Date(chosenDate));
-        console.log(startTime.current + " -- " + endTime.current);
         return;
       }
     });
   };
 
   const handleSubmit = () => {
-    console.log(chosenTime);
     let end = new Date();
     let [hours, minutes, seconds] = chosenTime.split(" ")[0].split(":");
     end.setHours(+hours);
-    end.setMinutes(minutes + 30);
+    end.setMinutes(minutes + service?.duration);
     end.setSeconds(seconds);
 
     let appointment = {
       day: chosenDate.getTime(),
       start_hour: chosenTime,
       end_hour: end.toTimeString(),
-      customer: customer,
+      customer: customer?.customer,
       serviceProvider: serviceProvider,
+      service: {
+        ...service,
+        business: business,
+        serviceProviderSet: business?.serviceProviders,
+      },
     };
     dispatch(_addAppointment(appointment));
   };
@@ -75,7 +79,6 @@ export default function TimeDialog(props) {
   const MenuItems = () => {
     let timesArray = [];
     timesArray.push(new Date(startTime.current));
-
     while (
       timesArray.length > 0 &&
       new Date(endTime.current).getTime() !==
