@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   addAppointment,
   fetchAppointment,
+  removeAppointment
 } from "../utils/AppointAPI";
 
 const initialState = {
@@ -31,6 +32,19 @@ export const _addAppointment = createAsyncThunk(
     }
   }
 );
+
+export const _removeAppointment = createAsyncThunk(
+  "appoint/removeappointment",
+  async (appointment, thunkAPI) => {
+    try {
+      const response = await removeAppointment(appointment);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
 export const appointSlice = createSlice({
   name: "appoint",
   initialState,

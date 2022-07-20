@@ -50,6 +50,7 @@ export default function PhoneRegistration() {
       .confirm(code)
       .then(async (result) => {
         const user = result.user;
+        localStorage.setItem("phone", user?.phoneNumber);
         let response = await dispatch(_fetchCustomer(user?.phoneNumber));
         if(!response?.payload?.phone)return navigate("/appoint/" + businessId + "/registration", {
           state: user.phoneNumber,

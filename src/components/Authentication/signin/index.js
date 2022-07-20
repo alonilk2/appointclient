@@ -33,11 +33,11 @@ function SigninComponent(props) {
     };
 
     let response = await dispatch(_login(obj));
-    if (response.type == "user/login/fulfilled") {
+    if (response.type === "user/login/fulfilled") {
       localStorage.setItem(ACCESS_TOKEN, response.payload.accessToken);
 
       navigate("/dashboard");
-    } else if (response.type == "user/login/rejected") {
+    } else if (response.type === "user/login/rejected") {
       setError(response);
     }
   };

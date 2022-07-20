@@ -1,12 +1,16 @@
+import DeleteIcon from "@mui/icons-material/EventBusy";
 import PageviewIcon from "@mui/icons-material/Pageview";
 import { Avatar, Divider } from "@mui/material";
+import Button from "@mui/material/Button";
 import randomColor from "random-material-color";
-import { useMemo } from "react";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import Slide from "react-reveal/Slide";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { API_UPLOADS_URL } from "../../../constants";
+import { _removeAppointment } from "../../../features/appointSlice";
 import useBusiness from "../../../hooks/useBusiness";
+import useCustomer from "../../../hooks/useCustomer";
 import Breadcrumb from "../../Breadcrumb";
 import "./AppointDashboard.css";
 
@@ -15,10 +19,10 @@ export default function AppointDashboard(props) {
   const [clickedService, setClickedService] = useState(); // +1 added
   const { businessId } = useParams();
   const { business } = useBusiness(businessId);
-  const navigate = useNavigate();
-  const location = useLocation();
-  const customer = location.state;
+  const { customer } = useCustomer(localStorage.getItem("phone"));
   const [colors, setColors] = useState([]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleClick = (serviceId) => {
     setClickedService(serviceId / clickedService === 1 ? null : serviceId);
@@ -37,6 +41,10 @@ export default function AppointDashboard(props) {
       });
     });
     return filteredProviders;
+  };
+
+  const handleCancelAppointment = (appointment) => {
+    dispatch(_removeAppointment(appointment?.id));
   };
 
   const Services = business?.services?.map((service, idx) => {
@@ -86,6 +94,7 @@ export default function AppointDashboard(props) {
         provider: provider,
         business: business,
         clickedService: clickedService - 1,
+        customer: customer,
       },
     });
   };
@@ -94,9 +103,9 @@ export default function AppointDashboard(props) {
     let filteredProviders = FilterProvidersByService();
     let delay = 0;
     const providers = filteredProviders.map((provider) => {
-      delay += 100;
+      delay += 200;
       return (
-        <Slide left big delay={delay} duration={700} when={showProviders}>
+        <Slide left big delay={delay} duration={900} when={showProviders}>
           <div
             className="service-col"
             onClick={() => handleProviderClick(provider)}
@@ -119,16 +128,45 @@ export default function AppointDashboard(props) {
   const futureAppointments = () => {
     let delay = 0;
     const appointments = customer?.appointments?.map((appointment) => {
-      delay += 100;
+      delay += 200;
+      let provider;
+      let endHour = appointment.end_hour.split(" ")[0].split(":");
+      let startHour = appointment.start_hour.split(" ")[0].split(":");
+      business?.serviceProviders?.forEach((_provider) => {
+        _provider.appointments?.forEach((app) => {
+          if (appointment.id === app.id) provider = _provider;
+        });
+      });
       return (
-        <Slide right big delay={delay} duration={600}>
+        <Slide right big delay={delay} duration={900}>
           <div className="service-col">
             <Avatar
               alt=""
               sx={{ width: 80, height: 80 }}
-              src={API_UPLOADS_URL + appointment?.serviceProvider?.filename}
+              src={API_UPLOADS_URL + provider?.filename}
             ></Avatar>
+            <p className="service-name">
+              <b>{provider?.firstname + " " + provider?.lastname}</b>
+            </p>
             <p className="service-name">{appointment.day}</p>
+            <p className="service-name">
+              {endHour[0] +
+                ":" +
+                endHour[1] +
+                " - " +
+                startHour[0] +
+                ":" +
+                startHour[1]}
+            </p>
+            <Button
+              size="small"
+              variant="outlined"
+              color="error"
+              startIcon={<DeleteIcon />}
+              onClick={() => handleCancelAppointment(appointment)}
+            >
+              ביטול פגישה
+            </Button>
           </div>
         </Slide>
       );

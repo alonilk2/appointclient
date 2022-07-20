@@ -31,12 +31,12 @@ export async function addAppointment(appointment) {
   return response?.data;
 }
 
-// export async function removeCustomer(id) {
-//   if (!localStorage.getItem(ACCESS_TOKEN)) {
-//     return Promise.reject("No access token set.");
-//   }
-//   let response = await Axios.delete(API_BASE_URL + "/customers/" + id, {
-//     headers: { Authorization: "Bearer " + localStorage.getItem(ACCESS_TOKEN) },
-//   });
-//   return response?.data;
-// }
+export async function removeAppointment(id) {
+  if (!localStorage.getItem(ACCESS_TOKEN)) {
+    return Promise.reject("No access token set.");
+  }
+  let response = await Axios.delete(API_BASE_URL + "/appoint/" + id, {
+    headers: { Authorization: "Bearer " + localStorage.getItem(ACCESS_TOKEN) },
+  });
+  return response?.data;
+}

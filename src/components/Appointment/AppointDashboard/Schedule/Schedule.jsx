@@ -25,6 +25,7 @@ export default function Schedule() {
   let provider = location?.state?.provider;
   let business = location?.state?.business;
   let clickedService = location?.state?.clickedService;
+  let customer = location?.state?.customer;
   const [chosenDate, setChosenDate] = useState();
   const [open, setOpen] = useState(false);
 
@@ -67,6 +68,7 @@ export default function Schedule() {
           service={business?.services[clickedService]}
           serviceProvider={provider}
           business={business}
+          customer={customer}
         />
         <div className="calendar">
           <FullCalendar
