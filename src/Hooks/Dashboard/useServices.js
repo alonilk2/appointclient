@@ -1,15 +1,24 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { _fetchServices, _addServices, _removeServices, _updateServices } from "../../features/dashboardSlice";
-
-export default function useServices(user) {
-  const services = useSelector((state) => user?.business?.services);
+import { useDispatch, useSelector} from "react-redux";
+import {
+  _addServices,
+  _removeServices,
+  _updateServices,
+} from "../../features/dashboardSlice";
+import { uploadFile } from "../../utils/FilesAPI";
+import UserContext from "../../components/Dashboard/UserContext";
+import { useContext } from 'react'
+export default function useServices() {
   const servicesCustomer = useSelector((state) => state?.business?.services);
-
+  const user = useContext(UserContext)
+  const services = user?.business?.services;
   const dispatch = useDispatch();
 
   const addServices = async (service) => {
     try {
+      console.log(service);
+      let fileName =
+        service?.file && (await uploadFile({ file: service.file }));
+      service.img = fileName?.message;
       let response = await dispatch(_addServices(service));
       return response;
     } catch (e) {
@@ -19,6 +28,9 @@ export default function useServices(user) {
 
   const updateServices = async (service) => {
     try {
+      let fileName =
+        service?.file && (await uploadFile({ file: service.file }));
+      service.img = fileName?.message;
       let response = await dispatch(_updateServices(service));
       return response;
     } catch (e) {
@@ -26,24 +38,20 @@ export default function useServices(user) {
     }
   };
 
+  const refreshServices = async () => {
+    user?.refresh();
+  }
+
   const removeServices = async (id) => {
     let response = await dispatch(_removeServices(id));
     return response;
   };
 
-  // const initialize = async () => {
-  //   user?.refresh()
-  // };
-
-  // useEffect(() => {
-  //   initialize();
-  // }, []);
-  console.log(services)
   return {
     list: services || servicesCustomer,
     add: addServices,
     remove: removeServices,
-    // refresh: initialize,
-    update: updateServices
+    update: updateServices,
+    refresh: refreshServices
   };
 }

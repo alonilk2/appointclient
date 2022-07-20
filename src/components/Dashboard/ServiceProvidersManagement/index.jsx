@@ -90,12 +90,6 @@ export default function ServiceProvidersManagement() {
     { field: "phone", headerName: "טלפון", width: 200 },
     { field: "email", headerName: `דוא"ל`, width: 280 },
     {
-      field: "workdays",
-      headerName: "ימי עבודה",
-      width: 150,
-      renderCell: WorkdaysCell,
-    },
-    {
       field: "actions",
       headerName: "פעולות",
       width: 280,

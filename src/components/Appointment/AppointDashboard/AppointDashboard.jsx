@@ -1,9 +1,8 @@
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import DeleteIcon from "@mui/icons-material/EventBusy";
-import PageviewIcon from "@mui/icons-material/Pageview";
 import { Avatar, Divider } from "@mui/material";
 import Button from "@mui/material/Button";
-import randomColor from "random-material-color";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import Slide from "react-reveal/Slide";
 import { useNavigate, useParams } from "react-router-dom";
@@ -20,11 +19,11 @@ export default function AppointDashboard(props) {
   const { businessId } = useParams();
   const { business } = useBusiness(businessId);
   const { customer } = useCustomer(localStorage.getItem("phone"));
-  const [colors, setColors] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleClick = (serviceId) => {
+    console.log(serviceId);
     setClickedService(serviceId / clickedService === 1 ? null : serviceId);
     setShowProviders(false);
     setTimeout(() => {
@@ -48,46 +47,21 @@ export default function AppointDashboard(props) {
   };
 
   const Services = business?.services?.map((service, idx) => {
-    colors.length < business.services.length &&
-      setColors([...colors, randomColor.getColor()]);
     return (
       <Slide big left>
-        <div className="service-col">
-          <div
-            className="service-wrapper"
-            style={
-              clickedService === idx + 1
-                ? { border: "4px solid rgba(158, 158, 158, 0.678)" }
-                : null
-            }
-          >
-            <Avatar
-              sx={
-                clickedService === idx + 1
-                  ? {
-                      bgcolor: colors[idx],
-                      width: 80,
-                      height: 80,
-                    }
-                  : { bgcolor: colors[idx], width: 80, height: 80 }
-              }
-              onClick={() => handleClick(idx + 1)}
-            >
-              <PageviewIcon
-                sx={
-                  clickedService === idx + 1
-                    ? { fontSize: "50px" }
-                    : { fontSize: "50px" }
-                }
-              />
-            </Avatar>
-          </div>
-
+        <div className="service-col" onClick={() => handleClick(idx + 1)}>
+          <img
+            className="service-img"
+            src={API_UPLOADS_URL + service?.img}
+            alt="service"
+          ></img>
+          <div className="darken"></div>
           <p className="service-name">{service?.name}</p>
         </div>
       </Slide>
     );
   });
+
   const handleProviderClick = (provider) => {
     navigate("../schedule", {
       state: {
@@ -105,9 +79,9 @@ export default function AppointDashboard(props) {
     const providers = filteredProviders.map((provider) => {
       delay += 200;
       return (
-        <Slide left big delay={delay} duration={900} when={showProviders}>
+        <Slide bottom big delay={delay} duration={600} when={showProviders}>
           <div
-            className="service-col"
+            className="provider-col"
             onClick={() => handleProviderClick(provider)}
           >
             <Avatar
@@ -115,7 +89,7 @@ export default function AppointDashboard(props) {
               sx={{ width: 80, height: 80 }}
               src={API_UPLOADS_URL + provider?.filename}
             ></Avatar>
-            <p className="service-name">
+            <p className="provider-name">
               {provider.firstname + " " + provider.lastname}
             </p>
           </div>
@@ -125,38 +99,46 @@ export default function AppointDashboard(props) {
     return providers;
   };
 
-  const futureAppointments = () => {
+  const FindProviderByAppointment = (appointment) => {
+    let provider;
+    business?.serviceProviders?.forEach((_provider) => {
+      return _provider.appointments?.forEach((app) => {
+        if (appointment.id === app.id) return (provider = _provider);
+      });
+    });
+    return provider;
+  };
+
+  const upcomingAppointments = () => {
     let delay = 0;
-    const appointments = customer?.appointments?.map((appointment) => {
+    const appointments = customer?.appointments?.map((appointment, idx) => {
       delay += 200;
-      let provider;
       let endHour = appointment.end_hour.split(" ")[0].split(":");
       let startHour = appointment.start_hour.split(" ")[0].split(":");
-      business?.serviceProviders?.forEach((_provider) => {
-        _provider.appointments?.forEach((app) => {
-          if (appointment.id === app.id) provider = _provider;
-        });
-      });
+      let provider = FindProviderByAppointment(appointment);
       return (
         <Slide right big delay={delay} duration={900}>
-          <div className="service-col">
+          <div
+            className="appointment-col"
+            style={
+              idx !== customer.appointments.length - 1 && {
+                borderLeft: "1px solid lightgrey",
+              }
+            }
+          >
             <Avatar
               alt=""
               sx={{ width: 80, height: 80 }}
               src={API_UPLOADS_URL + provider?.filename}
             ></Avatar>
-            <p className="service-name">
+            <p className="appointment-text">
               <b>{provider?.firstname + " " + provider?.lastname}</b>
             </p>
-            <p className="service-name">{appointment.day}</p>
-            <p className="service-name">
-              {endHour[0] +
-                ":" +
-                endHour[1] +
-                " - " +
-                startHour[0] +
-                ":" +
-                startHour[1]}
+            <p className="appointment-text">{appointment.day}</p>
+            <p className="appointment-text">
+              שעות: {endHour[0] + ":" + endHour[1]}
+              <ArrowForwardIcon sx={{ fontSize: "16px" }} />
+              {startHour[0] + ":" + startHour[1]}
             </p>
             <Button
               size="small"
@@ -190,19 +172,16 @@ export default function AppointDashboard(props) {
           sx={{ position: "absolute", top: "3%", left: "3%" }}
         />
         <div className="col introduction">
-          <img
-            src={API_UPLOADS_URL + customer?.business?.img}
-            alt=""
-            width={100}
-          />
           <h2> ברוך\ה הבא\ה {customer?.firstname}</h2>
           <p>
-            Sed dapibus, massa non gravida vestibulum, ligula nisi sodales sem,
-            sit amet interdum libero dolor ac enim. Praesent bibendum augue
-            pharetra metus aliquet vulputate.
+            ברוכים הבאים לפאנל ניהול התורים. כאן תוכלו לצפות בתורים שלכם, לבטל
+            תורים במידת הצורך, ולהזמין תורים חדשים. על מנת לקבוע תור חדש, יש
+            לבחור בשירות המבוקש בצד שמאל, ולאחר מכן בנותן השירות.
           </p>
-          <h4>תורים קרובים:</h4>
-          <div className="services-row">{futureAppointments()}</div>
+          <div className="upcoming">
+            <h4>תורים קרובים:</h4>
+            <div className="upcoming-row">{upcomingAppointments()}</div>
+          </div>
         </div>
         <Divider orientation="vertical" flexItem sx={{ height: "100%" }} />
 
@@ -210,7 +189,6 @@ export default function AppointDashboard(props) {
           <h4> בחר שירות מבוקש:</h4>
 
           <div className="services-row">{Services}</div>
-          <Divider />
           <h4> בחר נותן שירות:</h4>
 
           <div className="providers-row">{ServiceProviders()}</div>

@@ -17,10 +17,9 @@ function Signup(props) {
   const [lastname, setLastname] = useState("");
   const [error, setError] = useState("");
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
-  const location = useLocation();
   const size = useWindowSize();
   const navigate = useNavigate();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -33,11 +32,10 @@ function Signup(props) {
 
     let response = await dispatch(_signup(obj));
 
-    if (response.type == "user/signup/fulfilled") {
-      navigate("/authorization/login", { state: { registered: true } });
-    } else if ((response.type == "user/signup/rejected")) {
-      setError(response.error.message);
+    if (response.type === "user/signup/fulfilled") {
+      return navigate("/authorization/login", { state: { registered: true } });
     }
+    return setError(response.error.message);
   };
 
   function SignupForm() {

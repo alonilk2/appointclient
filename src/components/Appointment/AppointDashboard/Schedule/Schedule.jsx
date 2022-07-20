@@ -1,24 +1,13 @@
-import FullCalendar from "@fullcalendar/react"; // must go before plugins
-import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
-import { useLocation } from "react-router-dom";
 import { Avatar } from "@mui/material";
-import { API_UPLOADS_URL } from "../../../../constants";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import { useState } from "react";
-import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import TimeDialog from "./TimeDialog";
-import interactionPlugin from "@fullcalendar/interaction";
+import { useLocation } from "react-router-dom";
+import { API_UPLOADS_URL } from "../../../../constants";
 import Breadcrumb from "../../../Breadcrumb";
+import TimeDialog from "./TimeDialog";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
+
 
 export default function Schedule() {
   const location = useLocation();
@@ -28,11 +17,22 @@ export default function Schedule() {
   let customer = location?.state?.customer;
   const [chosenDate, setChosenDate] = useState();
   const [open, setOpen] = useState(false);
+  console.log(provider)
 
   const handleDateClick = (arg) => {
+    if (provider?.workdays && !FindProviderWorkday(arg.date.getDay()))
+      return false;
     setOpen(true);
     setChosenDate(arg.date);
   };
+
+  const FindProviderWorkday = (day) => {
+    for (let wd of provider?.workdays) {
+      if (wd.day === day) return true;
+    }
+    return false;
+  };
+  
 
   return (
     <div className="appoint-dashboard-container">
@@ -61,21 +61,26 @@ export default function Schedule() {
           <h5>אצל {provider?.firstname + " " + provider?.lastname}</h5>
           <h1>לחץ\י על היום הרצוי בלוח השנה:</h1>
         </div>
-        <TimeDialog
-          open={open}
-          setOpen={setOpen}
-          chosenDate={chosenDate}
-          service={business?.services[clickedService]}
-          serviceProvider={provider}
-          business={business}
-          customer={customer}
-        />
+        {open && (
+          <TimeDialog
+            open={open}
+            setOpen={setOpen}
+            chosenDate={chosenDate}
+            service={business?.services[clickedService]}
+            serviceProvider={provider}
+            business={business}
+            customer={customer}
+          />
+        )}
         <div className="calendar">
           <FullCalendar
             plugins={[dayGridPlugin, interactionPlugin]}
             height="100%"
             initialView="dayGridMonth"
             dateClick={handleDateClick}
+            dayCellClassNames={(date) =>
+              !FindProviderWorkday(date.date.getDay()) && "disabled-date"
+            }
           />
         </div>
       </div>

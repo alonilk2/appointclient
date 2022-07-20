@@ -1,3 +1,4 @@
+import { Alert } from "@mui/material";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -14,9 +15,9 @@ import { useDispatch } from "react-redux";
 import { _addAppointment } from "../../../../features/appointSlice";
 
 export default function TimeDialog(props) {
-  const [workday, setWorkday] = useState("");
-  const [day, setDay] = useState();
-  const [chosenTime, setChosenTime] = useState(new Date());
+  const [error, setError] = useState();
+  const [chosenTime, setChosenTime] = useState();
+  const [timesArray, setTimesArray] = useState();
   const serviceProvider = props?.serviceProvider;
   const service = props?.service;
   const chosenDate = props?.chosenDate;
@@ -36,27 +37,23 @@ export default function TimeDialog(props) {
     props?.setOpen(false);
   };
 
-  const hoursList = () => {
+  const parseWorkingHoursForChosenDate = () => {
     serviceProvider?.workdays?.forEach((wd) => {
       if (wd.day === chosenDate?.getDay() && wd.starttime != null) {
         startTime.current = parse(wd.starttime, "HH:mm", new Date(chosenDate));
-        setWorkday(wd);
         endTime.current = parse(wd.endtime, "HH:mm", new Date(chosenDate));
         return;
       }
     });
   };
 
-  const handleSubmit = () => {
-    let end = new Date(chosenDate);
-    let [hours, minutes, seconds] = chosenTime.split(" ")[0].split(":");
-    end.setHours(parseInt(hours));
-    end.setMinutes(parseInt(minutes) + parseInt(service?.duration));
+  const handleSubmit = async () => {
+    if (!chosenTime) return setError("יש לבחור שעת פגישה מהרשימה!");
 
     let appointment = {
       day: chosenDate.getTime(),
       start_hour: chosenTime,
-      end_hour: end.toTimeString(),
+      end_hour: CalculateEndTime().toTimeString(),
       customer: customer,
       serviceProvider: serviceProvider,
       service: {
@@ -65,12 +62,25 @@ export default function TimeDialog(props) {
         serviceProviderSet: business?.serviceProviders,
       },
     };
-    dispatch(_addAppointment(appointment));
+
+    let response = await dispatch(_addAppointment(appointment));
+    if (response?.type?.endsWith("fulfilled")) {
+      handleClose();
+    } else setError("Error: operation failed.");
   };
 
   useEffect(() => {
-    hoursList();
+    parseWorkingHoursForChosenDate();
+    CalculateMenuItems();
   }, [chosenDate]);
+
+  const CalculateEndTime = () => {
+    let end = new Date(chosenDate);
+    let [hours, minutes] = chosenTime.split(" ")[0].split(":");
+    end.setHours(parseInt(hours));
+    end.setMinutes(parseInt(minutes) + parseInt(service?.duration));
+    return end;
+  };
 
   const CalculateMenuItems = () => {
     let timesArray = [];
@@ -97,13 +107,15 @@ export default function TimeDialog(props) {
       timesArray.push(new Date(lastTimeObj));
     }
 
-    return timesArray.map((t) => {
+    let timesList = timesArray.map((t) => {
       return (
         <MenuItem value={new Date(t).toTimeString()}>
           {new Date(t).toTimeString().split(" ")[0]}
         </MenuItem>
       );
     });
+
+    setTimesArray(timesList);
   };
 
   const checkTimeAvailability = (newTimeObj, skipFlag) => {
@@ -122,6 +134,11 @@ export default function TimeDialog(props) {
 
   return (
     <Dialog open={props?.open} onClose={handleClose}>
+      {error && (
+        <Alert severity="error" sx={{ direction: "ltr" }}>
+          {error}
+        </Alert>
+      )}
       <DialogTitle>בחירת שעה</DialogTitle>
       <DialogContent>
         <DialogContentText sx={{ direction: "ltr" }}>
@@ -138,7 +155,7 @@ export default function TimeDialog(props) {
               label="Hour"
               onChange={handleChange}
             >
-              {CalculateMenuItems()}
+              {timesArray}
             </Select>
           </FormControl>
         )}

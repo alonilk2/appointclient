@@ -1,17 +1,19 @@
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import {
   Alert,
   Button,
+  ButtonGroup,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  Divider,
   TextField,
-  ButtonGroup,
   Typography,
 } from "@mui/material";
-import useUser from "../../../hooks/Dashboard/useUser";
-import { useEffect, useState } from "react";
-import { useContext } from "react";
+
+import { useCallback, useContext, useEffect, useState } from "react";
+import { useDropzone } from "react-dropzone";
 import UserContext from "../UserContext";
 
 export default function ServicesDialog(props) {
@@ -19,7 +21,15 @@ export default function ServicesDialog(props) {
   const [cost, setCost] = useState(0);
   const [error, setError] = useState(false);
   const [duration, setDuration] = useState(0);
-  const user = useContext(UserContext)
+  const [file, setFile] = useState([]);
+
+  const user = useContext(UserContext);
+
+  const onDrop = useCallback((acceptedFiles) => {
+    setFile(acceptedFiles);
+  }, []);
+
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   const handleClose = () => {
     toggleDialog();
@@ -33,7 +43,7 @@ export default function ServicesDialog(props) {
     if (props?.serviceForEdit) {
       setName(props?.serviceForEdit.name);
       setCost(props?.serviceForEdit.cost);
-      setCost(props?.serviceForEdit.duration);
+      setDuration(props?.serviceForEdit.duration);
     } else {
       setName("");
       setCost(0);
@@ -55,8 +65,10 @@ export default function ServicesDialog(props) {
       id: props?.serviceForEdit?.id || null,
       name: name,
       cost: cost,
+      file: file,
+      img: "",
       business: user?.business,
-      duration: duration
+      duration: duration,
     };
 
     let response;
@@ -64,13 +76,29 @@ export default function ServicesDialog(props) {
     else response = await props?.add(newService);
 
     if (
-      response?.type == "dashboard/addServices/fulfilled" ||
-      response?.type == "dashboard/updateServices/fulfilled"
+      response?.type === "dashboard/addServices/fulfilled" ||
+      response?.type === "dashboard/updateServices/fulfilled"
     ) {
       toggleDialog();
       props?.refresh();
     }
   };
+
+  const Dropzone = (
+    <div
+      className="dropzone-container"
+      {...getRootProps()}
+      style={
+        error && file?.length === 0
+          ? { borderColor: "red", borderWidth: "3px", color: "red" }
+          : null
+      }
+    >
+      <input {...getInputProps()} />
+      <p>גרור ושחרר קובץ, או לחץ לבחירה</p>
+      <CloudUploadIcon sx={styles.CloudUploadIcon} />
+    </div>
+  );
 
   return (
     <Dialog open={props.open} sx={styles.dialogContainer}>
@@ -118,6 +146,14 @@ export default function ServicesDialog(props) {
             <Button onClick={handleSubDuration}>-</Button>
           </ButtonGroup>
         </div>
+        <Divider />
+        <br />
+        {Dropzone}
+        {file && (
+          <p>
+            {file[0]?.name} - {file[0]?.size}
+          </p>
+        )}
       </DialogContent>
       <DialogActions>
         <Button variant="text" onClick={handleClose}>

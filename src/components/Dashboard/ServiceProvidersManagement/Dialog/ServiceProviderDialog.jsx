@@ -1,4 +1,5 @@
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import EnhancedEncryptionIcon from "@mui/icons-material/EnhancedEncryption";
 import {
   Alert,
   Button,
@@ -7,13 +8,14 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Divider,
-  FormControlLabel,
-  TextField,
-  Typography,
+  Divider, Fab, FormControlLabel, Stack, TextField,
+  Typography
 } from "@mui/material";
+import DialogContentText from '@mui/material/DialogContentText';
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { useDispatch } from "react-redux";
+import { _signup } from "../../../../features/userSlice";
 import useServices from "../../../../hooks/Dashboard/useServices";
 import AddWorkdaysDialog from "../../AddWorkdayDialog/AddWorkdaysDialog";
 import UserContext from "../../UserContext";
@@ -30,8 +32,10 @@ export default function AddServiceProviderDialog(props) {
   const [firstDayAvailable, setFirstDayAvailable] = useState(0);
   const [error, setError] = useState(false);
   const [chosenServices, setChosenServices] = useState([]);
+  const [password, setPassword] = useState("");
   const user = useContext(UserContext);
   const services = useServices(user);
+  const dispatch = useDispatch();
 
   const onDrop = useCallback((acceptedFiles) => {
     setFile(acceptedFiles);
@@ -64,42 +68,56 @@ export default function AddServiceProviderDialog(props) {
       lastname === "" ||
       email === "" ||
       phone === "" ||
-      file.length === 0
+      file.length === 0 ||
+      password === ""
     )
       return setError(true);
 
-    const workdays = workdaysArr.map((wd) => {
-      return {
-        id: wd?.id,
-        starttime: wd.startTimeFormatted || wd.starttime,
-        endtime: wd.endTimeFormatted || wd.endtime,
-        day: wd.day,
-      };
-    });
-
-    let newProvider = {
-      id: props?.providerForEdit?.id || null,
+    let newUser = {
       firstname: firstname,
       lastname: lastname,
-      phone: phone,
       email: email,
-      file: file,
-      filename: "",
-      workdays: workdays,
-      services: chosenServices,
-      business: user?.business,
+      password: password,
     };
 
-    console.log(newProvider)
+    let response = await dispatch(_signup(newUser));
 
-    let response;
-    if (props?.providerForEdit) await props?.providers.update(newProvider);
-    else await props?.providers.add(newProvider);
+    if (response.type.endsWith("fulfilled")) {
+      const workdays = workdaysArr.map((wd) => {
+        return {
+          id: wd?.id,
+          starttime: wd.startTimeFormatted || wd.starttime,
+          endtime: wd.endTimeFormatted || wd.endtime,
+          day: wd.day,
+        };
+      });
 
-    if (response?.type.endsWith("fuloutlined")) {
-      toggleDialog();
-      user.refresh();
-    }
+      let newProvider = {
+        id: props?.providerForEdit?.id || null,
+        firstname: firstname,
+        lastname: lastname,
+        phone: phone,
+        email: email,
+        file: file,
+        filename: "",
+        workdays: workdays,
+        services: chosenServices,
+        business: user?.business,
+      };
+
+      if (props?.providerForEdit)
+        response = await props?.providers.update(newProvider);
+      else response = await props?.providers.add(newProvider);
+
+      if (response.type.endsWith("fulfilled")) {
+        toggleDialog();
+        user?.refresh();
+      }
+    } else return setError(response.error.message);
+  };
+
+  const handleGeneratePassword = () => {
+    setPassword(Math.random().toString(36).slice(-8));
   };
 
   const Dropzone = (
@@ -178,7 +196,12 @@ export default function AddServiceProviderDialog(props) {
             יש למלא את כל השדות ולהוסיף קובץ תמונה להעלאה
           </Alert>
         )}
-
+        <DialogContentText sx={{direction: 'ltr'}}>
+          יש למלא את כל הפרטים לפי הסדר.<br />
+          לנותן השירות יפתח חשבון במערכת באופן אוטומטי בלחיצה על "הוספה", כאשר פרטי ההתחברות יהיו הדוא"ל והסיסמה הזמנית שתוצג בהמשך הטופס.<br />
+          בסעיף יצירת סיסמה יש ללחוץ על הכפתור להצגת הסיסמה הזמנית.
+        </DialogContentText>
+<br />
         <TextField
           required
           error={error && firstname.length === 0 && true}
@@ -224,9 +247,25 @@ export default function AddServiceProviderDialog(props) {
           fullWidth
         />
         <Typography variant="subtitle1" gutterBottom component="div">
+          יצירת סיסמה זמנית
+        </Typography>
+        <Divider />
+        <Stack direction="column" sx={styles.addWorkdays}>
+          {password.length === 0 ? <>          <Fab
+            color="primary"
+            aria-label="generate"
+            onClick={handleGeneratePassword}
+          >
+            <EnhancedEncryptionIcon />
+          </Fab>
+          <p>לחץ להצגת הסיסמה הזמנית</p></> : <h3 style={{direction: 'rtl'}}>הסיסמה הזמנית: {password} </h3>}
+
+        </Stack>
+        <Typography variant="subtitle1" gutterBottom component="div">
           ימי ושעות עבודה
         </Typography>
         <Divider />
+
         <WorkdaysTable
           workdaysArr={workdaysArr}
           setWorkdaysArr={setWorkdaysArr}

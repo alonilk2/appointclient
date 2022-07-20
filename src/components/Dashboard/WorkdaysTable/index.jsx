@@ -8,9 +8,8 @@ import {
   TableBody,
   TableCell,
   TableHead,
-  TableRow
+  TableRow,
 } from "@mui/material";
-import { useState } from "react";
 import { useMemo } from "react";
 import { daysArray } from "../util";
 
@@ -21,55 +20,61 @@ export default function WorkdaysTable(props) {
 
   const handleRemove = (dayId) => {
     let tempArr = [...props?.workdaysArr];
-    console.log(tempArr)
+    console.log(tempArr);
     props?.workdaysArr.forEach((e, idx) => {
       if (e.day === dayId) {
         tempArr.splice(idx, 1);
       }
     });
     props?.setWorkdaysArr(tempArr);
-    console.log(tempArr)
+    console.log(tempArr);
   };
 
-
-  let table = useMemo(()=>(
-    <Table size="small" aria-label="a dense table" sx={{direction: 'ltr'}}>
-      <TableHead>
-        <TableRow>
-          <TableCell align="right">יום</TableCell>
-          <TableCell align="right">שעת התחלה</TableCell>
-          <TableCell align="right">שעת סיום</TableCell>
-          <TableCell align="right">מחיקה</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {props?.workdaysArr?.map((row) => {
-          return (
-            <TableRow
-              key={row.day}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell align="right" component="th" scope="row">
-                {daysArray[row.day]}
-              </TableCell>
-              <TableCell align="right">{row?.startTimeFormatted || row?.starttime}</TableCell>
-              <TableCell align="right">{row?.endTimeFormatted || row?.endtime}</TableCell>
-              <TableCell align="right">
-                <IconButton
-                  aria-label="delete"
-                  color="error"
-                  size="small"
-                  onClick={() => handleRemove(row.day)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
-  ), [props?.workdaysArr]);
+  let table = useMemo(
+    () => (
+      <Table size="small" aria-label="a dense table" sx={{ direction: "ltr" }}>
+        <TableHead>
+          <TableRow>
+            <TableCell align="right">יום</TableCell>
+            <TableCell align="right">שעת התחלה</TableCell>
+            <TableCell align="right">שעת סיום</TableCell>
+            <TableCell align="right">מחיקה</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {props?.workdaysArr?.map((row) => {
+            return (
+              <TableRow
+                key={row.day}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell align="right" component="th" scope="row">
+                  {daysArray[row.day]}
+                </TableCell>
+                <TableCell align="right">
+                  {row?.startTimeFormatted || row?.starttime}
+                </TableCell>
+                <TableCell align="right">
+                  {row?.endTimeFormatted || row?.endtime}
+                </TableCell>
+                <TableCell align="right">
+                  <IconButton
+                    aria-label="delete"
+                    color="error"
+                    size="small"
+                    onClick={() => handleRemove(row.day)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    ),
+    [props?.workdaysArr]
+  );
 
   return (
     <>
