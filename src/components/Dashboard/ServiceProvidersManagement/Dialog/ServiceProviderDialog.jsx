@@ -15,7 +15,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useDispatch } from "react-redux";
-import { _signup } from "../../../../features/userSlice";
+import { _signup, _updateUser } from "../../../../features/userSlice";
 import useServices from "../../../../hooks/Dashboard/useServices";
 import AddWorkdaysDialog from "../../AddWorkdayDialog/AddWorkdaysDialog";
 import UserContext from "../../UserContext";
@@ -41,7 +41,7 @@ export default function AddServiceProviderDialog(props) {
     setFile(acceptedFiles);
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   const handleClose = () => {
     toggleDialog();
@@ -59,6 +59,13 @@ export default function AddServiceProviderDialog(props) {
       setEmail(props?.providerForEdit.email);
       setWorkdaysArr(props?.providerForEdit?.workdays);
       setChosenServices(props?.providerForEdit?.services);
+    } else {
+      setFirstname("");
+      setPhone("");
+      setLastname("");
+      setEmail("");
+      setWorkdaysArr([]);
+      setChosenServices("");
     }
   }, [props?.providerForEdit]);
 
@@ -80,7 +87,10 @@ export default function AddServiceProviderDialog(props) {
       password: password,
     };
 
-    let response = await dispatch(_signup(newUser));
+    let response
+    if(props?.providerForEdit) response = await dispatch(_updateUser(newUser));
+    else response = await dispatch(_signup(newUser));
+    let userResponse = response?.payload
 
     if (response.type.endsWith("fulfilled")) {
       const workdays = workdaysArr.map((wd) => {
@@ -103,12 +113,17 @@ export default function AddServiceProviderDialog(props) {
         workdays: workdays,
         services: chosenServices,
         business: user?.business,
+        appointments: [],
+        user: response?.payload || props?.providerForEdit?.user
       };
 
       if (props?.providerForEdit)
         response = await props?.providers.update(newProvider);
       else response = await props?.providers.add(newProvider);
 
+      userResponse.serviceProvider = response.payload;
+      response = await dispatch(_updateUser(userResponse));
+      
       if (response.type.endsWith("fulfilled")) {
         toggleDialog();
         user?.refresh();

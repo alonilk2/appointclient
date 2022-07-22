@@ -17,7 +17,7 @@ export default function ServiceProvidersManagement() {
   const [toggleDialog, setToggleDialog] = useState(false);
   const [providerForEdit, setProviderForEdit] = useState();
   const serviceProviders = useServiceProviders();
-  const user = useContext(UserContext)
+  const user = useContext(UserContext);
 
   const UserProfileCell = (params) => {
     let filename = params?.value.file;
@@ -30,21 +30,10 @@ export default function ServiceProvidersManagement() {
     );
   };
 
-  const WorkdaysCell = () => {
-    return (
-      <IconButton color="primary" aria-label="add an alarm">
-        <EditIcon />
-      </IconButton>
-    );
-  };
-
-  const handleRemove = (params) => {
-    return async () => {
-      let response = await serviceProviders?.remove(params?.value?.id);
-      if (response?.type == "dashboard/removeServiceProvider/fulfilled") {
-        user.refresh();
-      }
-    };
+  const handleRemove = async (params) => {
+    let response = await user?.findUserByEmail(params?.value?.email);
+    if (response) response = await user?.remove(response?.payload);
+    user.refresh();
   };
 
   const handleEdit = (params) => {
@@ -60,7 +49,7 @@ export default function ServiceProvidersManagement() {
         <IconButton
           aria-label="delete"
           color="error"
-          onClick={handleRemove(params)}
+          onClick={() => handleRemove(params)}
         >
           <DeleteIcon />
         </IconButton>
@@ -76,6 +65,7 @@ export default function ServiceProvidersManagement() {
   };
 
   const handleAddServiceProvider = () => {
+    setProviderForEdit(null);
     setToggleDialog(true);
   };
 
@@ -149,7 +139,7 @@ const styles = {
   AddButton: { direction: "ltr", backgroundColor: "#0369ff" },
   DeleteIcon: { marginLeft: "20%", color: "red" },
   EditIcon: { marginRight: "20%" },
-  Box: { height: "100%", width: "100%"},
+  Box: { height: "100%", width: "100%" },
   CardHeader: { textAlign: "right" },
   UserProfileCell: {
     display: "flex",

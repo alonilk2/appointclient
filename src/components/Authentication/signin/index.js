@@ -24,6 +24,7 @@ function SigninComponent(props) {
   const size = useWindowSize();
   const navigate = useNavigate();
   const loggedIn = localStorage.getItem(ACCESS_TOKEN);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -35,8 +36,7 @@ function SigninComponent(props) {
     let response = await dispatch(_login(obj));
     if (response.type === "user/login/fulfilled") {
       localStorage.setItem(ACCESS_TOKEN, response.payload.accessToken);
-
-      navigate("/dashboard");
+      return navigate("/dashboard", {replace: true});
     } else if (response.type === "user/login/rejected") {
       setError(response);
     }
@@ -63,8 +63,8 @@ function SigninComponent(props) {
   );
 
   useEffect(() => {
-    if (loggedIn) navigate("/dashboard");
-  }, []);
+    if (loggedIn) return navigate("/dashboard");
+  }, [loggedIn]);
 
   const LoginForm = (
     <form

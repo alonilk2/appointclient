@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 
-import { _updateUser } from "../../features/userSlice";
+import { _removeUser, _updateUser, _findUserByEmail } from "../../features/userSlice";
 import { uploadFile } from "../../utils/FilesAPI";
 import { _getCurrentUser } from "../../features/userSlice";
 import { useEffect } from "react";
@@ -23,6 +23,17 @@ export default function useUser() {
     return response;
   };
 
+  const remove = async (user) => {
+    console.log(user)
+    let response = await dispatch(_removeUser(user));
+    return response;
+  };
+
+  const findUserByEmail = async (email) => {
+    let response = await dispatch(_findUserByEmail(email));
+    return response;
+  }
+
   const getUserInstance = async () => {
     dispatch(_getCurrentUser());
   };
@@ -36,5 +47,7 @@ export default function useUser() {
     business: user?.business,
     update: updateUser,
     refresh: getUserInstance,
+    remove: remove,
+    findUserByEmail: findUserByEmail
   };
 }

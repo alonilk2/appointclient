@@ -73,3 +73,28 @@ export function updateUser(user) {
     console.log(ErrorOutlined);
   }
 }
+
+export function removeUser(user) {
+  try {
+    let str = JSON.stringify(user);
+    return request({
+      url: API_BASE_URL + "/users/" + user.id,
+      method: "DELETE",
+      body: str,
+    });
+  } catch (err) {
+    console.log(ErrorOutlined);
+  }
+}
+
+export function findUserByEmail(email) {
+  try {
+    return request({
+      url: API_BASE_URL + "/users/" + email,
+      method: "GET",
+    });
+  } catch (err) {
+    console.log(ErrorOutlined);
+  }
+}
+

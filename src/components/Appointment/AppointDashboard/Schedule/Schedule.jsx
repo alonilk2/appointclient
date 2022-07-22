@@ -8,7 +8,6 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
-
 export default function Schedule() {
   const location = useLocation();
   let provider = location?.state?.provider;
@@ -17,7 +16,6 @@ export default function Schedule() {
   let customer = location?.state?.customer;
   const [chosenDate, setChosenDate] = useState();
   const [open, setOpen] = useState(false);
-  console.log(provider)
 
   const handleDateClick = (arg) => {
     if (provider?.workdays && !FindProviderWorkday(arg.date.getDay()))
@@ -32,7 +30,6 @@ export default function Schedule() {
     }
     return false;
   };
-  
 
   return (
     <div className="appoint-dashboard-container">

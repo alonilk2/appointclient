@@ -5,6 +5,8 @@ import {
   getCurrentUser,
   confirmEmail,
   updateUser,
+  removeUser,
+  findUserByEmail,
 } from "../utils/AuthAPI";
 
 const sortWorkdaysArray = (arr) => {
@@ -56,7 +58,7 @@ export const _signup = createAsyncThunk(
   async (signupRequest, thunkAPI) => {
     try {
       const response = await signup(signupRequest);
-      return response.data;
+      return response;
     } catch (error) {
       console.log(error);
       return thunkAPI.rejectWithValue();
@@ -71,17 +73,44 @@ export const _updateUser = createAsyncThunk(
       const response = await updateUser(user);
       return response;
     } catch (error) {
-      if(error != "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+      if(error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
     }
   }
 );
+
+export const _removeUser = createAsyncThunk(
+  "user/remove",
+  async (user, thunkAPI) => {
+    try {
+      const response = await removeUser(user);
+      return response;
+    } catch (error) {
+      if(error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
+export const _findUserByEmail = createAsyncThunk(
+  "user/remove",
+  async (user, thunkAPI) => {
+    try {
+      const response = await findUserByEmail(user);
+      return response;
+    } catch (error) {
+      if(error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
 
 export const _getCurrentUser = createAsyncThunk(
   "user/getcurrentuser",
   async (thunkAPI) => {
     try {
       let response = await getCurrentUser();
-      response.business.workdays = sortWorkdaysArray(response.business.workdays)
+      if(response?.business?.workdays){
+        response.business.workdays = sortWorkdaysArray(response.business.workdays)
+      }
       return response;
     } catch (error) {
       console.log(error)
@@ -129,6 +158,7 @@ export const userSlice = createSlice({
     },
     [_updateUser.rejected]: (state, action) => {
     },
+    
     // [logout.fulfilled]: (state, action) => {
     //     state.isLoggedIn = false;
     //     state.user = null;
