@@ -10,11 +10,11 @@ export default function useUser() {
   const dispatch = useDispatch();
 
   const updateUser = async (user) => {
-    if (typeof user?.business?.img == "object") {
+    if (typeof user?.business?.img === 'object') {
       let fileName = await uploadFile({ file: user?.business?.img });
       user.business.img = fileName?.message;
     }
-    if (typeof user?.business?.headerImg == "object") {
+    if (typeof user?.business?.headerImg === 'object') {
       console.log(user?.business);
       let fileName = await uploadFile({ file: user?.business?.headerImg });
       user.business.headerImg = fileName?.message;
@@ -24,29 +24,28 @@ export default function useUser() {
   };
 
   const remove = async (user) => {
-    console.log(user)
     let response = await dispatch(_removeUser(user));
     return response;
   };
 
   const findUserByEmail = async (email) => {
     let response = await dispatch(_findUserByEmail(email));
-    return response;
+    return response.payload
   }
 
-  const getUserInstance = async () => {
+  const fetchUserInstance = () => {
     dispatch(_getCurrentUser());
   };
 
   useEffect(()=> {
-    getUserInstance()
+    fetchUserInstance()
   }, [])
 
   return {
     user: user,
     business: user?.business,
     update: updateUser,
-    refresh: getUserInstance,
+    refresh: fetchUserInstance,
     remove: remove,
     findUserByEmail: findUserByEmail
   };

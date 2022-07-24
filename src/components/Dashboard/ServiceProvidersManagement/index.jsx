@@ -32,7 +32,7 @@ export default function ServiceProvidersManagement() {
 
   const handleRemove = async (params) => {
     let response = await user?.findUserByEmail(params?.value?.email);
-    if (response) response = await user?.remove(response?.payload);
+    if (response) response = await user?.remove(response);
     user.refresh();
   };
 

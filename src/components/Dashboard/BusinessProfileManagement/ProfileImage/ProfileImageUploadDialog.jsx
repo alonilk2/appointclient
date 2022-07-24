@@ -13,7 +13,7 @@ import UserContext from "../../UserContext";
 export default function ProfileImageUploadDialog(props) {
   const [file, setFile] = useState([]);
   const [error, setError] = useState(false);
-  const { user, update } = useContext(UserContext)
+  const { user, update, refresh } = useContext(UserContext)
 
   const onDrop = useCallback((acceptedFiles) => {
     setFile(acceptedFiles);
@@ -52,6 +52,7 @@ export default function ProfileImageUploadDialog(props) {
     };
     let response = await update(tempUser);
     if (response?.type === "user/update/fulfilled") {
+      refresh()
       toggleDialog();
     }
   };

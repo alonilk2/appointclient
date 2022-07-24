@@ -14,16 +14,68 @@ import { API_UPLOADS_URL, FRONT_BASE_URL } from "../../../constants";
 import { selectTab } from "../../../features/dashboardSlice";
 import UserContext from "../UserContext";
 
-
 export default function SideMenu() {
   const dispatch = useDispatch();
   const selectedTab = useSelector((state) => state.dashboard.selectedTabIndex);
-  const user = useContext(UserContext)
-  
+  const user = useContext(UserContext);
+
   const handleListItemClick = (event, index) => {
     dispatch(selectTab(index));
   };
 
+  const serviceProviderMenu = (
+    <>
+   
+    </>
+  );
+
+  const adminMenu = (
+    <>
+      <ListSubheader component="div" id="nested-list-subheader">
+        פרופיל העסק
+      </ListSubheader>
+      <ListItemButton
+        selected={selectedTab === 2}
+        onClick={(event) => handleListItemClick(event, 2)}
+      >
+        <ListItemIcon>
+          <SettingsIcon />
+        </ListItemIcon>
+        <ListItemText primary="ניהול פרטי העסק" />
+      </ListItemButton>
+      <ListItemButton
+        selected={selectedTab === 3}
+        onClick={(event) => handleListItemClick(event, 3)}
+      >
+        <ListItemIcon>
+          <HomeIcon />
+        </ListItemIcon>
+        <ListItemText primary="ניהול דף נחיתה" />
+      </ListItemButton>
+      <ListSubheader component="div" id="nested-list-subheader">
+        שירותים ומוצרים
+      </ListSubheader>
+      <ListItemButton
+        selected={selectedTab === 0}
+        onClick={(event) => handleListItemClick(event, 0)}
+      >
+        <ListItemIcon>
+          <PeopleIcon />
+        </ListItemIcon>
+        <ListItemText primary="ניהול נותני שירות" />
+      </ListItemButton>
+      <ListItemButton
+        selected={selectedTab === 1}
+        onClick={(event) => handleListItemClick(event, 1)}
+      >
+        <ListItemIcon>
+          <ListIcon />
+        </ListItemIcon>
+        <ListItemText primary="ניהול שירותים" />
+      </ListItemButton>
+    </>
+  );
+  
   return (
     <div className="col-2 sidemenu-container">
       <List
@@ -36,63 +88,25 @@ export default function SideMenu() {
           עמוד העסק
         </ListSubheader>
         <div className="business-link-row">
-        <div className="links">
-          <div className="row">
-            {user?.business?.name}
+          <div className="links">
+            <div className="row">{user?.business?.name}</div>
+            <div className="row">
+              <a
+                href={FRONT_BASE_URL + "appoint/" + user?.business?.id}
+                style={{ fontSize: "14px" }}
+              >
+                לכניסה לעמוד העסק
+              </a>
+            </div>
           </div>
-          <div className="row">
-            <a href={FRONT_BASE_URL+"appoint/"+user?.business?.id} style={{fontSize: '14px'}}>
-              לכניסה לעמוד העסק
-            </a>
-          </div>
-        </div>
-        <img src={API_UPLOADS_URL+user?.business?.img} className="business-logo" alt="business logo" />
-
-
+          <img
+            src={API_UPLOADS_URL + user?.business?.img}
+            className="business-logo"
+            alt="business logo"
+          />
         </div>
         <Divider />
-        <ListSubheader component="div" id="nested-list-subheader">
-          פרופיל העסק
-        </ListSubheader>
-        <ListItemButton
-          selected={selectedTab === 2}
-          onClick={(event) => handleListItemClick(event, 2)}
-        >
-          <ListItemIcon>
-            <SettingsIcon />
-          </ListItemIcon>
-          <ListItemText primary="ניהול פרטי העסק" />
-        </ListItemButton>
-        <ListItemButton
-          selected={selectedTab === 3}
-          onClick={(event) => handleListItemClick(event, 3)}
-        >
-          <ListItemIcon>
-            <HomeIcon />
-          </ListItemIcon>
-          <ListItemText primary="ניהול דף נחיתה" />
-        </ListItemButton>
-        <ListSubheader component="div" id="nested-list-subheader">
-          שירותים ומוצרים
-        </ListSubheader>
-        <ListItemButton
-          selected={selectedTab === 0}
-          onClick={(event) => handleListItemClick(event, 0)}
-        >
-          <ListItemIcon>
-            <PeopleIcon />
-          </ListItemIcon>
-          <ListItemText primary="ניהול נותני שירות" />
-        </ListItemButton>
-        <ListItemButton
-          selected={selectedTab === 1}
-          onClick={(event) => handleListItemClick(event, 1)}
-        >
-          <ListItemIcon>
-            <ListIcon />
-          </ListItemIcon>
-          <ListItemText primary="ניהול שירותים" />
-        </ListItemButton>
+        {user.user?.serviceProvider ? serviceProviderMenu : adminMenu}
       </List>
     </div>
   );

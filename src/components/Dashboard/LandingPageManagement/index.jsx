@@ -31,8 +31,8 @@ export default function LandingPageManagement() {
     setOpen(!open);
   };
 
-  const handleChangeColor = (color, event) => {
-    setColor(color.hex);
+  const handleChangeColor = (_color, event) => {
+    setColor(_color?.hex);
   };
 
   const handleSubmit = async () => {
@@ -51,7 +51,7 @@ export default function LandingPageManagement() {
   };
 
   useEffect(() => {
-    if (user) {
+    if (user.user?.business?.pageColor) {
       setColor(user.user?.business?.pageColor);
     }
   }, [user]);

@@ -153,12 +153,7 @@ export const userSlice = createSlice({
     [_getCurrentUser.rejected]: (state, action) => {
       state.user = null;
     },
-    [_updateUser.fulfilled]: (state, action) => {
-      state.user = action.payload;
-    },
-    [_updateUser.rejected]: (state, action) => {
-    },
-    
+
     // [logout.fulfilled]: (state, action) => {
     //     state.isLoggedIn = false;
     //     state.user = null;

@@ -65,7 +65,7 @@ export default function AddServiceProviderDialog(props) {
       setLastname("");
       setEmail("");
       setWorkdaysArr([]);
-      setChosenServices("");
+      setChosenServices([]);
     }
   }, [props?.providerForEdit]);
 
@@ -87,8 +87,10 @@ export default function AddServiceProviderDialog(props) {
       password: password,
     };
 
+    let existingUser = await user.findUserByEmail(email)
+    console.log(existingUser)
     let response
-    if(props?.providerForEdit) response = await dispatch(_updateUser(newUser));
+    if(props?.providerForEdit) response = await dispatch(_updateUser({...existingUser, ...newUser}));
     else response = await dispatch(_signup(newUser));
     let userResponse = response?.payload
 
@@ -120,8 +122,11 @@ export default function AddServiceProviderDialog(props) {
       if (props?.providerForEdit)
         response = await props?.providers.update(newProvider);
       else response = await props?.providers.add(newProvider);
-
+      console.log(response)
       userResponse.serviceProvider = response.payload;
+      userResponse = {...userResponse, ...newUser, business: user?.business};
+      console.log(userResponse)
+
       response = await dispatch(_updateUser(userResponse));
       
       if (response.type.endsWith("fulfilled")) {
