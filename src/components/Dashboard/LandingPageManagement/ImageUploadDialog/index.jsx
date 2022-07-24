@@ -1,18 +1,19 @@
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { Alert } from "@mui/material";
+import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Button from "@mui/material/Button";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import useUser from "../../../../hooks/Dashboard/useUser";
-import { useState, useCallback } from "react";
+import { useCallback, useContext, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { Alert } from "@mui/material";
+import UserContext from "../../UserContext";
+
 export default function ImageUploadDialog(props) {
   const [file, setFile] = useState([]);
   const [error, setError] = useState(false);
-  const { user, update } = useUser();
+  const { user, update, refresh } = useContext(UserContext)
 
   const onDrop = useCallback((acceptedFiles) => {
     setFile(acceptedFiles);
@@ -20,7 +21,7 @@ export default function ImageUploadDialog(props) {
 
   const toggleDialog = () => props.toggle(!props.open);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   const handleClose = () => {
     toggleDialog();
@@ -51,8 +52,10 @@ export default function ImageUploadDialog(props) {
     };
     try {
       let response = await update(tempUser);
-      if (response?.type === "user/update/fulfilled") 
+      if (response?.type === "user/update/fulfilled") {
+        refresh();
         toggleDialog();
+      }
 
     } catch (error) {
       setError(true);

@@ -23,11 +23,7 @@ export default function SideMenu() {
     dispatch(selectTab(index));
   };
 
-  const serviceProviderMenu = (
-    <>
-   
-    </>
-  );
+  const serviceProviderMenu = <></>;
 
   const adminMenu = (
     <>
@@ -75,7 +71,7 @@ export default function SideMenu() {
       </ListItemButton>
     </>
   );
-  
+
   return (
     <div className="col-2 sidemenu-container">
       <List
@@ -93,7 +89,11 @@ export default function SideMenu() {
             <div className="row">
               <a
                 href={FRONT_BASE_URL + "appoint/" + user?.business?.id}
-                style={{ fontSize: "14px" }}
+                style={{
+                  fontSize: "14px",
+                  color: "blue",
+                  textDecoration: "underline",
+                }}
               >
                 לכניסה לעמוד העסק
               </a>

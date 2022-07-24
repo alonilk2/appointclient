@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import { useContext, useState } from "react";
 import { API_UPLOADS_URL } from "../../../constants";
-import useUser from "../../../hooks/Dashboard/useUser";
 import ImageUploadDialog from "./ImageUploadDialog";
 import "./index.css";
 import { HuePicker } from "react-color";

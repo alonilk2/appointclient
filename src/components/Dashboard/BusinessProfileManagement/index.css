@@ -15,7 +15,7 @@
     background-color: white;
     border-radius: 10px;
     max-height: 65px;
-    margin: 2% 2% 0 2%;
+    margin: 2% 2% 0 0;
 }
 
 .formcontainer {
@@ -31,7 +31,6 @@
 .widget-container {
     display: flex;
     flex-direction: row;
-    padding-left: 2%;
     flex-wrap: wrap;
 }
 .MuiCardHeader-title {

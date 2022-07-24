@@ -37,7 +37,7 @@ export default function Dashboard() {
             <div className="main-container">
               {selectedTab === 0 && <ServiceProvidersManagement />}
               {selectedTab === 1 && <ServicesManagement />}
-              {selectedTab === 2 && user.user?.serviceProvider ? <ServiceProviderView /> : <BusinessDetailsManagement />}
+              {selectedTab === 2 && (user.user?.serviceProvider ? <ServiceProviderView /> : <BusinessDetailsManagement />)}
               {selectedTab === 3 && <LandingPageManagement />}
             </div>
           </main>

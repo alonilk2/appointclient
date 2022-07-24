@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import {
   ACCESS_TOKEN,
   FACEBOOK_AUTH_URL,
-  GOOGLE_AUTH_URL
+  GOOGLE_AUTH_URL,
 } from "../../../constants";
 import { _login } from "../../../features/userSlice";
 import useWindowSize from "../../../hooks/useWindowSize";
@@ -34,10 +34,10 @@ function SigninComponent(props) {
     };
 
     let response = await dispatch(_login(obj));
-    if (response.type === "user/login/fulfilled") {
+    if (response.type.endsWith("fulfilled")) {
       localStorage.setItem(ACCESS_TOKEN, response.payload.accessToken);
-      return navigate("/dashboard", {replace: true});
-    } else if (response.type === "user/login/rejected") {
+      return navigate("/dashboard", { replace: true });
+    } else if (response.type.endsWith("rejected")) {
       setError(response);
     }
   };
@@ -63,8 +63,8 @@ function SigninComponent(props) {
   );
 
   useEffect(() => {
-    if (loggedIn) return navigate("/dashboard");
-  }, [loggedIn]);
+    if (loggedIn) navigate("/dashboard", { replace: true });
+  }, []);
 
   const LoginForm = (
     <form
