@@ -11,6 +11,12 @@
 .nav-link, .navbar-brand {
     color: white !important;
 }
+
+.navbar-collapse a{
+    color: white;
+    font-weight: 700;
+
+}
 .main-title {
     text-align: center;
     font-weight: 700;

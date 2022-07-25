@@ -38,8 +38,27 @@
   align-items: center;
 
   color: white;
-}
+  position: relative;
+  min-height: 65vh;
+  padding-bottom: 7%;
 
+}
+.details-box {
+  width: 22%;
+  background-color: white;
+  position: absolute;
+  bottom: -0%;
+  border-radius: 50px;
+  box-shadow: rgb(84, 104, 128) 0px 15px 30px -10px;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  padding: 0.8% 1.5%;
+}
+.details-row {
+  font-size: 18px;
+  margin: 0.5% 0;
+}
 .image-container > h1 {
   font-size: 68px;
 }

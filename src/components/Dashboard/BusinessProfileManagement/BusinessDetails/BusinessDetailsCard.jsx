@@ -7,17 +7,31 @@ import {
   Divider,
   TextField,
 } from "@mui/material";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import UserContext from "../../UserContext";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import {Alert} from "@mui/material";
 
 export default function BusinessDetailsCard() {
-  const { user, update, refresh } = useContext(UserContext)
-  const [name, setName] = useState(user?.business?.name || "");
-  const [address, setAddress] = useState(user?.business?.address || "");
-  const [phone1, setPhone1] = useState(user?.business?.phone1 || "");
-  const [phone2, setPhone2] = useState(user?.business?.phone2 || "");
+  const { user, update, refresh } = useContext(UserContext);
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [website, setWebsite] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone1, setPhone1] = useState("");
+  const [phone2, setPhone2] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
 
-  const handleSubmitForm = () => {
+  const handleSubmitForm = async () => {
+    if (
+      name.length === 0 ||
+      address.length === 0 ||
+      email.length === 0 ||
+      phone1.length === 0
+    ) {
+      return setError(true);
+    }
     if (user) {
       let tempUser = { ...user };
       tempUser.business = {
@@ -26,19 +40,41 @@ export default function BusinessDetailsCard() {
         address: address,
         phone1: phone1,
         phone2: phone2,
+        email: email,
+        website: website
       };
-      update(tempUser);
-      refresh();
+      let response = await update(tempUser);
+      if (response?.type?.endsWith("fulfilled")) {
+        setSuccess(true);
+        console.log("TR*IE");
+        setTimeout(() => {
+          setSuccess(false);
+        }, 4000);
+        refresh();
+      }
     }
   };
 
+  useEffect(() => {
+    setName(user?.business?.name || "");
+    setAddress(user?.business?.address || "");
+    setPhone1(user?.business?.phone1 || "");
+    setPhone2(user?.business?.phone2 || "");
+    setWebsite(user?.business?.website || "");
+    setEmail(user?.business?.email || "");
+  }, [user]);
+
   return (
     <Card elevation={0} sx={styles.cardContainer}>
+      {error && <Alert severity="error">יש למלא את כל שדות החובה!</Alert>}
+
       <CardHeader title="פרטי העסק" />
       <Divider />
       <CardContent>
         <TextField
           fieldWidth
+          required
+          error={error && name.length === 0 && true}
           id="outlined-basic"
           label="שם העסק"
           variant="outlined"
@@ -47,6 +83,8 @@ export default function BusinessDetailsCard() {
         />
         <TextField
           fieldWidth
+          required
+          error={error && address.length === 0 && true}
           id="outlined-basic"
           label="כתובת"
           variant="outlined"
@@ -55,6 +93,8 @@ export default function BusinessDetailsCard() {
         />
         <TextField
           fieldWidth
+          required
+          error={error && phone1.length === 0 && true}
           id="outlined-basic"
           label="מס' טלאפון"
           variant="outlined"
@@ -69,6 +109,25 @@ export default function BusinessDetailsCard() {
           value={phone2}
           onChange={(e) => setPhone2(e.target.value)}
         />
+        <TextField
+          fieldWidth
+          id="outlined-basic"
+          required
+          error={error && email.length === 0 && true}
+          label='דוא"ל'
+          variant="outlined"
+          value={email}
+          type="email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <TextField
+          fieldWidth
+          id="outlined-basic"
+          label="אתר אינטרנט"
+          variant="outlined"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+        />
       </CardContent>
       <CardActions>
         <Button
@@ -78,6 +137,14 @@ export default function BusinessDetailsCard() {
         >
           עדכון פרטים
         </Button>
+        {success && (
+          <>
+            <CheckCircleOutlineIcon
+              sx={{ color: "green", marginRight: "5px" }}
+            />
+            נשמר
+          </>
+        )}
       </CardActions>
     </Card>
   );

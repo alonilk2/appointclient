@@ -10,7 +10,7 @@ export default function NavigationBar(props) {
         <Navbar.Collapse id="responsive-navbar-nav">
           <a href="#features" style={props?.dark && {color: 'black'}}>המוצר שלנו</a>
           <a href="#pricing" style={props?.dark && {color: 'black'}}>מחירים</a>
-          <a href="/" ><h1 href="#home" className="main-title" style={props?.dark && {color: 'black'}}>APPoint</h1></a>
+          <a href="/" ><h1 href="#home" className="main-title" style={props?.dark && {color: 'black'}}>Torgate</h1></a>
 
           <a href="#memes" style={props?.dark && {color: 'black'}}>
             מי אנחנו

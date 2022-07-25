@@ -11,7 +11,7 @@ import SideMenu from "./SideMenu/SideMenu";
 import UserContext from "./UserContext";
 import { useNavigate } from "react-router-dom";
 import ServiceProviderView from "./ServiceProviderView";
-
+import logo from '../../images/logo.png'
 export default function Dashboard() {
   const selectedTab = useSelector((state) => state.dashboard.selectedTabIndex);
   const user = useUser();
@@ -26,9 +26,10 @@ export default function Dashboard() {
       <div className="dashboard-container">
         <header className="dashboard-header">
           <a href="/">
-            <h1 href="#home" className="main-title" style={{ color: "black" }}>
-              APPoint
-            </h1>
+            {/* <h1 href="#home" className="main-title" style={{ color: "black" }}>
+              Torgate
+            </h1> */}
+            <img src={logo} alt="logo" width={200}/>
           </a>
           {ProfileChip(user)}
         </header>

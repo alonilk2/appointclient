@@ -21,7 +21,7 @@ import img3 from "../../../images/img3.jpg";
 import UserContext from "../UserContext";
 
 export default function LandingPageManagement() {
-  const user = useContext(UserContext)
+  const user = useContext(UserContext);
   const [open, setOpen] = useState(false);
   const [color, setColor] = useState("#f25f5c");
   const [success, setSuccess] = useState(false);
@@ -89,39 +89,111 @@ export default function LandingPageManagement() {
             </CardActions>
           </Card>
         </div>
-        <div className="landing-page-main">
-          <Typography variant="h5">עיצוב דף נחיתה</Typography>
-        </div>
       </div>
       <div className="landing-page-main">
-        <div className="header-background" onClick={handleHeaderClick}>
-          <div className="cover">
-            <h1>{user?.business?.name}</h1>
-            <h5>{user?.business?.subtitle}</h5>
-            <img
-              src={API_UPLOADS_URL + user?.business?.img}
-              alt="logo"
-              className="business-logo"
-            />
-            <button
-              className="appoint-btn-demo"
-              style={{ backgroundColor: color }}
-            >
-              קביעת תור
-            </button>
-          </div>
+        <div
+          className="header-background"
+          onClick={handleHeaderClick}
+          style={{
+            backgroundImage: `url(${
+              API_UPLOADS_URL + user?.business?.headerImg
+            })`,
+            backgroundSize: "cover",
+            width: "100%",
+            height: "60%",
+          }}
+        >
+          <h1>{user?.business?.name}</h1>
+          <h5>{user?.business?.subtitle}</h5>
           <img
-            alt="header background"
-            src={API_UPLOADS_URL + user?.business?.headerImg}
+            src={API_UPLOADS_URL + user?.business?.img}
+            alt="logo"
+            className="business-logo"
           />
+          <button
+            className="appoint-btn-demo"
+            style={{ backgroundColor: color }}
+          >
+            קביעת תור
+          </button>
+          <div className="cover">
+            <lottie-player
+              src="https://assets7.lottiefiles.com/packages/lf20_asjtsvwm.json"
+              background="transparent"
+              speed="1"
+              style={{ width: "50%", height: "50%" }}
+              loop
+              autoplay
+            ></lottie-player>
+            <p>לחץ לשינוי התמונה</p>
+          </div>
+          <div></div>
         </div>
         <div className="second-row">
           <div className="form-container">
-            {OpeningHours(user?.business?.workdays, user?.business?.pageColor)}
+            {OpeningHours(user?.business?.workdays, color)}
             <div className="gallery">
-              <img src={img1}></img>
-              <img src={img2}></img>
-              <img src={img3}></img>
+              <div
+                style={{
+                  backgroundImage: `url(${img1})`,
+                  minHeight: "200px",
+                  minWidth: "200px",
+                  backgroundSize: "cover",
+                }}
+                onClick={handleHeaderClick}
+              >
+                <div className="cover">
+                  <lottie-player
+                    src="https://assets7.lottiefiles.com/packages/lf20_asjtsvwm.json"
+                    background="transparent"
+                    speed="1"
+                    style={{ width: "50%", height: "50%" }}
+                    loop
+                    autoplay
+                  ></lottie-player>
+                  <p>לחץ לשינוי התמונה</p>
+                </div>
+              </div>
+              <div
+                style={{
+                  backgroundImage: `url(${img2})`,
+                  minHeight: "200px",
+                  minWidth: "200px",
+                  backgroundSize: "cover",
+                }}
+              >
+                <div className="cover">
+                  <lottie-player
+                    src="https://assets7.lottiefiles.com/packages/lf20_asjtsvwm.json"
+                    background="transparent"
+                    speed="1"
+                    style={{ width: "50%", height: "50%" }}
+                    loop
+                    autoplay
+                  ></lottie-player>
+                  <p>לחץ לשינוי התמונה</p>
+                </div>
+              </div>
+              <div
+                style={{
+                  backgroundImage: `url(${img3})`,
+                  minHeight: "200px",
+                  minWidth: "200px",
+                  backgroundSize: "cover",
+                }}
+              >
+                <div className="cover">
+                  <lottie-player
+                    src="https://assets7.lottiefiles.com/packages/lf20_asjtsvwm.json"
+                    background="transparent"
+                    speed="1"
+                    style={{ width: "50%", height: "50%" }}
+                    loop
+                    autoplay
+                  ></lottie-player>
+                  <p>לחץ לשינוי התמונה</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
