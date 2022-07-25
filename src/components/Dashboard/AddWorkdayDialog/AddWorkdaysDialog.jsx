@@ -1,9 +1,10 @@
 import {
+  Alert,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
-  Stack
+  Stack,
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -16,15 +17,13 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { getHours, getMinutes } from "date-fns";
-import { useRef, useState } from "react";
-import {Alert} from "@mui/material";
-import { useEffect } from "react";
+import { useState } from "react";
 import { daysArray } from "../util";
 
-Date.prototype.addHours = function(h){
-  this.setHours(this.getHours()+h);
+Date.prototype.addHours = function (h) {
+  this.setHours(this.getHours() + h);
   return this;
-}
+};
 
 const formatTime = (time) => {
   return getHours(time).toString() + ":" + getMinutes(time).toString();
@@ -38,7 +37,7 @@ export default function AddWorkdaysDialog(props) {
     endTimeFormatted: formatTime(new Date().addHours(1)),
     day: props?.firstDayAvailable,
   });
-  const [error, setError] = useState({field1: null, field2: null});
+  const [error, setError] = useState({ field1: null, field2: null });
 
   const toggleDialog = () => {
     props.toggle(!props.open);
@@ -47,39 +46,38 @@ export default function AddWorkdaysDialog(props) {
   const daysMenuItemsArray = daysArray.map((day, idx) => {
     let isExist = false;
     props?.workdaysArr?.forEach((e) => {
-      if (e.day == idx) {
+      if (e.day === idx) {
         isExist = true;
       }
     });
-    if(isExist) return null
-    return  <MenuItem value={idx}>{day}</MenuItem>;
+    if (isExist) return null;
+    return <MenuItem value={idx}>{day}</MenuItem>;
   });
 
   const handleChange = (e, field) => {
     field === 0 && setWorkdays({ ...workdays, day: e.target.value });
-    if(field === 1){
+    if (field === 1) {
       setWorkdays({
         ...workdays,
         startTimeFormatted: formatTime(e),
-        starttime: e
+        starttime: e,
       });
     }
-    if(field === 2){
+    if (field === 2) {
       setWorkdays({
         ...workdays,
         endTimeFormatted: formatTime(e),
         endtime: e,
       });
     }
-    if(e === "Invalid Date"){
-      if(field === 1) {
-        return setError({...error, field1: "Invalid Date"})
+    if (e === "Invalid Date") {
+      if (field === 1) {
+        return setError({ ...error, field1: "Invalid Date" });
       }
-      return setError({...error, field2: "Invalid Date"})
+      return setError({ ...error, field2: "Invalid Date" });
     }
-    if(field === 1) setError({...error, field1: null})
-    setError({...error, field2: null})
-
+    if (field === 1) setError({ ...error, field1: null });
+    setError({ ...error, field2: null });
   };
 
   const handleSubmit = () => {
@@ -87,7 +85,6 @@ export default function AddWorkdaysDialog(props) {
     props.addWorkdays([...arr, workdays]);
     toggleDialog();
   };
-
 
   return (
     <Dialog open={props.open} onClose={toggleDialog} dir="rtl">
