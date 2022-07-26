@@ -8,18 +8,26 @@ import { useEffect } from "react";
 export default function useUser() {
   const user = useSelector((state) => state.user?.user);
   const dispatch = useDispatch();
+  let gallery = user?.business?.gallery ? JSON.parse(user?.business?.gallery) : { images: [] };
 
-  const updateUser = async (user) => {
-    if (typeof user?.business?.img === 'object') {
-      let fileName = await uploadFile({ file: user?.business?.img });
-      user.business.img = fileName?.message;
+  const updateUser = async (_user) => {
+    console.log(_user)
+    if (typeof _user?.business?.gallery === 'object') {
+      let fileName = await uploadFile({ file: _user?.business?.gallery });
+      gallery.images[_user?.business?.element] = fileName?.message
+      _user.business.gallery = JSON.stringify(gallery);
+      console.log(_user.business.gallery)
     }
-    if (typeof user?.business?.headerImg === 'object') {
-      console.log(user?.business);
-      let fileName = await uploadFile({ file: user?.business?.headerImg });
-      user.business.headerImg = fileName?.message;
+    else if (typeof _user?.business?.img === 'object') {
+      let fileName = await uploadFile({ file: _user?.business?.img });
+      _user.business.img = fileName?.message;
     }
-    let response = await dispatch(_updateUser(user));
+    else if (typeof _user?.business?.headerImg === 'object') {
+      let fileName = await uploadFile({ file: _user?.business?.headerImg });
+      _user.business.headerImg = fileName?.message;
+    }
+
+    let response = await dispatch(_updateUser(_user));
     return response;
   };
 

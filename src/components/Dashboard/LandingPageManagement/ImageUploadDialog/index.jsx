@@ -9,11 +9,13 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useCallback, useContext, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import UserContext from "../../UserContext";
+import { uploadFile } from "../../../../utils/FilesAPI";
 
 export default function ImageUploadDialog(props) {
   const [file, setFile] = useState([]);
   const [error, setError] = useState(false);
-  const { user, update, refresh } = useContext(UserContext)
+  const { user, update, refresh } = useContext(UserContext);
+  let element = props?.element;
 
   const onDrop = useCallback((acceptedFiles) => {
     setFile(acceptedFiles);
@@ -48,29 +50,24 @@ export default function ImageUploadDialog(props) {
     let tempUser = { ...user };
     tempUser.business = {
       ...tempUser.business,
-      headerImg: file,
+      headerImg: element === null ? file : tempUser.business?.headerImg,
+      gallery: element !== null ? file : tempUser.business?.gallery,
+      element: element
     };
     try {
       let response = await update(tempUser);
-      if (response?.type === "user/update/fulfilled") {
+      if (response?.type?.endsWith("fulfilled")) {
         refresh();
         toggleDialog();
       }
-
     } catch (error) {
       setError(true);
-
     }
-
   };
 
   return (
     <Dialog open={props.open} onClose={handleClose} sx={styles.container}>
-      {error && (
-        <Alert severity="error">
-          אירעה שגיאה
-        </Alert>
-      )}
+      {error && <Alert severity="error">אירעה שגיאה</Alert>}
       <DialogTitle>החלפת רקע לראש העמוד</DialogTitle>
       <DialogContent>
         <DialogContentText>

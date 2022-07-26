@@ -25,8 +25,10 @@ export default function LandingPageManagement() {
   const [open, setOpen] = useState(false);
   const [color, setColor] = useState("#f25f5c");
   const [success, setSuccess] = useState(false);
+  const [element, setElement] = useState();
 
   const handleHeaderClick = () => {
+    setElement(null)
     setOpen(!open);
   };
 
@@ -49,6 +51,11 @@ export default function LandingPageManagement() {
     }
   };
 
+  const handleImageChange = (id) => {
+    setElement(id)
+    setOpen(true)
+  }
+
   useEffect(() => {
     if (user.user?.business?.pageColor) {
       setColor(user.user?.business?.pageColor);
@@ -57,7 +64,7 @@ export default function LandingPageManagement() {
 
   return (
     <div className="landing-page-container">
-      <ImageUploadDialog open={open} toggle={setOpen} />
+      <ImageUploadDialog open={open} toggle={setOpen} element={element} />
 
       <div className="header-bar">
         <Typography variant="h5">עיצוב דף נחיתה</Typography>
@@ -140,7 +147,7 @@ export default function LandingPageManagement() {
                   minWidth: "200px",
                   backgroundSize: "cover",
                 }}
-                onClick={handleHeaderClick}
+                onClick={() => handleImageChange(0)}
               >
                 <div className="cover">
                   <lottie-player
@@ -161,6 +168,7 @@ export default function LandingPageManagement() {
                   minWidth: "200px",
                   backgroundSize: "cover",
                 }}
+                onClick={() => handleImageChange(1)}
               >
                 <div className="cover">
                   <lottie-player
@@ -181,6 +189,7 @@ export default function LandingPageManagement() {
                   minWidth: "200px",
                   backgroundSize: "cover",
                 }}
+                onClick={() => handleImageChange(2)}
               >
                 <div className="cover">
                   <lottie-player
