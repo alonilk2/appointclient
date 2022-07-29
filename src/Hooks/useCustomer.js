@@ -20,11 +20,11 @@ export default function useCustomer(phone) {
   };
 
   useEffect(() => {
-    console.log(customer);
     if (!customer) initialize();
   }, []);
 
   return {
     customer: customer,
+    refresh: initialize
   };
 }

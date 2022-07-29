@@ -8,11 +8,15 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Divider, Fab, FormControlLabel, Stack, TextField,
-  Typography
+  Divider,
+  Fab,
+  FormControlLabel,
+  Stack,
+  TextField,
+  Typography,
 } from "@mui/material";
-import DialogContentText from '@mui/material/DialogContentText';
-import { useCallback, useContext, useEffect, useState } from "react";
+import DialogContentText from "@mui/material/DialogContentText";
+import { useCallback, useContext, useEffect, useState, useMemo } from "react";
 import { useDropzone } from "react-dropzone";
 import { useDispatch } from "react-redux";
 import { _signup, _updateUser } from "../../../../features/userSlice";
@@ -36,6 +40,7 @@ export default function AddServiceProviderDialog(props) {
   const user = useContext(UserContext);
   const services = useServices(user);
   const dispatch = useDispatch();
+  let providerForEdit = props?.providerForEdit;
 
   const onDrop = useCallback((acceptedFiles) => {
     setFile(acceptedFiles);
@@ -52,13 +57,13 @@ export default function AddServiceProviderDialog(props) {
   };
 
   useEffect(() => {
-    if (props?.providerForEdit) {
-      setFirstname(props?.providerForEdit.firstname);
-      setPhone(props?.providerForEdit.phone);
-      setLastname(props?.providerForEdit.lastname);
-      setEmail(props?.providerForEdit.email);
-      setWorkdaysArr(props?.providerForEdit?.workdays);
-      setChosenServices(props?.providerForEdit?.services);
+    if (providerForEdit) {
+      setFirstname(providerForEdit.firstname);
+      setPhone(providerForEdit.phone);
+      setLastname(providerForEdit.lastname);
+      setEmail(providerForEdit.email);
+      setWorkdaysArr(providerForEdit?.workdays);
+      setChosenServices(providerForEdit?.services);
     } else {
       setFirstname("");
       setPhone("");
@@ -67,7 +72,7 @@ export default function AddServiceProviderDialog(props) {
       setWorkdaysArr([]);
       setChosenServices([]);
     }
-  }, [props?.providerForEdit]);
+  }, [providerForEdit]);
 
   const handleAdd = async () => {
     if (
@@ -75,7 +80,7 @@ export default function AddServiceProviderDialog(props) {
       lastname === "" ||
       email === "" ||
       phone === "" ||
-      file.length === 0 ||
+      (file.length === 0 && !providerForEdit?.filename) ||
       password === ""
     )
       return setError(true);
@@ -87,13 +92,13 @@ export default function AddServiceProviderDialog(props) {
       password: password,
     };
 
-    let existingUser = await user.findUserByEmail(email)
-    console.log(existingUser)
-    let response
-    if(props?.providerForEdit) response = await dispatch(_updateUser({...existingUser, ...newUser}));
-    else response = await dispatch(_signup(newUser));
-    let userResponse = response?.payload
+    let existingUser = await user.findUserByEmail(email);
+    let response;
+    if (providerForEdit) {
+      response = await dispatch(_updateUser({ ...existingUser, ...newUser }));
+    } else response = await dispatch(_signup(newUser));
 
+    let userResponse = response?.payload;
     if (response.type.endsWith("fulfilled")) {
       const workdays = workdaysArr.map((wd) => {
         return {
@@ -105,7 +110,7 @@ export default function AddServiceProviderDialog(props) {
       });
 
       let newProvider = {
-        id: props?.providerForEdit?.id || null,
+        id: providerForEdit?.id || null,
         firstname: firstname,
         lastname: lastname,
         phone: phone,
@@ -115,20 +120,18 @@ export default function AddServiceProviderDialog(props) {
         workdays: workdays,
         services: chosenServices,
         business: user?.business,
-        appointments: [],
-        user: response?.payload || props?.providerForEdit?.user
+        appointments: providerForEdit?.appointments,
+        user: response?.payload || providerForEdit?.user,
       };
 
-      if (props?.providerForEdit)
+      if (providerForEdit)
         response = await props?.providers.update(newProvider);
       else response = await props?.providers.add(newProvider);
-      console.log(response)
       userResponse.serviceProvider = response.payload;
-      userResponse = {...userResponse, ...newUser, business: user?.business};
-      console.log(userResponse)
+      userResponse = { ...userResponse, ...newUser, business: user?.business };
 
       response = await dispatch(_updateUser(userResponse));
-      
+
       if (response.type.endsWith("fulfilled")) {
         toggleDialog();
         user?.refresh();
@@ -187,15 +190,20 @@ export default function AddServiceProviderDialog(props) {
     findFirstDayAvailable();
   }, [workdaysArr, setFirstDayAvailable]);
 
-  const ServicesCheckboxes = services?.list?.map((service) => {
+  const ServicesCheckboxes = useMemo(()=>services?.list?.map((service) => {
     return (
       <FormControlLabel
-        control={<Checkbox onChange={(e) => handleCheck(e, service)} />}
+        control={
+          <Checkbox
+            checked={chosenServices.some((_ser) => _ser.id === service.id)}
+            onChange={(e) => handleCheck(e, service)}
+          />
+        }
         label={service?.name}
         sx={{ margin: "1%" }}
       />
     );
-  });
+  }), [chosenServices])
 
   return (
     <Dialog open={props.open} sx={styles.dialogContainer}>
@@ -216,12 +224,15 @@ export default function AddServiceProviderDialog(props) {
             יש למלא את כל השדות ולהוסיף קובץ תמונה להעלאה
           </Alert>
         )}
-        <DialogContentText sx={{direction: 'ltr'}}>
-          יש למלא את כל הפרטים לפי הסדר.<br />
-          לנותן השירות יפתח חשבון במערכת באופן אוטומטי בלחיצה על "הוספה", כאשר פרטי ההתחברות יהיו הדוא"ל והסיסמה הזמנית שתוצג בהמשך הטופס.<br />
+        <DialogContentText sx={{ direction: "ltr" }}>
+          יש למלא את כל הפרטים לפי הסדר.
+          <br />
+          לנותן השירות יפתח חשבון במערכת באופן אוטומטי בלחיצה על "הוספה", כאשר
+          פרטי ההתחברות יהיו הדוא"ל והסיסמה הזמנית שתוצג בהמשך הטופס.
+          <br />
           בסעיף יצירת סיסמה יש ללחוץ על הכפתור להצגת הסיסמה הזמנית.
         </DialogContentText>
-<br />
+        <br />
         <TextField
           required
           error={error && firstname.length === 0 && true}
@@ -271,15 +282,21 @@ export default function AddServiceProviderDialog(props) {
         </Typography>
         <Divider />
         <Stack direction="column" sx={styles.addWorkdays}>
-          {password.length === 0 ? <>          <Fab
-            color="primary"
-            aria-label="generate"
-            onClick={handleGeneratePassword}
-          >
-            <EnhancedEncryptionIcon />
-          </Fab>
-          <p>לחץ להצגת הסיסמה הזמנית</p></> : <h3 style={{direction: 'rtl'}}>הסיסמה הזמנית: {password} </h3>}
-
+          {password.length === 0 ? (
+            <>
+              {" "}
+              <Fab
+                color="primary"
+                aria-label="generate"
+                onClick={handleGeneratePassword}
+              >
+                <EnhancedEncryptionIcon />
+              </Fab>
+              <p>לחץ להצגת הסיסמה הזמנית</p>
+            </>
+          ) : (
+            <h3 style={{ direction: "rtl" }}>הסיסמה הזמנית: {password} </h3>
+          )}
         </Stack>
         <Typography variant="subtitle1" gutterBottom component="div">
           ימי ושעות עבודה

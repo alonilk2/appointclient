@@ -19,7 +19,7 @@ export default function AppointDashboard(props) {
   const [clickedService, setClickedService] = useState(); // +1 added
   const { businessId } = useParams();
   const { business } = useBusiness(businessId);
-  const { customer } = useCustomer(localStorage.getItem("phone"));
+  const { customer, refresh } = useCustomer(localStorage.getItem("phone"));
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -36,15 +36,18 @@ export default function AppointDashboard(props) {
     let filteredProviders = [];
     business?.serviceProviders?.forEach((provider) => {
       provider.services?.forEach((service) => {
-        if (service.id === business?.services[clickedService - 1]?.id)
+        if (service?.id === business?.services[clickedService - 1]?.id)
           filteredProviders.push(provider);
       });
     });
     return filteredProviders;
   };
-
-  const handleCancelAppointment = (appointment) => {
-    dispatch(_removeAppointment(appointment?.id));
+  
+  const handleCancelAppointment = async(appointment) => {
+    let response =await dispatch(_removeAppointment(appointment?.id));
+    if(response?.type?.endsWith('fulfilled')){
+      refresh()
+    }
   };
 
   const Services = business?.services?.map((service, idx) => {
@@ -74,7 +77,7 @@ export default function AppointDashboard(props) {
     });
   };
 
-  const ServiceProviders = () => {
+  const ServiceProviders = useCallback(() => {
     let filteredProviders = FilterProvidersByService();
     let delay = 0;
     const providers = filteredProviders.map((provider) => {
@@ -98,25 +101,29 @@ export default function AppointDashboard(props) {
       );
     });
     return providers;
-  };
+  }, [FilterProvidersByService])
 
-  const FindProviderByAppointment = (appointment) => {
-    let provider;
-    business?.serviceProviders?.forEach((_provider) => {
-      return _provider.appointments?.forEach((app) => {
-        if (appointment.id === app.id) return (provider = _provider);
-      });
-    });
-    return provider;
-  };
+  // const FindProviderByAppointment = (appointment) => {
+  //   let provider;
+  //   business?.serviceProviders?.forEach((_provider) => {
+  //     return _provider.appointments?.forEach((app) => {
+  //       if (appointment.id === app.id) return (provider = _provider);
+  //     });
+  //   });
+  //   return provider;
+  // };
 
-  const upcomingAppointments = () => {
+  useEffect(()=> {
+    refresh()
+  }, [businessId])
+
+  const upcomingAppointments = useCallback(() => {
     let delay = 0;
     const appointments = customer?.appointments?.map((appointment, idx) => {
       delay += 200;
       let endHour = appointment.end_hour.split(" ")[0].split(":");
       let startHour = appointment.start_hour.split(" ")[0].split(":");
-      let provider = FindProviderByAppointment(appointment);
+      let provider = appointment?.serviceProvider
       return (
         <Slide right big delay={delay} duration={900}>
           <div
@@ -155,7 +162,7 @@ export default function AppointDashboard(props) {
       );
     });
     return appointments;
-  };
+  }, [customer?.appointments]);
 
   return (
     <div className="appoint-dashboard-container">

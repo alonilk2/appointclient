@@ -62,6 +62,8 @@ export default function LandingPageManagement() {
     }
   }, [user]);
 
+  
+
   return (
     <div className="landing-page-container">
       <ImageUploadDialog open={open} toggle={setOpen} element={element} />

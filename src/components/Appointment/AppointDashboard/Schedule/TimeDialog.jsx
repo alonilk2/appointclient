@@ -12,6 +12,7 @@ import Select from "@mui/material/Select";
 import { parse } from "date-fns";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { _addAppointment } from "../../../../features/appointSlice";
 
 export default function TimeDialog(props) {
@@ -28,6 +29,7 @@ export default function TimeDialog(props) {
   const endTime = useRef();
   const dispatch = useDispatch();
   const customer = props?.customer;
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     setChosenTime(event.target.value);
@@ -66,6 +68,7 @@ export default function TimeDialog(props) {
     let response = await dispatch(_addAppointment(appointment));
     if (response?.type?.endsWith("fulfilled")) {
       handleClose();
+      navigate(-1, { replace: true });
     } else setError("Error: operation failed.");
   };
 
@@ -85,8 +88,10 @@ export default function TimeDialog(props) {
   const CalculateMenuItems = () => {
     let timesArray = [];
     let skipFlag = 0;
+    let counter = 0;
     timesArray.push(new Date(startTime.current));
-    while (true) {
+    while (true && counter < 45) {
+      counter++;
       let lastTimeObj = new Date(timesArray[timesArray.length - 1]);
 
       // advance next time object by service duration
@@ -97,16 +102,14 @@ export default function TimeDialog(props) {
         );
       } else
         lastTimeObj?.setMinutes(lastTimeObj?.getMinutes() + service?.duration);
-
       if (new Date(lastTimeObj) > new Date(endTime.current)) break;
-
-      skipFlag = 0;
+      let lastSkipFlag = skipFlag;
       skipFlag = checkTimeAvailability(lastTimeObj, skipFlag);
-      if (skipFlag > 0) continue;
-
+      if (skipFlag > lastSkipFlag) continue;
+      skipFlag = 0;
       timesArray.push(new Date(lastTimeObj));
     }
-
+    
     let timesList = timesArray.map((t) => {
       return (
         <MenuItem value={new Date(t).toTimeString()}>
@@ -123,7 +126,7 @@ export default function TimeDialog(props) {
       let day = parse(pa.day, "yyyy-MM-dd", new Date(chosenDate));
       // If same day & start-time of an appointment - skip adding time to select list
       if (
-        day.getDay() === chosenDate.getDay() &&
+        chosenDate.toDateString() === day.toDateString() &&
         new Date(newTimeObj).toTimeString() === pa.start_hour
       ) {
         return skipFlag++;
