@@ -26,9 +26,6 @@ export default function Dashboard() {
       <div className="dashboard-container">
         <header className="dashboard-header">
           <a href="/">
-            {/* <h1 href="#home" className="main-title" style={{ color: "black" }}>
-              Torgate
-            </h1> */}
             <img src={logo} alt="logo" width={200}/>
           </a>
           {ProfileChip(user)}

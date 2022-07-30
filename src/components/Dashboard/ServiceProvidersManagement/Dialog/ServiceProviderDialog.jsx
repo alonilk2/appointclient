@@ -22,7 +22,7 @@ import { useDropzone } from "react-dropzone";
 import { useDispatch } from "react-redux";
 import { validEmail } from "../../../../common/Regex";
 import { API_UPLOADS_URL } from "../../../../constants";
-import { _signup, _updateUser } from "../../../../features/userSlice";
+import { _createProviderUser, _signup, _updateUser } from "../../../../features/userSlice";
 import useServices from "../../../../hooks/Dashboard/useServices";
 import AddWorkdaysDialog from "../../AddWorkdayDialog/AddWorkdaysDialog";
 import UserContext from "../../UserContext";
@@ -110,9 +110,10 @@ export default function AddServiceProviderDialog(props) {
 
     let existingUser = await user.findUserByEmail(email);
     let response;
+    
     if (providerForEdit) {
       response = await dispatch(_updateUser({ ...existingUser, ...newUser }));
-    } else response = await dispatch(_signup(newUser));
+    } else response = await dispatch(_createProviderUser(newUser));
 
     let userResponse = response?.payload;
     if (response.type.endsWith("fulfilled")) {
@@ -394,6 +395,7 @@ export default function AddServiceProviderDialog(props) {
 const styles = {
   dialogContainer: {
     direction: "rtl",
+    minWidth: '500px'
   },
   textField: {
     margin: "2% 0",

@@ -1,5 +1,6 @@
 import { Typography } from "@mui/material";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
+import { useDispatch, useSelector } from 'react-redux'
 import UserContext from "../UserContext";
 import BusinessDetailsCard from "./BusinessDetails/BusinessDetailsCard";
 import "./index.css";
@@ -9,10 +10,27 @@ import WorkdaysCard from "./Workdays/WorkdaysCard";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import ShowChartIcon from '@mui/icons-material/ShowChart';
+import { _fetchAppointmentsByDay } from "../../../features/appointSlice";
+import { _fetchTotalMonthlyIncome } from "../../../features/businessSlice";
 
 export default function BusinessProfileManagement() {
   const [open, setOpen] = useState();
   const user = useContext(UserContext);
+  const dispatch = useDispatch();
+  const todaysAppointments = useSelector(state => state.appoint?.appoint)
+  const totalMonthlyIncome = useSelector(state => state.business.totalMonthlyIncome)
+  // let appointmentsToday = user?.business?.serviceProviders?.
+
+  useEffect(() => {
+    if(user){
+      dispatch(_fetchAppointmentsByDay(user?.business?.id))
+      dispatch(_fetchTotalMonthlyIncome(user?.business?.id))
+    }
+  }, [user])
+  
+  useEffect(()=>{
+    console.log(todaysAppointments)
+  }, [todaysAppointments])
 
   return (
     <div className="business-details-container">
@@ -23,7 +41,7 @@ export default function BusinessProfileManagement() {
       <div className="widget-container">
         <div className="formcontainer data-widget">
           <Typography variant="body1" gutterBottom sx={styles.widgetNumber}>
-            28
+            {todaysAppointments || 0}
           </Typography>
           <Typography variant="body1" gutterBottom sx={styles.widgetTitle}>
             מספר הביקורים להיום
@@ -32,7 +50,7 @@ export default function BusinessProfileManagement() {
         </div>
         <div className="formcontainer data-widget" style={styles.totalIncomes}>
           <Typography variant="body1" gutterBottom sx={styles.widgetNumber}>
-            ₪30,285
+            ₪{totalMonthlyIncome}
           </Typography>
           <Typography variant="body1" gutterBottom sx={styles.totalIncomeTitle}>
             סה"כ הכנסות החודש

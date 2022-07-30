@@ -7,6 +7,7 @@ import {
   updateUser,
   removeUser,
   findUserByEmail,
+  createProviderUser,
 } from "../utils/AuthAPI";
 
 const sortWorkdaysArray = (arr) => {
@@ -66,6 +67,20 @@ export const _signup = createAsyncThunk(
   }
 );
 
+export const _createProviderUser = createAsyncThunk(
+  "user/signupprovider",
+  async (signupRequest, thunkAPI) => {
+    try {
+      const response = await createProviderUser(signupRequest);
+      return response;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
+
 export const _updateUser = createAsyncThunk(
   "user/update",
   async (user, thunkAPI) => {
@@ -91,7 +106,7 @@ export const _removeUser = createAsyncThunk(
 );
 
 export const _findUserByEmail = createAsyncThunk(
-  "user/remove",
+  "user/findbymail",
   async (user, thunkAPI) => {
     try {
       const response = await findUserByEmail(user);

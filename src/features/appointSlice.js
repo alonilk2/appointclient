@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   addAppointment,
   fetchAppointment,
+  fetchAppointmentsByDate,
   removeAppointment
 } from "../utils/AppointAPI";
 
@@ -14,6 +15,19 @@ export const _fetchAppointment = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       const response = await fetchAppointment(id);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
+export const _fetchAppointmentsByDay = createAsyncThunk(
+  "appoint/fetchappointments",
+  async (businessId, thunkAPI) => {
+    try {
+      let day = new Date().toISOString().slice(0, 10)
+      const response = await fetchAppointmentsByDate(day, businessId);
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue();
@@ -58,6 +72,12 @@ export const appointSlice = createSlice({
       state.appoint = action.payload;
     },
     [_fetchAppointment.rejected]: (state, action) => {
+      state.appoint = null;
+    },
+    [_fetchAppointmentsByDay.fulfilled]: (state, action) => {
+      state.appoint = action.payload;
+    },
+    [_fetchAppointmentsByDay.rejected]: (state, action) => {
       state.appoint = null;
     },
     [_addAppointment.fulfilled]: (state, action) => {

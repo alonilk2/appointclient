@@ -13,6 +13,7 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import LanguageIcon from "@mui/icons-material/Language";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+
 export default function Appointment(props) {
   const { businessId } = useParams();
   const { business } = useBusiness(businessId);
@@ -70,13 +71,17 @@ export default function Appointment(props) {
   };
 
   const DetailsContainer = () => {
+    let galleryArray = business?.gallery && JSON.parse(business?.gallery).images;
+    console.log(galleryArray)
     return (
       <div className="form-container">
         {OpeningHours(business?.workdays, business?.pageColor)}
         <div className="gallery">
-          <img src={img1}></img>
-          <img src={img2}></img>
-          <img src={img3}></img>
+          {galleryArray?.map(img => {
+            return (
+              <img src={API_UPLOADS_URL + img} alt="profile"/>
+            )
+          })}
         </div>
       </div>
     );

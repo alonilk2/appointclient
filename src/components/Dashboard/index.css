@@ -32,6 +32,9 @@
   top: 0;
   z-index: 2;
 }
+.MuiDialog-paper {
+  width: 600px;
+}
 .css-o943dk-MuiFormLabel-root-MuiInputLabel-root, .css-e4w4as-MuiFormLabel-root-MuiInputLabel-root{
   left: inherit !important;
   right: 1.75rem !important;

@@ -9,20 +9,26 @@ import useWindowSize from "../../../hooks/useWindowSize";
 import fbLogo from "../../../images/fb-logo.png";
 import googleLogo from "../../../images/google-logo.png";
 import BackgroundImage from "../../../images/login.png";
+import { mediumRegex, validEmail } from "../../../common/Regex";
 
 function Signup(props) {
-  const [email, setEmail] = useState("");
+  const dispatch = useDispatch();
+  const size = useWindowSize();
+  const navigate = useNavigate();
+  const location = useLocation()
+  const [email, setEmail] = useState(location?.state || "");
   const [password, setPassword] = useState("");
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [error, setError] = useState("");
-  const dispatch = useDispatch();
-  const size = useWindowSize();
-  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    if(!validEmail.test(email) || !mediumRegex.test(password) || firstname.length === 0 || lastname.length === 0){
+      return setError("Missing fields")
+    }
+    
     let obj = {
       email: email,
       password: password,
@@ -45,10 +51,10 @@ function Signup(props) {
         className="col-5 signin-form"
         autocomplete="on"
       >
-        {error && (
+        {error.length > 0 && (
           <Alert severity="error">
             <AlertTitle>Error</AlertTitle>
-            An error occured while trying to register —{" "}
+            An error occured while trying to register —
             <strong>check credentials and try again</strong>
           </Alert>
         )}
@@ -59,6 +65,7 @@ function Signup(props) {
           type="text"
           placeholder="שם פרטי"
           required
+          error={error && firstname.length === 0}
           onChange={(e) => setFirstname(e.target.value)}
         ></input>
         <h5>שם משפחה</h5>
@@ -67,6 +74,7 @@ function Signup(props) {
           type="text"
           placeholder="שם משפחה"
           required
+          error={error && lastname.length === 0}
           onChange={(e) => setLastname(e.target.value)}
         ></input>
         <h5>כתובת דוא"ל</h5>
@@ -75,6 +83,8 @@ function Signup(props) {
           type="email"
           placeholder="email Address"
           required
+          value={email}
+          error={error && !validEmail.test(email)}
           onChange={(e) => setEmail(e.target.value)}
         ></input>
         <h5>סיסמה</h5>
@@ -83,6 +93,7 @@ function Signup(props) {
           type="password"
           placeholder="Password"
           required
+          error={error && !mediumRegex.test(password)}
           onChange={(e) => setPassword(e.target.value)}
         ></input>
         <button className="home-btn signin-custom-btn" type="submit">

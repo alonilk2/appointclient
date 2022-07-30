@@ -12,17 +12,17 @@ export default function useUser() {
 
   const updateUser = async (_user) => {
     console.log(_user)
-    if (typeof _user?.business?.gallery === 'object') {
+    if (_user?.business?.gallery && typeof _user?.business?.gallery === 'object') {
       let fileName = await uploadFile({ file: _user?.business?.gallery });
       gallery.images[_user?.business?.element] = fileName?.message
       _user.business.gallery = JSON.stringify(gallery);
       console.log(_user.business.gallery)
     }
-    else if (typeof _user?.business?.img === 'object') {
+    else if (_user?.business?.img && typeof _user?.business?.img === 'object') {
       let fileName = await uploadFile({ file: _user?.business?.img });
       _user.business.img = fileName?.message;
     }
-    else if (typeof _user?.business?.headerImg === 'object') {
+    else if (_user?.business?.headerImg && typeof _user?.business?.headerImg === 'object') {
       let fileName = await uploadFile({ file: _user?.business?.headerImg });
       _user.business.headerImg = fileName?.message;
     }

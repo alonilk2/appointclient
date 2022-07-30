@@ -53,6 +53,15 @@ export function signup(signupRequest) {
   });
 }
 
+export function createProviderUser(signupRequest) {
+  return request({
+    url: API_BASE_URL + "/auth/createProviderUser",
+    method: "POST",
+    body: JSON.stringify(signupRequest),
+  });
+}
+
+
 export function confirmEmail(confirmRequest) {
   return request({
     url: API_BASE_URL + "/auth/confirmemail",

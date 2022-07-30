@@ -7,7 +7,8 @@ export async function uploadFile(request) {
     return Promise.reject("No access token set.");
   }
   let formData = new FormData();
-  formData.append("file", request.file[0]);
+  console.log(request)
+  formData.append("file", request?.file[0]);
   let response = await Axios.post(API_BASE_URL + "/upload", formData, {
     headers: {
       Authorization: "Bearer " + localStorage.getItem(ACCESS_TOKEN),

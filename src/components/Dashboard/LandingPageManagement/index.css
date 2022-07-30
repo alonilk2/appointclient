@@ -110,8 +110,8 @@ lottie-player {
   color: black;
   font-weight: 600;
 }
-.gallery img {
-  max-width: 100% !important;
+.landing-page-container .gallery img {
+  max-width: 100%;
   z-index: 0;
 }
 .header-background {
