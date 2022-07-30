@@ -20,6 +20,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import { useCallback, useContext, useEffect, useState, useMemo } from "react";
 import { useDropzone } from "react-dropzone";
 import { useDispatch } from "react-redux";
+import { validEmail } from "../../../../common/Regex";
 import { API_UPLOADS_URL } from "../../../../constants";
 import { _signup, _updateUser } from "../../../../features/userSlice";
 import useServices from "../../../../hooks/Dashboard/useServices";
@@ -68,7 +69,7 @@ export default function AddServiceProviderDialog(props) {
       (activeStep === 0 &&
         (firstname === "" ||
           lastname === "" ||
-          email === "" ||
+          !validEmail.test(email) ||
           phone === "")) ||
       (activeStep === 2 && file.length === 0 && !providerForEdit?.filename) ||
       (activeStep === 3 && password === "")
@@ -256,7 +257,7 @@ export default function AddServiceProviderDialog(props) {
       <TextField
         required
         value={email}
-        error={error && email.length === 0 && true}
+        error={error && !validEmail.test(email) && true}
         id="outlined-required"
         variant="outlined"
         label='דוא"ל'
