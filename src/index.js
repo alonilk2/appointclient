@@ -63,16 +63,7 @@ const CustomRoutes = () => {
             <Route path="login" element={<Signin />} />
             <Route path="signup" element={<Signup />} />
           </Route>
-          <Route
-            path="dashboard"
-            element={
-              loggedIn.loggedIn ? (
-                <Dashboard />
-              ) : (
-                <Navigate to="/authorization/login" />
-              )
-            }
-          />
+          <Route path="dashboard" element={<Dashboard />} />
         </Route>
       </Routes>
     </BrowserRouter>

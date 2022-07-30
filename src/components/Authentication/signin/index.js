@@ -36,7 +36,7 @@ function SigninComponent(props) {
     let response = await dispatch(_login(obj));
     if (response.type.endsWith("fulfilled")) {
       localStorage.setItem(ACCESS_TOKEN, response.payload.accessToken);
-      return navigate("/dashboard", { replace: true });
+     navigate("/dashboard");
     } else if (response.type.endsWith("rejected")) {
       setError(response);
     }
@@ -62,9 +62,9 @@ function SigninComponent(props) {
     </>
   );
 
-  useEffect(() => {
-    if (loggedIn) navigate("/dashboard", { replace: true });
-  }, []);
+  // useEffect(() => {
+  //   if (loggedIn) navigate("/dashboard", { replace: true });
+  // }, []);
 
   const LoginForm = (
     <form

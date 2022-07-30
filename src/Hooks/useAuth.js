@@ -3,7 +3,7 @@ import { ACCESS_TOKEN } from "../constants";
 import { useSelector } from "react-redux";
 export default function useAuth() {
   const [userToken, setUserToken] = useState();
-  // const user = useSelector(state=>state.user?.user);
+  const user = useSelector(state=>state.user?.user);
 
   const Logout = () => {
     if (userToken) {
@@ -16,7 +16,7 @@ export default function useAuth() {
   },[])
 
   return {
-    loggedIn: userToken ? true : false,
+    loggedIn: localStorage.getItem(ACCESS_TOKEN) ? true : false,
     logout: () => Logout(),
     // user: user
   };

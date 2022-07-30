@@ -4,10 +4,12 @@ import { _removeUser, _updateUser, _findUserByEmail } from "../../features/userS
 import { uploadFile } from "../../utils/FilesAPI";
 import { _getCurrentUser } from "../../features/userSlice";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function useUser() {
   const user = useSelector((state) => state.user?.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   let gallery = user?.business?.gallery ? JSON.parse(user?.business?.gallery) : { images: [] };
 
   const updateUser = async (_user) => {
@@ -16,7 +18,6 @@ export default function useUser() {
       let fileName = await uploadFile({ file: _user?.business?.gallery });
       gallery.images[_user?.business?.element] = fileName?.message
       _user.business.gallery = JSON.stringify(gallery);
-      console.log(_user.business.gallery)
     }
     else if (_user?.business?.img && typeof _user?.business?.img === 'object') {
       let fileName = await uploadFile({ file: _user?.business?.img });
@@ -41,11 +42,14 @@ export default function useUser() {
     return response.payload
   }
 
-  const fetchUserInstance = () => {
-    dispatch(_getCurrentUser());
+  const fetchUserInstance = async () => {
+    let response = await dispatch(_getCurrentUser());
+    if(response.type.endsWith("rejected")){
+      navigate('/')
+    }
   };
 
-  useEffect(()=> {
+  useEffect(() => {
     fetchUserInstance()
   }, [])
 
