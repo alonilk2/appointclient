@@ -351,7 +351,6 @@ export default function AddServiceProviderDialog(props) {
           firstDayAvailable={firstDayAvailable}
         />
       )}
-
       <DialogTitle>הוסף נותן שירות</DialogTitle>
       <DialogContent>
         {error && (
@@ -363,7 +362,6 @@ export default function AddServiceProviderDialog(props) {
           activeStep={activeStep}
           setActiveStep={setActiveStep}
         />
-
         {activeStep === 0 && DetailsForm}
         {activeStep === 1 && workdaysView}
         {activeStep === 2 && profilePictureView}
@@ -379,7 +377,6 @@ export default function AddServiceProviderDialog(props) {
             הוספה
           </Button>
         )}
-
         <Box sx={{ flex: "1 1 auto" }} />
         <Button variant="text" onClick={handleClose}>
           ביטול
