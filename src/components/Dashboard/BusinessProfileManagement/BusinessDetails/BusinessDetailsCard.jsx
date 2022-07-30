@@ -10,7 +10,7 @@ import {
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../../UserContext";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import {Alert} from "@mui/material";
+import { Alert } from "@mui/material";
 
 export default function BusinessDetailsCard() {
   const { user, update, refresh } = useContext(UserContext);
@@ -41,12 +41,12 @@ export default function BusinessDetailsCard() {
         phone1: phone1,
         phone2: phone2,
         email: email,
-        website: website
+        website: website,
       };
       let response = await update(tempUser);
       if (response?.type?.endsWith("fulfilled")) {
         setSuccess(true);
-        console.log("TR*IE");
+        setError()
         setTimeout(() => {
           setSuccess(false);
         }, 4000);
@@ -66,11 +66,11 @@ export default function BusinessDetailsCard() {
 
   return (
     <Card elevation={0} sx={styles.cardContainer}>
-      {error && <Alert severity="error">יש למלא את כל שדות החובה!</Alert>}
-
       <CardHeader title="פרטי העסק" />
       <Divider />
       <CardContent>
+        {error && <Alert severity="error">יש למלא את כל שדות החובה!</Alert>}
+
         <TextField
           fieldWidth
           required

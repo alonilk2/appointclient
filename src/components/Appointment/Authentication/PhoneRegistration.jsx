@@ -1,16 +1,15 @@
-import "../index.css";
-import { useState, useRef, useEffect } from "react";
 import {
   getAuth,
   RecaptchaVerifier,
   signInWithPhoneNumber,
 } from "firebase/auth";
-import useBusiness from "../../../hooks/useBusiness";
-import { useNavigate, useParams } from "react-router-dom";
-import loginImg from "../../../images/password.png";
-import useCustomer from "../../../hooks/useCustomer";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import { _fetchCustomer } from "../../../features/customerSlice";
+import useBusiness from "../../../hooks/useBusiness";
+import loginImg from "../../../images/password.png";
+import "../index.css";
 
 export default function PhoneRegistration() {
   const [code, setCode] = useState("");
@@ -52,9 +51,10 @@ export default function PhoneRegistration() {
         const user = result.user;
         localStorage.setItem("phone", user?.phoneNumber);
         let response = await dispatch(_fetchCustomer(user?.phoneNumber));
-        if(!response?.payload?.phone)return navigate("/appoint/" + businessId + "/registration", {
-          state: user.phoneNumber,
-        });
+        if (!response?.payload?.phone)
+          return navigate("/appoint/" + businessId + "/registration", {
+            state: user.phoneNumber,
+          });
       })
       .catch((error) => {
         console.log(error);

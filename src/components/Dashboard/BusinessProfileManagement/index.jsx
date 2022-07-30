@@ -12,15 +12,16 @@ import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 import { _fetchAppointmentsByDay } from "../../../features/appointSlice";
 import { _fetchTotalMonthlyIncome } from "../../../features/businessSlice";
+import { ColorModeContext } from "..";
 
 export default function BusinessProfileManagement() {
   const [open, setOpen] = useState();
+  const colorMode = useContext(ColorModeContext)
   const user = useContext(UserContext);
   const dispatch = useDispatch();
   const todaysAppointments = useSelector(state => state.appoint?.appoint)
   const totalMonthlyIncome = useSelector(state => state.business.totalMonthlyIncome)
   // let appointmentsToday = user?.business?.serviceProviders?.
-
   useEffect(() => {
     if(user){
       dispatch(_fetchAppointmentsByDay(user?.business?.id))
@@ -31,11 +32,11 @@ export default function BusinessProfileManagement() {
   useEffect(()=>{
     console.log(todaysAppointments)
   }, [todaysAppointments])
-
+  
   return (
     <div className="business-details-container">
       <ProfileImageUploadDialog open={open} toggle={setOpen} />
-      <div className="header-bar">
+      <div className="header-bar" style={colorMode.mode === "dark" ? {backgroundColor: "#121212"} : null}>
         <Typography variant="h5">ניהול פרטי העסק</Typography>
       </div>
       <div className="widget-container">

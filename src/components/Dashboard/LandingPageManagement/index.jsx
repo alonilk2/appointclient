@@ -19,9 +19,11 @@ import img1 from "../../../images/img1.jpg";
 import img2 from "../../../images/img2.jpg";
 import img3 from "../../../images/img3.jpg";
 import UserContext from "../UserContext";
+import { ColorModeContext } from "..";
 
 export default function LandingPageManagement() {
   const user = useContext(UserContext);
+  const colorMode = useContext(ColorModeContext);
   const [open, setOpen] = useState(false);
   const [color, setColor] = useState("#f25f5c");
   const [success, setSuccess] = useState(false);
@@ -62,13 +64,11 @@ export default function LandingPageManagement() {
     }
   }, [user]);
 
-  
-
   return (
     <div className="landing-page-container">
       <ImageUploadDialog open={open} toggle={setOpen} element={element} />
 
-      <div className="header-bar">
+      <div className="header-bar" style={colorMode.mode === "dark" ? {backgroundColor: "#121212"} : null}>
         <Typography variant="h5">עיצוב דף נחיתה</Typography>
       </div>
       <div className="first-row">

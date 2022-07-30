@@ -11,11 +11,38 @@ import SideMenu from "./SideMenu/SideMenu";
 import UserContext from "./UserContext";
 import { useNavigate } from "react-router-dom";
 import ServiceProviderView from "./ServiceProviderView";
-import logo from '../../images/logo.png'
+import logo from "../../images/logo.png";
+import CssBaseline from "@mui/material/CssBaseline";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import React, { useState, useMemo, createContext } from "react";
+
+export const ColorModeContext = createContext({ toggleColorMode: () => {}, mode: "" });
+
 export default function Dashboard() {
   const selectedTab = useSelector((state) => state.dashboard.selectedTabIndex);
+  const [mode, setMode] = useState("light");
   const user = useUser();
   const navigate = useNavigate();
+
+  const colorMode = useMemo(
+    () => ({
+      toggleColorMode: () => {
+        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
+      },
+      mode: mode
+    }),
+    [mode]
+  );
+
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode]
+  );
 
   // useEffect(() => {
   //   if (!user.user) return navigate("/");
@@ -23,25 +50,36 @@ export default function Dashboard() {
 
   return (
     <UserContext.Provider value={user}>
-      <div className="dashboard-container">
-        <header className="dashboard-header">
-          <a href="/">
-            <img src={logo} alt="logo" width={200}/>
-          </a>
-          {ProfileChip(user)}
-        </header>
-        <section className="row main-section">
-          <main className="col-10 main">
-            <div className="main-container">
-              {selectedTab === 0 && <ServiceProvidersManagement />}
-              {selectedTab === 1 && <ServicesManagement />}
-              {selectedTab === 2 && (user.user?.serviceProvider ? <ServiceProviderView /> : <BusinessDetailsManagement />)}
-              {selectedTab === 3 && <LandingPageManagement />}
-            </div>
-          </main>
-          <SideMenu />
-        </section>
-      </div>
+      <ColorModeContext.Provider value={colorMode}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <div className="dashboard-container">
+            <header className="dashboard-header" style={mode === "dark" ? {backgroundColor: "#121212"} : null}>
+              <a href="/">
+                <img src={logo} alt="logo" width={200} />
+              </a>
+              {ProfileChip(user)}
+            </header>
+            <section className="row main-section">
+              <main className="col-10 main">
+                <div className="main-container" style={mode === "dark" ? {backgroundColor: "#28333e"} : null}>
+                  {selectedTab === 0 && <ServiceProvidersManagement />}
+                  {selectedTab === 1 && <ServicesManagement />}
+                  {selectedTab === 2 &&
+                    (user.user?.serviceProvider ? (
+                      <ServiceProviderView />
+                    ) : (
+                      <BusinessDetailsManagement />
+                    ))}
+                  {selectedTab === 3 && <LandingPageManagement />}
+                </div>
+              </main>
+              <SideMenu />
+            </section>
+          </div>
+        </ThemeProvider>
+      </ColorModeContext.Provider>
     </UserContext.Provider>
   );
 }
+

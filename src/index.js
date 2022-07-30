@@ -1,9 +1,19 @@
+import createCache from "@emotion/cache";
+import { CacheProvider } from "@emotion/react";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Provider, useSelector } from "react-redux";
+import { Provider } from "react-redux";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { prefixer } from "stylis";
+import rtlPlugin from "stylis-plugin-rtl";
 import App from "./App";
+import Appointment from "./components/Appointment";
+import AppointDashboard from "./components/Appointment/AppointDashboard/AppointDashboard";
+import Schedule from "./components/Appointment/AppointDashboard/Schedule/Schedule";
+import CustomerRegistration from "./components/Appointment/Authentication/CustomerRegistration";
+import PhoneRegistration from "./components/Appointment/Authentication/PhoneRegistration";
 import Dashboard from "./components/Dashboard";
+import Firebase, { FirebaseContext } from "./components/Firebase";
 import OAuth2RedirectHandler from "./components/Oauth2/OAuth2RedirectHandler";
 import useAuth from "./hooks/useAuth";
 import "./index.css";
@@ -12,17 +22,6 @@ import { store } from "./store";
 import Email from "./views/EmailConfirm";
 import Signin from "./views/Signin";
 import Signup from "./views/Signup";
-import { ACCESS_TOKEN } from "./constants";
-import Appointment from "./components/Appointment";
-import PhoneRegistration from "./components/Appointment/Authentication/PhoneRegistration";
-import Firebase, { FirebaseContext } from "./components/Firebase";
-import CustomerRegistration from "./components/Appointment/Authentication/CustomerRegistration";
-import AppointDashboard from "./components/Appointment/AppointDashboard/AppointDashboard";
-import rtlPlugin from "stylis-plugin-rtl";
-import { CacheProvider } from "@emotion/react";
-import createCache from "@emotion/cache";
-import { prefixer } from "stylis";
-import Schedule from "./components/Appointment/AppointDashboard/Schedule/Schedule";
 
 const cacheRtl = createCache({
   key: "muirtl",

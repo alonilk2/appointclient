@@ -24,7 +24,6 @@ export default function AppointDashboard(props) {
   const navigate = useNavigate();
 
   const handleClick = (serviceId) => {
-    console.log(serviceId);
     setClickedService(serviceId / clickedService === 1 ? null : serviceId);
     setShowProviders(false);
     setTimeout(() => {
@@ -103,23 +102,14 @@ export default function AppointDashboard(props) {
     return providers;
   }, [FilterProvidersByService])
 
-  // const FindProviderByAppointment = (appointment) => {
-  //   let provider;
-  //   business?.serviceProviders?.forEach((_provider) => {
-  //     return _provider.appointments?.forEach((app) => {
-  //       if (appointment.id === app.id) return (provider = _provider);
-  //     });
-  //   });
-  //   return provider;
-  // };
-
   useEffect(()=> {
     refresh()
   }, [businessId])
 
   const upcomingAppointments = useCallback(() => {
     let delay = 0;
-    const appointments = customer?.appointments?.map((appointment, idx) => {
+    let filteredAppointments = customer?.appointments?.filter(app => app?.service?.business?.id == businessId)
+    const appointments = filteredAppointments?.map((appointment, idx) => {
       delay += 200;
       let endHour = appointment.end_hour.split(" ")[0].split(":");
       let startHour = appointment.start_hour.split(" ")[0].split(":");

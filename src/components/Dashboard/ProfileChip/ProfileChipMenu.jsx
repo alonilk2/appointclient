@@ -7,16 +7,25 @@ import {
   ListItem,
   ListItemButton,
   ListItemIcon,
-  ListItemText
+  ListItemText,
 } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
 import { styles } from ".";
+import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
+import { useContext } from "react";
+
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import { ColorModeContext } from "..";
 
 export const ProfileChipMenu = (props) => {
   const handleLogout = () => {
     props.auth.logout();
     props.navigate("/");
   };
-
+  const theme = useTheme();
+  const colorMode = useContext(ColorModeContext);
+  console.log(colorMode)
   return (
     <Box sx={styles.profileMenuBox}>
       <nav aria-label="main mailbox folders">
@@ -29,30 +38,35 @@ export const ProfileChipMenu = (props) => {
               <ListItemText primary="התנתק\י" />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <DraftsIcon />
-              </ListItemIcon>
-              <ListItemText primary="Drafts" />
-            </ListItemButton>
-          </ListItem>
         </List>
       </nav>
       <Divider />
       <nav aria-label="secondary mailbox folders">
-        <List>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemText primary="Trash" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton component="a" href="#simple-list">
-              <ListItemText primary="Spam" />
-            </ListItemButton>
-          </ListItem>
-        </List>
+        <Box
+          sx={{
+            display: "flex",
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+            bgcolor: "background.default",
+            color: "text.primary",
+            borderRadius: 1,
+            p: 3,
+          }}
+        >
+          {theme.palette.mode} mode
+          <IconButton
+            sx={{ ml: 1 }}
+            onClick={colorMode.toggleColorMode}
+            color="inherit"
+          >
+            {theme.palette.mode === "dark" ? (
+              <Brightness7Icon />
+            ) : (
+              <Brightness4Icon />
+            )}
+          </IconButton>
+        </Box>
       </nav>
     </Box>
   );

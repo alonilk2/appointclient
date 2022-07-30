@@ -5,7 +5,6 @@
   overflow-x: hidden;
 }
 .MuiBox-root {
-  background-color: white;
   border-radius: 20px;
   direction: rtl;
   width: 98% !important;
@@ -40,9 +39,7 @@
   right: 1.75rem !important;
   transform-origin: right !important;
 }
-.MuiDataGrid-cell {
-  background-color: white !important;
-}
+
 .css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root{
   transform: translate(16px, 16px) scale(1);
   left: inherit !important;
@@ -86,6 +83,9 @@
   margin-right: 3px !important;
   margin-left: -6px !important;
 }
+.MuiDataGrid-root {
+  height: 92% !important;
+}
 .main {
   padding: 0% 1% 0% 2%;
 }
@@ -98,7 +98,7 @@
 
 .main > .main-container {
   width: 100%;
-  height: 95%;
+  height: 100%;
   background-color: rgb(213, 233, 255);
   border-radius: 20px;
   display: flex;
