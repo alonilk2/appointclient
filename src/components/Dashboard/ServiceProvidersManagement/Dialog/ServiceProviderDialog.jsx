@@ -15,15 +15,18 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import Box from "@mui/material/Box";
 import DialogContentText from "@mui/material/DialogContentText";
 import { useCallback, useContext, useEffect, useState, useMemo } from "react";
 import { useDropzone } from "react-dropzone";
 import { useDispatch } from "react-redux";
+import { API_UPLOADS_URL } from "../../../../constants";
 import { _signup, _updateUser } from "../../../../features/userSlice";
 import useServices from "../../../../hooks/Dashboard/useServices";
 import AddWorkdaysDialog from "../../AddWorkdayDialog/AddWorkdaysDialog";
 import UserContext from "../../UserContext";
 import WorkdaysTable from "../../WorkdaysTable";
+import HorizontalLinearStepper from "./HorizontalLinearStepper";
 
 export default function AddServiceProviderDialog(props) {
   const [firstname, setFirstname] = useState("");
@@ -36,10 +39,14 @@ export default function AddServiceProviderDialog(props) {
   const [firstDayAvailable, setFirstDayAvailable] = useState(0);
   const [error, setError] = useState(false);
   const [chosenServices, setChosenServices] = useState([]);
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState(
+    Math.random().toString(36).slice(-8)
+  );
   const user = useContext(UserContext);
   const services = useServices(user);
   const dispatch = useDispatch();
+  const [activeStep, setActiveStep] = useState(0);
+
   let providerForEdit = props?.providerForEdit;
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -54,6 +61,24 @@ export default function AddServiceProviderDialog(props) {
 
   const toggleDialog = () => {
     props.toggle(!props.open);
+  };
+
+  const handleNext = () => {
+    if (
+      (activeStep === 0 &&
+        (firstname === "" ||
+          lastname === "" ||
+          email === "" ||
+          phone === "")) ||
+      (activeStep === 2 && file.length === 0 && !providerForEdit?.filename) ||
+      (activeStep === 3 && password === "")
+    )
+      return setError(true);
+    setActiveStep(activeStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep(activeStep - 1);
   };
 
   useEffect(() => {
@@ -75,16 +100,6 @@ export default function AddServiceProviderDialog(props) {
   }, [providerForEdit]);
 
   const handleAdd = async () => {
-    if (
-      firstname === "" ||
-      lastname === "" ||
-      email === "" ||
-      phone === "" ||
-      (file.length === 0 && !providerForEdit?.filename) ||
-      password === ""
-    )
-      return setError(true);
-
     let newUser = {
       firstname: firstname,
       lastname: lastname,
@@ -116,7 +131,7 @@ export default function AddServiceProviderDialog(props) {
         phone: phone,
         email: email,
         file: file,
-        filename: "",
+        filename: providerForEdit?.filename || "",
         workdays: workdays,
         services: chosenServices,
         business: user?.business,
@@ -137,10 +152,6 @@ export default function AddServiceProviderDialog(props) {
         user?.refresh();
       }
     } else return setError(response.error.message);
-  };
-
-  const handleGeneratePassword = () => {
-    setPassword(Math.random().toString(36).slice(-8));
   };
 
   const Dropzone = (
@@ -190,20 +201,143 @@ export default function AddServiceProviderDialog(props) {
     findFirstDayAvailable();
   }, [workdaysArr, setFirstDayAvailable]);
 
-  const ServicesCheckboxes = useMemo(()=>services?.list?.map((service) => {
-    return (
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={chosenServices.some((_ser) => _ser.id === service.id)}
-            onChange={(e) => handleCheck(e, service)}
+  const ServicesCheckboxes = useMemo(
+    () =>
+      services?.list?.map((service) => {
+        return (
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={chosenServices.some((_ser) => _ser.id === service.id)}
+                onChange={(e) => handleCheck(e, service)}
+              />
+            }
+            label={service?.name}
+            sx={{ margin: "1%" }}
           />
-        }
-        label={service?.name}
-        sx={{ margin: "1%" }}
+        );
+      }),
+    [chosenServices]
+  );
+
+  const DetailsForm = (
+    <>
+      <DialogContentText sx={{ direction: "ltr" }}>
+        יש למלא את כל הפרטים לפי הסדר.
+        <br />
+        לנותן השירות יפתח חשבון במערכת באופן אוטומטי בלחיצה על "הוספה", כאשר
+        פרטי ההתחברות יהיו הדוא"ל והסיסמה הזמנית שתוצג בהמשך הטופס.
+        <br />
+        בסעיף יצירת סיסמה יש ללחוץ על הכפתור להצגת הסיסמה הזמנית.
+      </DialogContentText>
+      <br />
+      <TextField
+        required
+        error={error && firstname.length === 0 && true}
+        id="outlined-required"
+        variant="outlined"
+        label="שם פרטי"
+        value={firstname}
+        sx={styles.textField}
+        onChange={(e) => setFirstname(e.target.value)}
+        fullWidth
       />
-    );
-  }), [chosenServices])
+      <TextField
+        required
+        error={error && lastname.length === 0 && true}
+        id="outlined-required"
+        variant="outlined"
+        value={lastname}
+        label="שם משפחה"
+        sx={styles.textField}
+        onChange={(e) => setLastname(e.target.value)}
+        fullWidth
+      />
+      <TextField
+        required
+        value={email}
+        error={error && email.length === 0 && true}
+        id="outlined-required"
+        variant="outlined"
+        label='דוא"ל'
+        sx={styles.textField}
+        onChange={(e) => setEmail(e.target.value)}
+        fullWidth
+      />
+      <TextField
+        required
+        value={phone}
+        error={error && phone.length === 0 && true}
+        id="outlined-required"
+        variant="outlined"
+        label="מספר טלאפון"
+        sx={styles.textField}
+        onChange={(e) => setPhone(e.target.value)}
+        fullWidth
+      />
+      <Typography variant="subtitle1" gutterBottom component="div">
+        תחומי שירות
+      </Typography>
+      <Divider />
+      <div className="services-container">{ServicesCheckboxes}</div>
+    </>
+  );
+
+  const workdaysView = (
+    <>
+      <Typography variant="subtitle1" gutterBottom component="div">
+        ימי ושעות עבודה
+      </Typography>
+      <Divider />
+      <WorkdaysTable
+        workdaysArr={workdaysArr}
+        setWorkdaysArr={setWorkdaysArr}
+        openDialog={workdaysDialog}
+        setOpenDialog={setWorkdaysDialog}
+      />
+    </>
+  );
+
+  const profilePictureView = (
+    <>
+      <Typography variant="subtitle1" gutterBottom component="div">
+        תמונת פרופיל
+      </Typography>
+      <Divider />
+      <br />
+
+      <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+        <img
+          style={{ maxWidth: "100px" }}
+          src={API_UPLOADS_URL + props?.providerForEdit?.filename}
+          alt="profile"
+        />
+      </div>
+      <br />
+      {Dropzone}
+      {file && (
+        <p>
+          {file[0]?.name} - {file[0]?.size}
+        </p>
+      )}
+    </>
+  );
+
+  const CredentialsView = (
+    <>
+      <DialogContentText sx={{ direction: "ltr" }}>
+        פרטים אלו ישמשו את נותן השירות לכניסה למערכת:
+      </DialogContentText>
+      <Stack direction="column" sx={styles.addWorkdays}>
+        <Typography variant="h6" gutterBottom sx={{ direction: "ltr" }}>
+          שם משתמש: {email}
+        </Typography>
+        <Typography variant="h6" gutterBottom sx={{ direction: "ltr" }}>
+          סיסמה זמנית: {password}
+        </Typography>
+      </Stack>
+    </>
+  );
 
   return (
     <Dialog open={props.open} sx={styles.dialogContainer}>
@@ -224,115 +358,36 @@ export default function AddServiceProviderDialog(props) {
             יש למלא את כל השדות ולהוסיף קובץ תמונה להעלאה
           </Alert>
         )}
-        <DialogContentText sx={{ direction: "ltr" }}>
-          יש למלא את כל הפרטים לפי הסדר.
-          <br />
-          לנותן השירות יפתח חשבון במערכת באופן אוטומטי בלחיצה על "הוספה", כאשר
-          פרטי ההתחברות יהיו הדוא"ל והסיסמה הזמנית שתוצג בהמשך הטופס.
-          <br />
-          בסעיף יצירת סיסמה יש ללחוץ על הכפתור להצגת הסיסמה הזמנית.
-        </DialogContentText>
-        <br />
-        <TextField
-          required
-          error={error && firstname.length === 0 && true}
-          id="outlined-required"
-          variant="outlined"
-          label="שם פרטי"
-          value={firstname}
-          sx={styles.textField}
-          onChange={(e) => setFirstname(e.target.value)}
-          fullWidth
+        <HorizontalLinearStepper
+          activeStep={activeStep}
+          setActiveStep={setActiveStep}
         />
-        <TextField
-          required
-          error={error && lastname.length === 0 && true}
-          id="outlined-required"
-          variant="outlined"
-          value={lastname}
-          label="שם משפחה"
-          sx={styles.textField}
-          onChange={(e) => setLastname(e.target.value)}
-          fullWidth
-        />
-        <TextField
-          required
-          value={email}
-          error={error && email.length === 0 && true}
-          id="outlined-required"
-          variant="outlined"
-          label='דוא"ל'
-          sx={styles.textField}
-          onChange={(e) => setEmail(e.target.value)}
-          fullWidth
-        />
-        <TextField
-          required
-          value={phone}
-          error={error && phone.length === 0 && true}
-          id="outlined-required"
-          variant="outlined"
-          label="מספר טלאפון"
-          sx={styles.textField}
-          onChange={(e) => setPhone(e.target.value)}
-          fullWidth
-        />
-        <Typography variant="subtitle1" gutterBottom component="div">
-          יצירת סיסמה זמנית
-        </Typography>
-        <Divider />
-        <Stack direction="column" sx={styles.addWorkdays}>
-          {password.length === 0 ? (
-            <>
-              {" "}
-              <Fab
-                color="primary"
-                aria-label="generate"
-                onClick={handleGeneratePassword}
-              >
-                <EnhancedEncryptionIcon />
-              </Fab>
-              <p>לחץ להצגת הסיסמה הזמנית</p>
-            </>
-          ) : (
-            <h3 style={{ direction: "rtl" }}>הסיסמה הזמנית: {password} </h3>
-          )}
-        </Stack>
-        <Typography variant="subtitle1" gutterBottom component="div">
-          ימי ושעות עבודה
-        </Typography>
-        <Divider />
 
-        <WorkdaysTable
-          workdaysArr={workdaysArr}
-          setWorkdaysArr={setWorkdaysArr}
-          openDialog={workdaysDialog}
-          setOpenDialog={setWorkdaysDialog}
-        />
-        <Typography variant="subtitle1" gutterBottom component="div">
-          תחומי שירות
-        </Typography>
-        <Divider />
-        <div className="services-container">{ServicesCheckboxes}</div>
-        <Typography variant="subtitle1" gutterBottom component="div">
-          תמונת פרופיל
-        </Typography>
-        <Divider />
-        <br />
-        {Dropzone}
-        {file && (
-          <p>
-            {file[0]?.name} - {file[0]?.size}
-          </p>
-        )}
+        {activeStep === 0 && DetailsForm}
+        {activeStep === 1 && workdaysView}
+        {activeStep === 2 && profilePictureView}
+        {activeStep === 3 && CredentialsView}
       </DialogContent>
       <DialogActions>
+        {activeStep < 3 ? (
+          <Button variant="contained" onClick={handleNext}>
+            המשך
+          </Button>
+        ) : (
+          <Button variant="contained" onClick={handleAdd}>
+            הוספה
+          </Button>
+        )}
+
+        <Box sx={{ flex: "1 1 auto" }} />
         <Button variant="text" onClick={handleClose}>
           ביטול
         </Button>
-        <Button variant="contained" onClick={handleAdd}>
-          הוספה
-        </Button>
+        {activeStep > 0 && (
+          <Button variant="contained" onClick={handleBack}>
+            חזור
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

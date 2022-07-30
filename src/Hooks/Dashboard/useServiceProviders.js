@@ -31,7 +31,7 @@ export default function useServiceProviders() {
 
   const updateServiceProvider = async (provider) => {
     try {
-      if (provider.file) {
+      if (provider.file.length > 0) {
         let fileName = await uploadFile({ file: provider.file });
         provider.filename = fileName?.message;
       }
