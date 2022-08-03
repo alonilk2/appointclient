@@ -74,7 +74,6 @@ export const _createProviderUser = createAsyncThunk(
       const response = await createProviderUser(signupRequest);
       return response;
     } catch (error) {
-      console.log(error);
       return thunkAPI.rejectWithValue();
     }
   }

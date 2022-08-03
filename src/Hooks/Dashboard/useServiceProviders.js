@@ -21,7 +21,7 @@ export default function useServiceProviders() {
   const addServiceProvider = async (provider) => {
     try {
       let fileName = await uploadFile({ file: provider.file });
-      provider.filename = fileName?.message;
+      provider.filename = fileName[0]?.fileUrl || "";
       let response = await dispatch(_addServiceProvider(provider));
       return response;
     } catch (e) {
@@ -33,7 +33,7 @@ export default function useServiceProviders() {
     try {
       if (provider.file.length > 0) {
         let fileName = await uploadFile({ file: provider.file });
-        provider.filename = fileName?.message;
+        provider.filename = fileName[0]?.fileUrl || "";
       }
       let response = await dispatch(_updateServiceProvider(provider));
       return response;

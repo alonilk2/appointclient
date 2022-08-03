@@ -21,10 +21,9 @@ export default function ServiceProvidersManagement() {
 
   const UserProfileCell = (params) => {
     let filename = params?.value.file;
-    let url = "http://localhost:8080/uploads/" + filename;
     return (
       <Box sx={styles.UserProfileCell}>
-        <Avatar alt="Remy Sharp" src={url} />
+        <Avatar alt="Remy Sharp" src={filename} />
         {params?.value?.name}
       </Box>
     );

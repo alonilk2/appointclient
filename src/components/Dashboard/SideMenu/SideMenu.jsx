@@ -100,7 +100,7 @@ export default function SideMenu() {
             </div>
           </div>
           <img
-            src={API_UPLOADS_URL + user?.business?.img}
+            src={user?.business?.img}
             className="business-logo"
             alt="business logo"
           />

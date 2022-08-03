@@ -17,6 +17,15 @@
 .MuiListSubheader-root {
   position: inherit !important;
 }
+.profile-img-preview {
+  border: 1px dashed rgb(177, 177, 177);
+  max-width: 200px;
+  min-height: 200px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .dashboard-header {
   min-height: 100px;
   display: flex;

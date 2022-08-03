@@ -26,7 +26,7 @@ export default function ProfileImageCard(props) {
       <Divider />
       <CardContent>
         <img
-          src={API_UPLOADS_URL + user?.business?.img}
+          src={user?.business?.img}
           className="profile-logo"
           alt="פרופיל עסק"
         />

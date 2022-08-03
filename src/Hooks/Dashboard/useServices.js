@@ -20,7 +20,7 @@ export default function useServices() {
     try {
       let fileName =
         service?.file && (await uploadFile({ file: service.file }));
-      service.img = fileName?.message;
+      service.img = fileName[0]?.fileUrl
       let response = await dispatch(_addServices(service));
       return response;
     } catch (e) {
@@ -32,7 +32,7 @@ export default function useServices() {
     try {
       let fileName =
         service?.file && (await uploadFile({ file: service.file }));
-      service.img = fileName?.message;
+      service.img = fileName[0]?.fileUrl
       let response = await dispatch(_updateServices(service));
       return response;
     } catch (e) {

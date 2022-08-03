@@ -22,7 +22,11 @@ import { useDropzone } from "react-dropzone";
 import { useDispatch } from "react-redux";
 import { validEmail } from "../../../../common/Regex";
 import { API_UPLOADS_URL } from "../../../../constants";
-import { _createProviderUser, _signup, _updateUser } from "../../../../features/userSlice";
+import {
+  _createProviderUser,
+  _signup,
+  _updateUser,
+} from "../../../../features/userSlice";
 import useServices from "../../../../hooks/Dashboard/useServices";
 import AddWorkdaysDialog from "../../AddWorkdayDialog/AddWorkdaysDialog";
 import UserContext from "../../UserContext";
@@ -110,7 +114,7 @@ export default function AddServiceProviderDialog(props) {
 
     let existingUser = await user.findUserByEmail(email);
     let response;
-    
+
     if (providerForEdit) {
       response = await dispatch(_updateUser({ ...existingUser, ...newUser }));
     } else response = await dispatch(_createProviderUser(newUser));
@@ -137,8 +141,8 @@ export default function AddServiceProviderDialog(props) {
         workdays: workdays,
         services: chosenServices,
         business: user?.business,
-        appointments: providerForEdit?.appointments,
-        user: response?.payload || providerForEdit?.user,
+        appointments: providerForEdit?.appointments || [],
+        user: user?.user || providerForEdit?.user,
       };
 
       if (providerForEdit)
@@ -308,12 +312,21 @@ export default function AddServiceProviderDialog(props) {
       <Divider />
       <br />
 
-      <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-        <img
-          style={{ maxWidth: "100px" }}
-          src={API_UPLOADS_URL + props?.providerForEdit?.filename}
-          alt="profile"
-        />
+      <div
+        className="profile-img-preview"
+        style={{ width: "100%", display: "flex", justifyContent: "center" }}
+      >
+        {props?.providerForEdit?.filename ? (
+          <img
+            style={{ maxWidth: "100px" }}
+            src={props?.providerForEdit?.filename}
+            alt="profile"
+          />
+        ) : (
+          <Typography variant="subtitle1" gutterBottom component="div">
+            אין תמונה
+          </Typography>
+        )}
       </div>
       <br />
       {Dropzone}
@@ -356,7 +369,9 @@ export default function AddServiceProviderDialog(props) {
       <DialogContent>
         {error && (
           <Alert severity="error">
-            יש למלא את כל השדות ולהוסיף קובץ תמונה להעלאה
+            יש למלא את כל השדות ולהוסיף תמונה פרופיל.
+            <br />
+            יש לוודא כי המייל איננו תפוס כבר.
           </Alert>
         )}
         <HorizontalLinearStepper
@@ -395,7 +410,7 @@ export default function AddServiceProviderDialog(props) {
 const styles = {
   dialogContainer: {
     direction: "rtl",
-    minWidth: '500px'
+    minWidth: "500px",
   },
   textField: {
     margin: "2% 0",

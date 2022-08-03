@@ -13,19 +13,20 @@ export default function useUser() {
   let gallery = user?.business?.gallery ? JSON.parse(user?.business?.gallery) : { images: [] };
 
   const updateUser = async (_user) => {
-    console.log(_user)
     if (_user?.business?.gallery && typeof _user?.business?.gallery === 'object') {
       let fileName = await uploadFile({ file: _user?.business?.gallery });
-      gallery.images[_user?.business?.element] = fileName?.message
+
+      gallery.images[_user?.business?.element] = fileName[0]?.fileUrl
       _user.business.gallery = JSON.stringify(gallery);
     }
     else if (_user?.business?.img && typeof _user?.business?.img === 'object') {
       let fileName = await uploadFile({ file: _user?.business?.img });
-      _user.business.img = fileName?.message;
+      console.log(fileName)
+      _user.business.img = fileName[0]?.fileUrl
     }
     else if (_user?.business?.headerImg && typeof _user?.business?.headerImg === 'object') {
       let fileName = await uploadFile({ file: _user?.business?.headerImg });
-      _user.business.headerImg = fileName?.message;
+      _user.business.headerImg = fileName[0]?.fileUrl
     }
 
     let response = await dispatch(_updateUser(_user));

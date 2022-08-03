@@ -9,7 +9,7 @@ export async function uploadFile(request) {
   let formData = new FormData();
   console.log(request)
   formData.append("file", request?.file[0]);
-  let response = await Axios.post(API_BASE_URL + "/upload", formData, {
+  let response = await Axios.post(API_BASE_URL + "/api/files/upload", formData, {
     headers: {
       Authorization: "Bearer " + localStorage.getItem(ACCESS_TOKEN),
       "Content-Type": "multipart/form-data",

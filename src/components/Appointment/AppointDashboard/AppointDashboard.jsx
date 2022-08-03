@@ -55,7 +55,7 @@ export default function AppointDashboard(props) {
         <div className="service-col" onClick={() => handleClick(idx + 1)}>
           <img
             className="service-img"
-            src={API_UPLOADS_URL + service?.img}
+            src={service?.img}
             alt="service"
           ></img>
           <div className="darken"></div>
@@ -90,7 +90,7 @@ export default function AppointDashboard(props) {
             <Avatar
               alt=""
               sx={{ width: 80, height: 80 }}
-              src={API_UPLOADS_URL + provider?.filename}
+              src={provider?.filename}
             ></Avatar>
             <p className="provider-name">
               {provider.firstname + " " + provider.lastname}
@@ -127,7 +127,7 @@ export default function AppointDashboard(props) {
             <Avatar
               alt=""
               sx={{ width: 80, height: 80 }}
-              src={API_UPLOADS_URL + provider?.filename}
+              src={provider?.filename}
             ></Avatar>
             <p className="appointment-text">
               <b>{provider?.firstname + " " + provider?.lastname}</b>
@@ -137,6 +137,9 @@ export default function AppointDashboard(props) {
               שעות: {endHour[0] + ":" + endHour[1]}
               <ArrowForwardIcon sx={{ fontSize: "16px" }} />
               {startHour[0] + ":" + startHour[1]}
+            </p>
+            <p className="appointment-text">
+              ל:{appointment.service.name}
             </p>
             <Button
               size="small"

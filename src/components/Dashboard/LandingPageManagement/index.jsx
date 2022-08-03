@@ -105,7 +105,7 @@ export default function LandingPageManagement() {
           onClick={handleHeaderClick}
           style={{
             backgroundImage: `url(${
-              API_UPLOADS_URL + user?.business?.headerImg
+              user?.business?.headerImg
             })`,
             backgroundSize: "cover",
             width: "100%",
@@ -115,7 +115,7 @@ export default function LandingPageManagement() {
           <h1>{user?.business?.name}</h1>
           <h5>{user?.business?.subtitle}</h5>
           <img
-            src={API_UPLOADS_URL + user?.business?.img}
+            src={user?.business?.img}
             alt="logo"
             className="business-logo"
           />

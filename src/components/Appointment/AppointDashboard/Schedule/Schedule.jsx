@@ -51,7 +51,7 @@ export default function Schedule() {
         <Avatar
           alt=""
           sx={{ width: 80, height: 80 }}
-          src={API_UPLOADS_URL + provider?.filename}
+          src={provider?.filename}
         ></Avatar>
         <div className="right-column">
           <h5>בחרת לקבוע תור ל{business?.services[clickedService]?.name}</h5>

@@ -17,7 +17,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 export default function Appointment(props) {
   const { businessId } = useParams();
   const { business } = useBusiness(businessId);
-  let businessImg = API_UPLOADS_URL + business?.img;
+  let businessImg = business?.img;
   let navigate = useNavigate();
   let phone1 = business?.phone1 || "";
   let phone2 = business?.phone2 || "";
@@ -34,7 +34,7 @@ export default function Appointment(props) {
       <div
         className="image-container"
         style={{
-          backgroundImage: `url(${API_UPLOADS_URL + business?.headerImg})`,
+          backgroundImage: `url(${business?.headerImg})`,
           backgroundSize: "cover",
           backgroundPositionY: "50%",
         }}
@@ -79,7 +79,7 @@ export default function Appointment(props) {
         <div className="gallery">
           {galleryArray?.map(img => {
             return (
-              <img src={API_UPLOADS_URL + img} alt="profile"/>
+              <img src={img} alt="profile"/>
             )
           })}
         </div>

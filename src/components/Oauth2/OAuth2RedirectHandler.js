@@ -1,6 +1,5 @@
-import { ACCESS_TOKEN } from "../../constants";
 import { Navigate, useSearchParams } from "react-router-dom";
-import { useEffect } from "react";
+import { ACCESS_TOKEN } from "../../constants";
 
 function OAuth2RedirectHandler(props) {
   const [searchParams] = useSearchParams();
