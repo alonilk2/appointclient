@@ -34,6 +34,7 @@ export const _addServiceProvider = createAsyncThunk(
       const response = await addServiceProvider(provider);
       return response;
     } catch (error) {
+      console.log(error)
       return thunkAPI.rejectWithValue();
     }
   }
@@ -43,9 +44,16 @@ export const _updateServiceProvider = createAsyncThunk(
   "dashboard/updateServiceProvider",
   async (provider, thunkAPI) => {
     try {
+      let tempBus = {...provider.business}
+      let tempUser = {...provider.user}
+      tempBus.gallery = provider.business?.gallery && JSON.stringify(provider.business?.gallery);
+      tempUser.business = tempBus;
+      provider.business = tempBus;
+      provider.user = tempUser
       const response = await updateServiceProvider(provider);
       return response;
     } catch (error) {
+      console.log(error)
       return thunkAPI.rejectWithValue();
     }
   }

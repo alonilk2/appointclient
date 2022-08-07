@@ -51,8 +51,8 @@ export default function ImageUploadDialog(props) {
     tempUser.business = {
       ...tempUser.business,
       headerImg: element === null ? file : tempUser.business?.headerImg,
-      gallery: element !== null ? file : tempUser.business?.gallery,
-      element: element
+      element: element,
+      newfile: element !== null ? file : null
     };
     try {
       let response = await update(tempUser);

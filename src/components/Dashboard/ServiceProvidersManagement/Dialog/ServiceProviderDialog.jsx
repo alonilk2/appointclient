@@ -144,13 +144,13 @@ export default function AddServiceProviderDialog(props) {
         appointments: providerForEdit?.appointments || [],
         user: user?.user || providerForEdit?.user,
       };
-
+      console.log(providerForEdit)
       if (providerForEdit)
         response = await props?.providers.update(newProvider);
       else response = await props?.providers.add(newProvider);
       userResponse.serviceProvider = response.payload;
       userResponse = { ...userResponse, ...newUser, business: user?.business };
-
+      console.log(userResponse)
       response = await dispatch(_updateUser(userResponse));
 
       if (response.type.endsWith("fulfilled")) {

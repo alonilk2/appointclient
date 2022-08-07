@@ -15,9 +15,9 @@ import { HuePicker } from "react-color";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { useEffect } from "react";
 import { OpeningHours } from "../../OpeningHours";
-import img1 from "../../../images/img1.jpg";
-import img2 from "../../../images/img2.jpg";
-import img3 from "../../../images/img3.jpg";
+import NoImage from '../../../images/noimage.png'
+import headerbg from '../../../images/home-header-background.png'
+
 import UserContext from "../UserContext";
 import { ColorModeContext } from "..";
 
@@ -105,7 +105,7 @@ export default function LandingPageManagement() {
           onClick={handleHeaderClick}
           style={{
             backgroundImage: `url(${
-              user?.business?.headerImg
+              user?.business?.headerImg ? user?.business?.headerImg : headerbg
             })`,
             backgroundSize: "cover",
             width: "100%",
@@ -115,7 +115,7 @@ export default function LandingPageManagement() {
           <h1>{user?.business?.name}</h1>
           <h5>{user?.business?.subtitle}</h5>
           <img
-            src={user?.business?.img}
+            src={user?.business?.img ? user?.business?.img : NoImage}
             alt="logo"
             className="business-logo"
           />
@@ -142,9 +142,10 @@ export default function LandingPageManagement() {
           <div className="form-container">
             {OpeningHours(user?.business?.workdays, color)}
             <div className="gallery">
+
               <div
                 style={{
-                  backgroundImage: `url(${img1})`,
+                  backgroundImage: `url(${user?.business?.gallery && user?.business?.gallery[0] ? user?.business?.gallery[0] : NoImage})`,
                   minHeight: "200px",
                   minWidth: "200px",
                   backgroundSize: "cover",
@@ -165,7 +166,7 @@ export default function LandingPageManagement() {
               </div>
               <div
                 style={{
-                  backgroundImage: `url(${img2})`,
+                  backgroundImage: `url(${user?.business?.gallery && user?.business?.gallery[1] ? user?.business?.gallery[1] : NoImage})`,
                   minHeight: "200px",
                   minWidth: "200px",
                   backgroundSize: "cover",
@@ -186,7 +187,7 @@ export default function LandingPageManagement() {
               </div>
               <div
                 style={{
-                  backgroundImage: `url(${img3})`,
+                  backgroundImage: `url(${user?.business?.gallery && user?.business?.gallery[2] ? user?.business?.gallery[2] : NoImage})`,
                   minHeight: "200px",
                   minWidth: "200px",
                   backgroundSize: "cover",

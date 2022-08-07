@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { API_UPLOADS_URL, FRONT_BASE_URL } from "../../../constants";
 import { selectTab } from "../../../features/dashboardSlice";
 import UserContext from "../UserContext";
+import NoImage from '../../../images/noimage.png'
 
 export default function SideMenu() {
   const dispatch = useDispatch();
@@ -100,7 +101,7 @@ export default function SideMenu() {
             </div>
           </div>
           <img
-            src={user?.business?.img}
+            src={user?.business?.img ? user?.business?.img : NoImage}
             className="business-logo"
             alt="business logo"
           />

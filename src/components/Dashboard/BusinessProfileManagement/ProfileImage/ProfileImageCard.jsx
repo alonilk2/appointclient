@@ -10,6 +10,7 @@ import {
 import { useContext } from "react";
 import { API_UPLOADS_URL } from "../../../../constants";
 import UserContext from "../../UserContext";
+import NoImage from '../../../../images/noimage.png'
 
 export default function ProfileImageCard(props) {
   const user = useContext(UserContext)
@@ -26,7 +27,7 @@ export default function ProfileImageCard(props) {
       <Divider />
       <CardContent>
         <img
-          src={user?.business?.img}
+          src={user?.business?.img ? user?.business?.img : NoImage}
           className="profile-logo"
           alt="פרופיל עסק"
         />

@@ -13,6 +13,8 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import LanguageIcon from "@mui/icons-material/Language";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import NoImage from '../../images/noimage.png'
+import headerbg from '../../images/home-header-background.png'
 
 export default function Appointment(props) {
   const { businessId } = useParams();
@@ -34,14 +36,13 @@ export default function Appointment(props) {
       <div
         className="image-container"
         style={{
-          backgroundImage: `url(${business?.headerImg})`,
+          backgroundImage: `url(${business?.headerImg ? business?.headerImg : headerbg})`,
           backgroundSize: "cover",
           backgroundPositionY: "50%",
         }}
       >
-        <h1>{business?.name}</h1>
-        <h3>המרכז לבריאות האישה</h3>
-        <img src={businessImg} className="business-logo" alt="business logo" />
+        <h1>{business?.name ? business?.name : "שם העסק"}</h1>
+        <img src={businessImg ? businessImg : NoImage} className="business-logo" alt="business logo" />
         <button
           className="appoint-btn"
           style={{ backgroundColor: business?.pageColor }}
@@ -71,15 +72,14 @@ export default function Appointment(props) {
   };
 
   const DetailsContainer = () => {
-    let galleryArray = business?.gallery && JSON.parse(business?.gallery).images;
-    console.log(galleryArray)
+    let galleryArray = business?.gallery && JSON.parse(business?.gallery);
     return (
       <div className="form-container">
         {OpeningHours(business?.workdays, business?.pageColor)}
         <div className="gallery">
           {galleryArray?.map(img => {
             return (
-              <img src={img} alt="profile"/>
+              <img src={img ? img : NoImage} alt="profile"/>
             )
           })}
         </div>

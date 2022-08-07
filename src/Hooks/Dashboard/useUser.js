@@ -1,6 +1,10 @@
 import { useSelector, useDispatch } from "react-redux";
 
-import { _removeUser, _updateUser, _findUserByEmail } from "../../features/userSlice";
+import {
+  _removeUser,
+  _updateUser,
+  _findUserByEmail,
+} from "../../features/userSlice";
 import { uploadFile } from "../../utils/FilesAPI";
 import { _getCurrentUser } from "../../features/userSlice";
 import { useEffect } from "react";
@@ -10,27 +14,38 @@ export default function useUser() {
   const user = useSelector((state) => state.user?.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  let gallery = user?.business?.gallery ? JSON.parse(user?.business?.gallery) : { images: [] };
 
   const updateUser = async (_user) => {
-    if (_user?.business?.gallery && typeof _user?.business?.gallery === 'object') {
-      let fileName = await uploadFile({ file: _user?.business?.gallery });
+    try {
+      let newUser = _user
+      if (
+        newUser?.business?.newfile &&
+        typeof newUser?.business?.newfile === "object"
+      ) {
+        let gallery = _user.business?.gallery ? [..._user.business?.gallery] : [null, null, null];
+        let fileName = await uploadFile({ file: newUser?.business?.newfile });
+        gallery[newUser?.business?.element] =
+          fileName[0]?.fileUrl;
+        newUser.business.gallery = gallery;
+      } else if (
+        newUser?.business?.img &&
+        typeof newUser?.business?.img === "object"
+      ) {
+        let fileName = await uploadFile({ file: newUser?.business?.img });
+        newUser.business.img = fileName[0]?.fileUrl;
+      } else if (
+        newUser?.business?.headerImg &&
+        typeof newUser?.business?.headerImg === "object"
+      ) {
+        let fileName = await uploadFile({ file: newUser?.business?.headerImg });
+        newUser.business.headerImg = fileName[0]?.fileUrl;
+      }
 
-      gallery.images[_user?.business?.element] = fileName[0]?.fileUrl
-      _user.business.gallery = JSON.stringify(gallery);
+      let response = await dispatch(_updateUser(newUser));
+      return response;
+    } catch (e) {
+      console.log(e);
     }
-    else if (_user?.business?.img && typeof _user?.business?.img === 'object') {
-      let fileName = await uploadFile({ file: _user?.business?.img });
-      console.log(fileName)
-      _user.business.img = fileName[0]?.fileUrl
-    }
-    else if (_user?.business?.headerImg && typeof _user?.business?.headerImg === 'object') {
-      let fileName = await uploadFile({ file: _user?.business?.headerImg });
-      _user.business.headerImg = fileName[0]?.fileUrl
-    }
-
-    let response = await dispatch(_updateUser(_user));
-    return response;
   };
 
   const remove = async (user) => {
@@ -40,19 +55,16 @@ export default function useUser() {
 
   const findUserByEmail = async (email) => {
     let response = await dispatch(_findUserByEmail(email));
-    return response.payload
-  }
+    return response.payload;
+  };
 
   const fetchUserInstance = async () => {
     let response = await dispatch(_getCurrentUser());
-    if(response.type.endsWith("rejected")){
-      navigate('/')
-    }
   };
 
   useEffect(() => {
-    fetchUserInstance()
-  }, [])
+    fetchUserInstance();
+  }, []);
 
   return {
     user: user,
@@ -60,6 +72,6 @@ export default function useUser() {
     update: updateUser,
     refresh: fetchUserInstance,
     remove: remove,
-    findUserByEmail: findUserByEmail
+    findUserByEmail: findUserByEmail,
   };
 }

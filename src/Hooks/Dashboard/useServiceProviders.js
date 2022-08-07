@@ -22,6 +22,13 @@ export default function useServiceProviders() {
     try {
       let fileName = await uploadFile({ file: provider.file });
       provider.filename = fileName[0]?.fileUrl || "";
+      let tempBus = {...provider.business}
+      let tempUser = {...provider.user}
+      tempBus.gallery = provider.business.gallery && JSON.stringify(provider.business.gallery)
+      provider.business = tempBus
+      tempUser.business = tempBus
+      provider.user = tempUser;
+      console.log(provider)
       let response = await dispatch(_addServiceProvider(provider));
       return response;
     } catch (e) {
@@ -35,6 +42,7 @@ export default function useServiceProviders() {
         let fileName = await uploadFile({ file: provider.file });
         provider.filename = fileName[0]?.fileUrl || "";
       }
+      console.log(provider)
       let response = await dispatch(_updateServiceProvider(provider));
       return response;
     } catch (e) {

@@ -84,9 +84,13 @@ export const _updateUser = createAsyncThunk(
   "user/update",
   async (user, thunkAPI) => {
     try {
+      let tempBus = {...user.business}
+      tempBus.gallery = user.business?.gallery && JSON.stringify(user.business?.gallery);
+      user.business = tempBus
       const response = await updateUser(user);
       return response;
     } catch (error) {
+      console.log(error)
       if(error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
     }
   }
@@ -125,6 +129,7 @@ export const _getCurrentUser = createAsyncThunk(
       if(response?.business?.workdays){
         response.business.workdays = sortWorkdaysArray(response.business.workdays)
       }
+      if(response?.business?.gallery) response.business.gallery = JSON.parse(response?.business?.gallery)
       return response;
     } catch (error) {
       console.log(error)
