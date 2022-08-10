@@ -1,42 +1,55 @@
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import {
-  Button,
+  Alert, Button,
   Card,
   CardActions,
   CardContent,
   CardHeader,
   Divider
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { _updateBusiness } from "../../../../features/businessSlice";
+import Snackbar from '@mui/material/Snackbar';
+import { useContext, useEffect, useState } from "react";
 import AddWorkdaysDialog from "../../AddWorkdayDialog/AddWorkdaysDialog";
+import UserContext from "../../UserContext";
 import WorkdaysTable from "../../WorkdaysTable";
 
 export default function WorkdaysCard(props) {
   const [workdaysDialog, setWorkdaysDialog] = useState(false);
   const [workdaysArr, setWorkdaysArr] = useState(props?.business?.workdays);
   const [firstDayAvailable, setFirstDayAvailable] = useState(0);
-  const dispatch = useDispatch()
+  const [success, setSuccess] = useState(false);
+  const user = useContext(UserContext);
 
-  useEffect(()=>{
-    setWorkdaysArr(props?.business?.workdays)
-  }, [props?.business?.workdays])
+  useEffect(() => {
+    setWorkdaysArr(props?.business?.workdays);
+  }, [props?.business?.workdays]);
 
-  const handleSubmitForm =async () => {
+  const handleSubmitForm = async () => {
     const workdays = workdaysArr.map((wd) => {
-      if(wd.startTimeFormatted) return {
-        starttime: wd.startTimeFormatted,
-        endtime: wd.endTimeFormatted,
-        day: wd.day,
-      };
+      if (wd.startTimeFormatted)
+        return {
+          starttime: wd.startTimeFormatted,
+          endtime: wd.endTimeFormatted,
+          day: wd.day,
+        };
+      return wd;
     });
 
+    let tempUser = { ...user.user };
+    console.log(props?.business?.gallery)
     let businessObj = {
       ...props?.business,
-      workdays: workdays
+      workdays: workdays,
     };
-
-    dispatch(_updateBusiness(businessObj))
+    console.log(businessObj)
+    tempUser.business = businessObj;
+    let response = await user.update(tempUser);
+    if (response?.type?.endsWith("fulfilled")) {
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+      }, 6000);
+    }
   };
 
   const findFirstDayAvailable = () => {
@@ -70,6 +83,11 @@ export default function WorkdaysCard(props) {
           firstDayAvailable={firstDayAvailable}
         />
       )}
+      <Snackbar open={success}>
+        <Alert severity="success" sx={{ width: '100%' }}>
+          This is a success message!
+        </Alert>
+      </Snackbar>
       <CardHeader title="שעות פתיחה" />
       <Divider />
       <CardContent>
@@ -88,6 +106,14 @@ export default function WorkdaysCard(props) {
         >
           עדכון פרטים
         </Button>
+        {success && (
+          <>
+            <CheckCircleOutlineIcon
+              sx={{ color: "green", marginRight: "5px" }}
+            />
+            נשמר
+          </>
+        )}
       </CardActions>
     </Card>
   );

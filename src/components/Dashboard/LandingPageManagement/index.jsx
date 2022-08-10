@@ -1,3 +1,4 @@
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import {
   Button,
   Card,
@@ -7,19 +8,17 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import { useContext, useState } from "react";
-import { API_UPLOADS_URL } from "../../../constants";
+import { useContext, useEffect, useState } from "react";
+import { HuePicker } from "react-color";
+
+import headerbg from "../../../images/home-header-background.png";
+import NoImage from "../../../images/noimage.png";
+import { OpeningHours } from "../../OpeningHours";
 import ImageUploadDialog from "./ImageUploadDialog";
 import "./index.css";
-import { HuePicker } from "react-color";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import { useEffect } from "react";
-import { OpeningHours } from "../../OpeningHours";
-import NoImage from '../../../images/noimage.png'
-import headerbg from '../../../images/home-header-background.png'
 
-import UserContext from "../UserContext";
 import { ColorModeContext } from "..";
+import UserContext from "../UserContext";
 
 export default function LandingPageManagement() {
   const user = useContext(UserContext);
@@ -30,7 +29,7 @@ export default function LandingPageManagement() {
   const [element, setElement] = useState();
 
   const handleHeaderClick = () => {
-    setElement(null)
+    setElement(null);
     setOpen(!open);
   };
 
@@ -54,9 +53,9 @@ export default function LandingPageManagement() {
   };
 
   const handleImageChange = (id) => {
-    setElement(id)
-    setOpen(true)
-  }
+    setElement(id);
+    setOpen(true);
+  };
 
   useEffect(() => {
     if (user.user?.business?.pageColor) {
@@ -68,7 +67,12 @@ export default function LandingPageManagement() {
     <div className="landing-page-container">
       <ImageUploadDialog open={open} toggle={setOpen} element={element} />
 
-      <div className="header-bar" style={colorMode.mode === "dark" ? {backgroundColor: "#121212"} : null}>
+      <div
+        className="header-bar"
+        style={
+          colorMode.mode === "dark" ? { backgroundColor: "#121212" } : null
+        }
+      >
         <Typography variant="h5">עיצוב דף נחיתה</Typography>
       </div>
       <div className="first-row">
@@ -142,10 +146,13 @@ export default function LandingPageManagement() {
           <div className="form-container">
             {OpeningHours(user?.business?.workdays, color)}
             <div className="gallery">
-
               <div
                 style={{
-                  backgroundImage: `url(${user?.business?.gallery && user?.business?.gallery[0] ? user?.business?.gallery[0] : NoImage})`,
+                  backgroundImage: `url(${
+                    user?.business?.gallery && user?.business?.gallery[0]
+                      ? user?.business?.gallery[0]
+                      : NoImage
+                  })`,
                   minHeight: "200px",
                   minWidth: "200px",
                   backgroundSize: "cover",
@@ -166,7 +173,11 @@ export default function LandingPageManagement() {
               </div>
               <div
                 style={{
-                  backgroundImage: `url(${user?.business?.gallery && user?.business?.gallery[1] ? user?.business?.gallery[1] : NoImage})`,
+                  backgroundImage: `url(${
+                    user?.business?.gallery && user?.business?.gallery[1]
+                      ? user?.business?.gallery[1]
+                      : NoImage
+                  })`,
                   minHeight: "200px",
                   minWidth: "200px",
                   backgroundSize: "cover",
@@ -187,7 +198,11 @@ export default function LandingPageManagement() {
               </div>
               <div
                 style={{
-                  backgroundImage: `url(${user?.business?.gallery && user?.business?.gallery[2] ? user?.business?.gallery[2] : NoImage})`,
+                  backgroundImage: `url(${
+                    user?.business?.gallery && user?.business?.gallery[2]
+                      ? user?.business?.gallery[2]
+                      : NoImage
+                  })`,
                   minHeight: "200px",
                   minWidth: "200px",
                   backgroundSize: "cover",

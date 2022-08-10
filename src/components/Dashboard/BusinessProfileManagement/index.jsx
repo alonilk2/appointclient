@@ -21,18 +21,14 @@ export default function BusinessProfileManagement() {
   const dispatch = useDispatch();
   const todaysAppointments = useSelector(state => state.appoint?.appoint)
   const totalMonthlyIncome = useSelector(state => state.business.totalMonthlyIncome)
-  // let appointmentsToday = user?.business?.serviceProviders?.
+
   useEffect(() => {
     if(user){
       dispatch(_fetchAppointmentsByDay(user?.business?.id))
       dispatch(_fetchTotalMonthlyIncome(user?.business?.id))
     }
   }, [user])
-  
-  useEffect(()=>{
-    console.log(todaysAppointments)
-  }, [todaysAppointments])
-  
+
   return (
     <div className="business-details-container">
       <ProfileImageUploadDialog open={open} toggle={setOpen} />
@@ -83,8 +79,6 @@ export default function BusinessProfileManagement() {
     </div>
   );
 }
-
-
 
 const styles = {
   formcontainer: {

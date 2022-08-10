@@ -21,7 +21,7 @@ export default function ServicesDialog(props) {
   const [cost, setCost] = useState(0);
   const [error, setError] = useState(false);
   const [duration, setDuration] = useState(0);
-  const [file, setFile] = useState([]);
+  const [file, setFile] = useState(props?.serviceForEdit?.file);
 
   const user = useContext(UserContext);
 

@@ -10,7 +10,6 @@ import {
   ListItemText,
 } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
-import { styles } from ".";
 import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
 import { useContext } from "react";
 
@@ -25,9 +24,9 @@ export const ProfileChipMenu = (props) => {
   };
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
-  console.log(colorMode)
+
   return (
-    <Box sx={styles.profileMenuBox}>
+    <Box sx={colorMode.mode === "light" ? styles.profileMenuBoxDark : styles.profileMenuBox}>
       <nav aria-label="main mailbox folders">
         <List>
           <ListItem disablePadding>
@@ -70,4 +69,21 @@ export const ProfileChipMenu = (props) => {
       </nav>
     </Box>
   );
+};
+
+const styles = {
+  profileMenuBox: {
+    width: "100%",
+    maxWidth: 360,
+    boxShadow: "0px 10px 41px 3px rgba(0,0,0,0.3)",
+    zIndex: 3,
+    backgroundColor: '#121212'
+  },
+  profileMenuBoxDark: {
+    width: "100%",
+    maxWidth: 360,
+    boxShadow: "0px 10px 41px 3px rgba(0,0,0,0.3)",
+    zIndex: 3,
+    backgroundColor: 'white'
+  },
 };

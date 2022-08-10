@@ -20,14 +20,12 @@ export default function WorkdaysTable(props) {
 
   const handleRemove = (dayId) => {
     let tempArr = [...props?.workdaysArr];
-    console.log(tempArr);
     props?.workdaysArr.forEach((e, idx) => {
       if (e.day === dayId) {
         tempArr.splice(idx, 1);
       }
     });
     props?.setWorkdaysArr(tempArr);
-    console.log(tempArr);
   };
 
   let table = useMemo(
@@ -42,10 +40,10 @@ export default function WorkdaysTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {props?.workdaysArr?.map((row) => {
+          {props?.workdaysArr?.map((row, idx) => {
             return (
               <TableRow
-                key={row.day}
+                key={idx}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell align="right" component="th" scope="row">

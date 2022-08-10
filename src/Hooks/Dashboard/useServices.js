@@ -21,6 +21,12 @@ export default function useServices() {
       let fileName =
         service?.file && (await uploadFile({ file: service.file }));
       service.img = fileName[0]?.fileUrl
+      let tempBus = {...service.business}
+      let tempUser = {...service.user}
+      tempBus.gallery = service.business.gallery && JSON.stringify(service.business.gallery)
+      service.business = tempBus
+      tempUser.business = tempBus
+      service.user = tempUser;
       let response = await dispatch(_addServices(service));
       return response;
     } catch (e) {
@@ -30,9 +36,17 @@ export default function useServices() {
 
   const updateServices = async (service) => {
     try {
+      console.log(service)
       let fileName =
-        service?.file && (await uploadFile({ file: service.file }));
+        typeof service?.file === 'object' && (await uploadFile({ file: service.file }));
+      console.log(service)
       service.img = fileName[0]?.fileUrl
+      let tempBus = {...service.business}
+      let tempUser = {...service.user}
+      tempBus.gallery = service.business.gallery && JSON.stringify(service.business.gallery)
+      service.business = tempBus
+      tempUser.business = tempBus
+      service.user = tempUser;
       let response = await dispatch(_updateServices(service));
       return response;
     } catch (e) {

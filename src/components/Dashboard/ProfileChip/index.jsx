@@ -34,11 +34,3 @@ export default function ProfileChip(user) {
   );
 }
 
-export const styles = {
-  profileMenuBox: {
-    width: "100%",
-    maxWidth: 360,
-    boxShadow: "0px 10px 41px 3px rgba(0,0,0,0.3)",
-    zIndex: 3,
-  },
-};

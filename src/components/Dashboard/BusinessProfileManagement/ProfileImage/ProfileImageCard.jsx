@@ -25,7 +25,7 @@ export default function ProfileImageCard(props) {
     <Card elevation={0} sx={styles.cardContainer}>
       <CardHeader title="תמונת פרופיל" />
       <Divider />
-      <CardContent>
+      <CardContent sx={styles.content}>
         <img
           src={user?.business?.img ? user?.business?.img : NoImage}
           className="profile-logo"
@@ -50,6 +50,9 @@ const styles = {
   cardContainer: {
     border: "1px solid #dae0e7",
     borderRadius: "10px",
+  },
+  content: {
+    margin: '10% 0'
   },
   AddButton: {
     margin: "auto",

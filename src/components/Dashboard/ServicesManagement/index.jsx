@@ -128,7 +128,7 @@ const styles = {
   AddButton: { direction: "ltr", backgroundColor: "#0369ff" },
   DeleteIcon: { marginLeft: "20%", color: "red" },
   EditIcon: { marginRight: "20%" },
-  Box: { height: "100%", width: "100%", marginLeft: "2%" },
+  Box: { height: "100%", width: "100%", marginLeft: "2%", backgroundColor: 'white' },
   CardHeader: { textAlign: "right" },
   UserProfileCell: {
     display: "flex",

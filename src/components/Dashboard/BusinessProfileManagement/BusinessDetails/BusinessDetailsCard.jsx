@@ -1,4 +1,6 @@
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import {
+  Alert,
   Button,
   Card,
   CardActions,
@@ -7,10 +9,9 @@ import {
   Divider,
   TextField,
 } from "@mui/material";
+import Snackbar from "@mui/material/Snackbar";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../../UserContext";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import { Alert } from "@mui/material";
 
 export default function BusinessDetailsCard() {
   const { user, update, refresh } = useContext(UserContext);
@@ -46,10 +47,10 @@ export default function BusinessDetailsCard() {
       let response = await update(tempUser);
       if (response?.type?.endsWith("fulfilled")) {
         setSuccess(true);
-        setError()
+        setError();
         setTimeout(() => {
           setSuccess(false);
-        }, 4000);
+        }, 6000);
         refresh();
       }
     }
@@ -66,6 +67,11 @@ export default function BusinessDetailsCard() {
 
   return (
     <Card elevation={0} sx={styles.cardContainer}>
+      <Snackbar open={success}>
+        <Alert severity="success" sx={{ width: "100%" }}>
+          This is a success message!
+        </Alert>
+      </Snackbar>
       <CardHeader title="פרטי העסק" />
       <Divider />
       <CardContent>

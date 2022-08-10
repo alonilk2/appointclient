@@ -20,13 +20,18 @@ import { getHours, getMinutes } from "date-fns";
 import { useState } from "react";
 import { daysArray } from "../util";
 
+// eslint-disable-next-line no-extend-native
 Date.prototype.addHours = function (h) {
   this.setHours(this.getHours() + h);
   return this;
 };
 
 const formatTime = (time) => {
-  return getHours(time).toString() + ":" + getMinutes(time).toString();
+  let hours = getHours(time).toString()
+  let minutes = getMinutes(time).toString()
+  if(hours.length < 2) hours = "0" + hours
+  if(minutes.length < 2) minutes = "0" + minutes
+  return hours + ":" + minutes;
 };
 
 export default function AddWorkdaysDialog(props) {

@@ -1,19 +1,20 @@
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Button from "@mui/material/Button";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import useUser from "../../../../hooks/Dashboard/useUser";
-import { useState, useCallback, useContext } from "react";
+import { useCallback, useContext, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import Spinner from "../../../../images/spinner.svg";
 import UserContext from "../../UserContext";
 
 export default function ProfileImageUploadDialog(props) {
   const [file, setFile] = useState([]);
   const [error, setError] = useState(false);
-  const { user, update, refresh } = useContext(UserContext)
+  const { user, update, refresh } = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
 
   const onDrop = useCallback((acceptedFiles) => {
     setFile(acceptedFiles);
@@ -50,10 +51,12 @@ export default function ProfileImageUploadDialog(props) {
       ...tempUser.business,
       img: file,
     };
+    setLoading(true);
     let response = await update(tempUser);
     if (response?.type === "user/update/fulfilled") {
-      refresh()
+      refresh();
       toggleDialog();
+      setLoading(false);
     }
   };
 
@@ -69,6 +72,7 @@ export default function ProfileImageUploadDialog(props) {
         {file && <p>קובץ נבחר: {file[0]?.name}</p>}
       </DialogContent>
       <DialogActions>
+        {loading && <img src={Spinner} width={50} alt=""></img>}
         <Button onClick={handleClose}>ביטול</Button>
         <Button onClick={handleSubmit}>העלאה</Button>
       </DialogActions>

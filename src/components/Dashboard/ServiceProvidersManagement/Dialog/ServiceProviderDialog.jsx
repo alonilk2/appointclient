@@ -51,7 +51,6 @@ export default function AddServiceProviderDialog(props) {
   const services = useServices(user);
   const dispatch = useDispatch();
   const [activeStep, setActiveStep] = useState(0);
-
   let providerForEdit = props?.providerForEdit;
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -67,6 +66,12 @@ export default function AddServiceProviderDialog(props) {
   const toggleDialog = () => {
     props.toggle(!props.open);
   };
+
+  useEffect(()=>{
+    setActiveStep(0)
+    setFile([])
+    setPassword(Math.random().toString(36).slice(-8))
+  },[props?.open])
 
   const handleNext = () => {
     if (
@@ -144,7 +149,7 @@ export default function AddServiceProviderDialog(props) {
         appointments: providerForEdit?.appointments || [],
         user: user?.user || providerForEdit?.user,
       };
-      console.log(providerForEdit)
+
       if (providerForEdit)
         response = await props?.providers.update(newProvider);
       else response = await props?.providers.add(newProvider);

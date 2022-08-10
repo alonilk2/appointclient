@@ -1,20 +1,13 @@
-import "./index.css";
-import img1 from "../../images/img2.jpg";
-import img2 from "../../images/img2.jpg";
-import img3 from "../../images/img3.jpg";
-import useBusiness from "../../hooks/useBusiness";
-import { useParams } from "react-router-dom";
-import { useEffect } from "react";
-import { API_BASE_URL, API_UPLOADS_URL } from "../../constants";
-import { OpeningHours } from "../OpeningHours";
-import { useNavigate } from "react-router-dom";
-import Typography from "@mui/material/Typography";
-import PhoneIcon from "@mui/icons-material/Phone";
-import LanguageIcon from "@mui/icons-material/Language";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import LanguageIcon from "@mui/icons-material/Language";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import NoImage from '../../images/noimage.png'
-import headerbg from '../../images/home-header-background.png'
+import PhoneIcon from "@mui/icons-material/Phone";
+import { useNavigate, useParams } from "react-router-dom";
+import useBusiness from "../../hooks/useBusiness";
+import headerbg from "../../images/home-header-background.png";
+import NoImage from "../../images/noimage.png";
+import { OpeningHours } from "../OpeningHours";
+import "./index.css";
 
 export default function Appointment(props) {
   const { businessId } = useParams();
@@ -36,13 +29,20 @@ export default function Appointment(props) {
       <div
         className="image-container"
         style={{
-          backgroundImage: `url(${business?.headerImg ? business?.headerImg : headerbg})`,
+          backgroundImage: `url(${
+            business?.headerImg ? business?.headerImg : headerbg
+          })`,
           backgroundSize: "cover",
           backgroundPositionY: "50%",
         }}
       >
+        <div className="darken-home" />
         <h1>{business?.name ? business?.name : "שם העסק"}</h1>
-        <img src={businessImg ? businessImg : NoImage} className="business-logo" alt="business logo" />
+        <img
+          src={businessImg ? businessImg : NoImage}
+          className="business-logo"
+          alt="business logo"
+        />
         <button
           className="appoint-btn"
           style={{ backgroundColor: business?.pageColor }}
@@ -72,15 +72,13 @@ export default function Appointment(props) {
   };
 
   const DetailsContainer = () => {
-    let galleryArray = business?.gallery && JSON.parse(business?.gallery);
+    let galleryArray = business?.gallery ? JSON.parse(business?.gallery) : [];
     return (
       <div className="form-container">
         {OpeningHours(business?.workdays, business?.pageColor)}
         <div className="gallery">
-          {galleryArray?.map(img => {
-            return (
-              <img src={img ? img : NoImage} alt="profile"/>
-            )
+          {galleryArray?.map((img) => {
+            return <img src={img ? img : NoImage} alt="profile" />;
           })}
         </div>
       </div>
