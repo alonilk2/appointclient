@@ -48,7 +48,6 @@ export default function ProfileImageCard(props) {
 
 const styles = {
   cardContainer: {
-    border: "1px solid #dae0e7",
     borderRadius: "10px",
   },
   content: {

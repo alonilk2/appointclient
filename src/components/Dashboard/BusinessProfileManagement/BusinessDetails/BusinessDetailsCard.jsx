@@ -158,7 +158,6 @@ export default function BusinessDetailsCard() {
 
 const styles = {
   cardContainer: {
-    border: "1px solid #dae0e7",
     borderRadius: "10px",
   },
   AddButton: {

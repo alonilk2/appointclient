@@ -10,10 +10,11 @@ import ListItemText from "@mui/material/ListItemText";
 import ListSubheader from "@mui/material/ListSubheader";
 import { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { API_UPLOADS_URL, FRONT_BASE_URL } from "../../../constants";
+import { FRONT_BASE_URL } from "../../../constants";
 import { selectTab } from "../../../features/dashboardSlice";
+import NoImage from "../../../images/noimage.png";
 import UserContext from "../UserContext";
-import NoImage from '../../../images/noimage.png'
+import BarChartIcon from '@mui/icons-material/BarChart';
 
 export default function SideMenu() {
   const dispatch = useDispatch();
@@ -69,6 +70,19 @@ export default function SideMenu() {
           <ListIcon />
         </ListItemIcon>
         <ListItemText primary="ניהול שירותים" />
+      </ListItemButton>
+
+      <ListSubheader component="div" id="nested-list-subheader">
+        מידע
+      </ListSubheader>
+      <ListItemButton
+        selected={selectedTab === 4}
+        onClick={(event) => handleListItemClick(event, 4)}
+      >
+        <ListItemIcon>
+          <BarChartIcon />
+        </ListItemIcon>
+        <ListItemText primary="סטטיסטיקות" />
       </ListItemButton>
     </>
   );

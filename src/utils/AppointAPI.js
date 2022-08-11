@@ -26,6 +26,42 @@ export async function fetchAppointmentsByDate(day, businessId) {
   return response?.data;
 }
 
+export async function fetchAppointmentsByMonth(day, businessId) {
+  if (!localStorage.getItem(ACCESS_TOKEN)) {
+    return Promise.reject("No access token set.");
+  }
+  let response = await Axios.get(API_BASE_URL + "/appoint/month/" + day + "/" + businessId, {
+  headers: {
+      Authorization: "Bearer " + localStorage.getItem(ACCESS_TOKEN),
+    },
+  });
+  return response?.data;
+}
+
+export async function fetchAppointmentsByService(day, businessId) {
+  if (!localStorage.getItem(ACCESS_TOKEN)) {
+    return Promise.reject("No access token set.");
+  }
+  let response = await Axios.get(API_BASE_URL + "/appoint/services/" + day + "/" + businessId, {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem(ACCESS_TOKEN),
+    },
+  });
+  return response?.data;
+}
+
+export async function fetchAppointmentsByServiceProviders(day, businessId) {
+  if (!localStorage.getItem(ACCESS_TOKEN)) {
+    return Promise.reject("No access token set.");
+  }
+  let response = await Axios.get(API_BASE_URL + "/appoint/serviceProviders/" + day + "/" + businessId, {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem(ACCESS_TOKEN),
+    },
+  });
+  return response?.data;
+}
+
 export async function addAppointment(appointment) {
   if (!localStorage.getItem(ACCESS_TOKEN)) {
     return Promise.reject("No access token set.");

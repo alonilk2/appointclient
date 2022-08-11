@@ -36,12 +36,10 @@ export default function WorkdaysCard(props) {
     });
 
     let tempUser = { ...user.user };
-    console.log(props?.business?.gallery)
     let businessObj = {
       ...props?.business,
       workdays: workdays,
     };
-    console.log(businessObj)
     tempUser.business = businessObj;
     let response = await user.update(tempUser);
     if (response?.type?.endsWith("fulfilled")) {
@@ -70,6 +68,7 @@ export default function WorkdaysCard(props) {
 
   useEffect(() => {
     findFirstDayAvailable();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workdaysArr, setFirstDayAvailable]);
 
   return (
@@ -121,7 +120,6 @@ export default function WorkdaysCard(props) {
 
 const styles = {
   cardContainer: {
-    border: "1px solid #dae0e7",
     borderRadius: "10px",
   },
   AddButton: {

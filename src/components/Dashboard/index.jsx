@@ -15,6 +15,7 @@ import logo from "../../images/logo.png";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { useState, useMemo, createContext } from "react";
+import Statistics from "./Statistics";
 
 export const ColorModeContext = createContext({ toggleColorMode: () => {}, mode: "" });
 
@@ -72,6 +73,7 @@ export default function Dashboard() {
                       <BusinessDetailsManagement />
                     ))}
                   {selectedTab === 3 && <LandingPageManagement />}
+                  {selectedTab === 4 && <Statistics />}
                 </div>
               </main>
               <SideMenu />
