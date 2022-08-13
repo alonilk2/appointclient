@@ -2,37 +2,39 @@ import shield from "../../images/shield.png";
 import point from "../../images/point.png";
 import user from "../../images/user.png";
 
-const DescriptionCard = (props) => {
-  return (
-    <div className="description-card">
-      <img alt="icon" src={props.image}></img>
-      <p>
-        `Nullam non pulvinar nisl. <br />
-        Fusce nec metus a ipsum consequat lobortis. <br />
-        Curabitur efficitur bibendum magna et consectetur.`
-      </p>
-    </div>
-  );
-};
-
 export const AboutUsSection = () => {
   return (
     <section className="about-us-container">
       <div className="description">
         <h2 className="title">מי אנחנו</h2>
         <p>
-          Nullam non pulvinar nisl. Fusce nec metus a ipsum consequat lobortis.
-          <br />
-          Curabitur efficitur bibendum magna et consectetur. Praesent nec
-          <br />
-          pellentesque urna, ac porttitor leo. Vestibulum ultrices semper leo a
-          ultricies.
+          Torgate היא מערכת לניהול תורים עבור עסקים קטנים ובינוניים. <br />
+          המערכת שלנו הינה המתקדמת מסוגה בישראל, ומאפשרת ניהול תורים אוטומטי,
+          ללא רישומים ומעקבים ידניים, <br />
+          למספר רב של עובדים בנוחות ובקלות, ומציעה לבעלי העסקים דף נחיתה מותאם
+          אישית דרכו לקוחות העסק יוכלו לזמן את התורים שלהם.
         </p>
       </div>
       <div className="icons-row">
-        <DescriptionCard image={shield} />
-        <DescriptionCard image={point} />
-        <DescriptionCard image={user} />
+        <div className="description-card">
+          <img alt="icon" src={shield}></img>
+          <p>
+            עם 99.9% זמינות, את\ה יכול לסמוך עלינו לניהול רציף של התורים - ללא
+            שיבושים
+          </p>
+        </div>
+        <div className="description-card">
+          <img alt="icon" src={point}></img>
+          <p>
+            פאנל ניהול מתקדם מאפשר גמישות יוצאת דופן ומגוון רחב של אפשרויות התאמה אישית, שליטה ובקרה
+          </p>
+        </div>
+        <div className="description-card">
+          <img alt="icon" src={user}></img>
+          <p>
+            שירות לקוחות אנושי הדואג להבטיח שלקוחותיכם תמיד יוכלו למצוא אתכם
+          </p>
+        </div>
       </div>
     </section>
   );

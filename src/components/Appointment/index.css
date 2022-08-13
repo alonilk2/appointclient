@@ -17,6 +17,10 @@
   font-size: 18px;
 }
 
+.subtitle-column p {
+  margin-bottom: 0;
+}
+
 .image-container img, .image-container button, .image-container h1 {
   z-index: 1;
 }
@@ -57,6 +61,7 @@
   color: white;
   position: relative;
   min-height: 65vh;
+  width: 101%;
 }
 .details-box {
   width: 22%;
@@ -87,10 +92,12 @@
   border: 0px;
   border-radius: 50px;
   padding: 0.5% 1%;
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 300;
   margin: 1%;
   background-color: #f25f5c;
+  color: white;
+  font-weight: 400;
 }
 
 .gallery {

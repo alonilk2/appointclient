@@ -67,10 +67,10 @@ export default function Dashboard() {
                   {selectedTab === 0 && <ServiceProvidersManagement />}
                   {selectedTab === 1 && <ServicesManagement />}
                   {selectedTab === 2 &&
-                    (user.user?.serviceProvider ? (
-                      <ServiceProviderView />
-                    ) : (
+                    (!user.user?.serviceProvider ? (
                       <BusinessDetailsManagement />
+                    ) : (
+                      <ServiceProviderView  />
                     ))}
                   {selectedTab === 3 && <LandingPageManagement />}
                   {selectedTab === 4 && <Statistics />}

@@ -93,6 +93,7 @@ export default function Statistics() {
             />
           )}
         </StatisticsCard>
+
         <StatisticsCard title={`סה"כ מפגשים החודש לפי נותני שירות`}>
           {serviceProvidersCount && (
             <Chart
@@ -103,6 +104,7 @@ export default function Statistics() {
             />
           )}
         </StatisticsCard>
+
       </div>
     </div>
   );

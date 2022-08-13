@@ -50,12 +50,10 @@ export default function ServiceProviderView() {
           </Typography>
           <ShowChartIcon sx={styles.monthIcon} />
         </div>
-        <div className="formcontainer" style={styles.formcontainer}>
+        <div className="formcontainer upcoming" style={styles.formcontainer}>
           <UpcomingAppointmentsCard />
         </div>
-        <div className="formcontainer" style={styles.formcontainer}>
-          <UpcomingAppointmentsCard />
-        </div>
+
       </div>
     </div>
   );

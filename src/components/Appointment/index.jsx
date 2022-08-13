@@ -34,6 +34,7 @@ export default function Appointment(props) {
           })`,
           backgroundSize: "cover",
           backgroundPositionY: "50%",
+          backgroundPositionX: "1px"
         }}
       >
         <div className="darken-home" />
@@ -48,7 +49,7 @@ export default function Appointment(props) {
           style={{ backgroundColor: business?.pageColor }}
           onClick={handleClickAppoint}
         >
-          קביעת תור
+          זימון תור
         </button>
         <div className="details-box">
           <div className="details-row">

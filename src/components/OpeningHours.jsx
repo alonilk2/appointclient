@@ -17,7 +17,8 @@ export function OpeningHours(arr, color) {
   let sortedArr = sortWorkdaysArray(arr)
   return (
     <div className="open-times">
-      <div className="day-column" style={{ justifyContent: "center" }}>
+      <div className="day-column" style={{ justifyContent: "flex-end" }}>
+        <br />
         <p>שעת פתיחה</p>
         <p>שעת סגירה</p>
       </div>
