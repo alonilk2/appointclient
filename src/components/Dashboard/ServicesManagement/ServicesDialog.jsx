@@ -7,11 +7,12 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  DialogContentText,
   Divider,
   TextField,
   Typography,
 } from "@mui/material";
-
+import Spinner from "../../../images/spinner.svg";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import UserContext from "../UserContext";
@@ -22,7 +23,7 @@ export default function ServicesDialog(props) {
   const [error, setError] = useState(false);
   const [duration, setDuration] = useState(0);
   const [file, setFile] = useState(props?.serviceForEdit?.file);
-
+  const [loading, setLoading] = useState(false);
   const user = useContext(UserContext);
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -70,7 +71,7 @@ export default function ServicesDialog(props) {
       business: user?.business,
       duration: duration,
     };
-
+    setLoading(true);
     let response;
     if (props.serviceForEdit) response = await props.update(newService);
     else response = await props?.add(newService);
@@ -80,6 +81,7 @@ export default function ServicesDialog(props) {
       response?.type === "dashboard/updateServices/fulfilled"
     ) {
       toggleDialog();
+      setLoading(false);
       props?.refresh();
     }
   };
@@ -103,6 +105,9 @@ export default function ServicesDialog(props) {
   return (
     <Dialog open={props.open} sx={styles.dialogContainer}>
       <DialogTitle>הוסף שירות</DialogTitle>
+      <DialogContentText sx={{padding: '6px 24px'}}>
+        על מנת להוסיף שירות חדש, יש להזין את שם השירות, מחיר השירות (בשקלים), אורך הפגישה (בדקות), ותמונה לבחירתך אשר מתארת את השירות.
+      </DialogContentText>
       <DialogContent>
         {error && <Alert severity="error">יש למלא את כל השדות!</Alert>}
         <TextField
@@ -126,7 +131,7 @@ export default function ServicesDialog(props) {
           onChange={(e) => setCost(e.target.value)}
           fullWidth
         />
-        <Typography variant="subtitle2" component="div">
+        <Typography variant="subtitle2" component="div" sx={{direction: 'rtl'}}>
           :אורך הפגישה (בדקות)
         </Typography>
         <div
@@ -156,6 +161,7 @@ export default function ServicesDialog(props) {
         )}
       </DialogContent>
       <DialogActions>
+        {loading && <img src={Spinner} width={50} alt=""></img>}
         <Button variant="text" onClick={handleClose}>
           ביטול
         </Button>
@@ -169,7 +175,7 @@ export default function ServicesDialog(props) {
 
 const styles = {
   dialogContainer: {
-    direction: "rtl",
+    direction: "ltr",
   },
   textField: {
     margin: "2% 0",

@@ -1,5 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import EnhancedEncryptionIcon from "@mui/icons-material/EnhancedEncryption";
 import {
   Alert,
   Button,
@@ -9,24 +9,23 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
-  Fab,
+  AlertTitle,
   FormControlLabel,
   Stack,
   TextField,
   Typography,
+  Box,
+  DialogContentText,
 } from "@mui/material";
-import Box from "@mui/material/Box";
-import DialogContentText from "@mui/material/DialogContentText";
 import { useCallback, useContext, useEffect, useState, useMemo } from "react";
 import { useDropzone } from "react-dropzone";
 import { useDispatch } from "react-redux";
 import { validEmail } from "../../../../common/Regex";
-import { API_UPLOADS_URL } from "../../../../constants";
 import {
   _createProviderUser,
-  _signup,
   _updateUser,
 } from "../../../../features/userSlice";
+import Spinner from "../../../../images/spinner.svg";
 import useServices from "../../../../hooks/Dashboard/useServices";
 import AddWorkdaysDialog from "../../AddWorkdayDialog/AddWorkdaysDialog";
 import UserContext from "../../UserContext";
@@ -47,6 +46,7 @@ export default function AddServiceProviderDialog(props) {
   const [password, setPassword] = useState(
     Math.random().toString(36).slice(-8)
   );
+  const [loading, setLoading] = useState(false);
   const user = useContext(UserContext);
   const services = useServices(user);
   const dispatch = useDispatch();
@@ -67,11 +67,11 @@ export default function AddServiceProviderDialog(props) {
     props.toggle(!props.open);
   };
 
-  useEffect(()=>{
-    setActiveStep(0)
-    setFile([])
-    setPassword(Math.random().toString(36).slice(-8))
-  },[props?.open])
+  useEffect(() => {
+    setActiveStep(0);
+    setFile([]);
+    setPassword(Math.random().toString(36).slice(-8));
+  }, [props?.open]);
 
   const handleNext = () => {
     if (
@@ -116,6 +116,7 @@ export default function AddServiceProviderDialog(props) {
       email: email,
       password: password,
     };
+    setLoading(true);
 
     let existingUser = await user.findUserByEmail(email);
     let response;
@@ -155,14 +156,18 @@ export default function AddServiceProviderDialog(props) {
       else response = await props?.providers.add(newProvider);
       userResponse.serviceProvider = response.payload;
       userResponse = { ...userResponse, ...newUser, business: user?.business };
-      console.log(userResponse)
+      console.log(userResponse);
       response = await dispatch(_updateUser(userResponse));
 
       if (response.type.endsWith("fulfilled")) {
         toggleDialog();
         user?.refresh();
+        setLoading(false);
       }
-    } else return setError(response.error.message);
+    } else {
+      setLoading(false);
+      return setError(response.error.message);
+    }
   };
 
   const Dropzone = (
@@ -212,24 +217,30 @@ export default function AddServiceProviderDialog(props) {
     findFirstDayAvailable();
   }, [workdaysArr, setFirstDayAvailable]);
 
-  const ServicesCheckboxes = useMemo(
-    () =>
-      services?.list?.map((service) => {
-        return (
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={chosenServices.some((_ser) => _ser.id === service.id)}
-                onChange={(e) => handleCheck(e, service)}
-              />
-            }
-            label={service?.name}
-            sx={{ margin: "1%" }}
-          />
-        );
-      }),
-    [chosenServices]
-  );
+  const ServicesCheckboxes = useMemo(() => {
+    let _services = services?.list?.map((service) => {
+      return (
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={chosenServices.some((_ser) => _ser.id === service.id)}
+              onChange={(e) => handleCheck(e, service)}
+            />
+          }
+          label={service?.name}
+          sx={{ margin: "1%" }}
+        />
+      );
+    });
+    if (_services.length > 0) return services;
+    return (
+      <Alert severity="warning" sx={styles.alert}>
+        <AlertTitle>תחומי שירות לא הוגדרו</AlertTitle>
+        יש להגדיר תחומי שירות שניתנים בבית העסק תחת הלשונית —{" "}
+        <strong>"ניהול שירותים"</strong>
+      </Alert>
+    );
+  }, [chosenServices]);
 
   const DetailsForm = (
     <>
@@ -394,9 +405,12 @@ export default function AddServiceProviderDialog(props) {
             המשך
           </Button>
         ) : (
-          <Button variant="contained" onClick={handleAdd}>
-            הוספה
-          </Button>
+          <>
+            {loading && <img src={Spinner} width={50} alt=""></img>}
+            <Button variant="contained" onClick={handleAdd}>
+              הוספה
+            </Button>
+          </>
         )}
         <Box sx={{ flex: "1 1 auto" }} />
         <Button variant="text" onClick={handleClose}>
@@ -417,6 +431,7 @@ const styles = {
     direction: "rtl",
     minWidth: "500px",
   },
+  alert: { margin: "2%", direction: "ltr" },
   textField: {
     margin: "2% 0",
     border: "0px",

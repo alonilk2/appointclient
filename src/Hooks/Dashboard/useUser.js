@@ -1,5 +1,4 @@
 import { useSelector, useDispatch } from "react-redux";
-
 import {
   _removeUser,
   _updateUser,
@@ -8,12 +7,10 @@ import {
 import { uploadFile } from "../../utils/FilesAPI";
 import { _getCurrentUser } from "../../features/userSlice";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 export default function useUser() {
   const user = useSelector((state) => state.user?.user);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const updateUser = async (_user) => {
     try {
@@ -58,8 +55,8 @@ export default function useUser() {
     return response.payload;
   };
 
-  const fetchUserInstance = async () => {
-    let response = await dispatch(_getCurrentUser());
+  const fetchUserInstance = () => {
+    dispatch(_getCurrentUser());
   };
 
   useEffect(() => {

@@ -10,13 +10,11 @@ import {
 } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { HuePicker } from "react-color";
-
 import headerbg from "../../../images/home-header-background.png";
 import NoImage from "../../../images/noimage.png";
 import { OpeningHours } from "../../OpeningHours";
 import ImageUploadDialog from "./ImageUploadDialog";
 import "./index.css";
-
 import { ColorModeContext } from "..";
 import UserContext from "../UserContext";
 
@@ -153,9 +151,7 @@ export default function LandingPageManagement() {
                       ? user?.business?.gallery[0]
                       : NoImage
                   })`,
-                  minHeight: "200px",
-                  minWidth: "200px",
-                  backgroundSize: "cover",
+                  ...styles.galleryImage
                 }}
                 onClick={() => handleImageChange(0)}
               >
@@ -178,9 +174,7 @@ export default function LandingPageManagement() {
                       ? user?.business?.gallery[1]
                       : NoImage
                   })`,
-                  minHeight: "200px",
-                  minWidth: "200px",
-                  backgroundSize: "cover",
+                  ...styles.galleryImage
                 }}
                 onClick={() => handleImageChange(1)}
               >
@@ -203,9 +197,7 @@ export default function LandingPageManagement() {
                       ? user?.business?.gallery[2]
                       : NoImage
                   })`,
-                  minHeight: "200px",
-                  minWidth: "200px",
-                  backgroundSize: "cover",
+                  ...styles.galleryImage
                 }}
                 onClick={() => handleImageChange(2)}
               >
@@ -234,4 +226,11 @@ const styles = {
     border: "1px solid #dae0e7",
     borderRadius: "10px",
   },
+  galleryImage: {
+    minHeight: "150px",
+    backgroundSize: "200px",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center",
+    width: '100%',
+  }
 };

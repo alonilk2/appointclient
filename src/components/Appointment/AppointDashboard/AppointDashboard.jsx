@@ -2,17 +2,17 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import DeleteIcon from "@mui/icons-material/EventBusy";
 import { Avatar, Divider } from "@mui/material";
 import Button from "@mui/material/Button";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import Slide from "react-reveal/Slide";
 import { useNavigate, useParams } from "react-router-dom";
-import { API_UPLOADS_URL } from "../../../constants";
 import { _removeAppointment } from "../../../features/appointSlice";
 import useBusiness from "../../../hooks/useBusiness";
 import useCustomer from "../../../hooks/useCustomer";
 import Breadcrumb from "../../Breadcrumb";
 import "./AppointDashboard.css";
+import randomColor from "random-material-color";
 
 export default function AppointDashboard(props) {
   const [showProviders, setShowProviders] = useState(false);
@@ -41,29 +41,46 @@ export default function AppointDashboard(props) {
     });
     return filteredProviders;
   };
-  
-  const handleCancelAppointment = async(appointment) => {
-    let response =await dispatch(_removeAppointment(appointment?.id));
-    if(response?.type?.endsWith('fulfilled')){
-      refresh()
+
+  const handleCancelAppointment = async (appointment) => {
+    let response = await dispatch(_removeAppointment(appointment?.id));
+    if (response?.type?.endsWith("fulfilled")) {
+      refresh();
     }
   };
 
-  const Services = business?.services?.map((service, idx) => {
-    return (
-      <Slide big left>
-        <div className="service-col" onClick={() => handleClick(idx + 1)}>
-          <img
-            className="service-img"
-            src={service?.img}
-            alt="service"
-          ></img>
-          <div className="darken"></div>
-          <p className="service-name">{service?.name}</p>
-        </div>
-      </Slide>
-    );
-  });
+  const Services = useMemo(
+    () =>
+      business?.services?.map((service, idx) => {
+        return (
+          <Slide big left>
+            <div
+              className="service-col"
+              style={
+                idx !== business.services.length - 1
+                  ? {
+                      borderLeft: "3px solid white",
+                      backgroundColor: randomColor.getColor()
+                    }
+                  : { backgroundColor: randomColor.getColor() }
+              }
+              onClick={() => handleClick(idx + 1)}
+            >
+              {service?.img && (
+                <img
+                  className="service-img"
+                  src={service?.img}
+                  alt="service"
+                ></img>
+              )}
+              <div className="darken"></div>
+              <p className="service-name">{service?.name}</p>
+            </div>
+          </Slide>
+        );
+      }),
+    [business?.services]
+  );
 
   const handleProviderClick = (provider) => {
     navigate("../schedule", {
@@ -100,20 +117,22 @@ export default function AppointDashboard(props) {
       );
     });
     return providers;
-  }, [FilterProvidersByService])
+  }, [FilterProvidersByService]);
 
-  useEffect(()=> {
-    refresh()
-  }, [businessId])
+  useEffect(() => {
+    refresh();
+  }, [businessId]);
 
   const upcomingAppointments = useCallback(() => {
     let delay = 0;
-    let filteredAppointments = customer?.appointments?.filter(app => app?.service?.business?.id == businessId)
+    let filteredAppointments = customer?.appointments?.filter(
+      (app) => app?.service?.business?.id == businessId
+    );
     const appointments = filteredAppointments?.map((appointment, idx) => {
       delay += 200;
       let endHour = appointment.end_hour.split(" ")[0].split(":");
       let startHour = appointment.start_hour.split(" ")[0].split(":");
-      let provider = appointment?.serviceProvider
+      let provider = appointment?.serviceProvider;
       return (
         <Slide right big delay={delay} duration={900}>
           <div
@@ -138,9 +157,7 @@ export default function AppointDashboard(props) {
               <ArrowForwardIcon sx={{ fontSize: "16px" }} />
               {startHour[0] + ":" + startHour[1]}
             </p>
-            <p className="appointment-text">
-              ל:{appointment.service.name}
-            </p>
+            <p className="appointment-text">ל:{appointment.service.name}</p>
             <Button
               size="small"
               variant="outlined"
@@ -159,7 +176,7 @@ export default function AppointDashboard(props) {
 
   return (
     <div className="appoint-dashboard-container">
-      <div className="form-container">
+      <div className="form-container" style={{ width: "100%" }}>
         <Breadcrumb
           pageArr={[
             {
@@ -173,13 +190,17 @@ export default function AppointDashboard(props) {
           sx={{ position: "absolute", top: "3%", left: "3%" }}
         />
         <div className="col introduction">
+          <img src={business?.img} alt="company logo" width={100} />
+          <h5>{business?.name}</h5>
           <h2> ברוך\ה הבא\ה {customer?.firstname}</h2>
           <p>
-            ברוכים הבאים לפאנל ניהול התורים. כאן תוכלו לצפות בתורים שלכם, לבטל
-            תורים במידת הצורך, ולהזמין תורים חדשים. על מנת לקבוע תור חדש, יש
-            לבחור בשירות המבוקש בצד שמאל, ולאחר מכן בנותן השירות.
+            ברוכים הבאים לפאנל ניהול התורים.
+            <br /> כאן תוכלו לצפות בתורים שלכם, לבטל תורים במידת הצורך, ולהזמין
+            תורים חדשים.
+            <br /> על מנת לקבוע תור חדש, יש לבחור בשירות המבוקש בצד שמאל, ולאחר
+            מכן בנותן השירות.
           </p>
-          <div className="upcoming">
+          <div className="upcoming-meetings">
             <h4>תורים קרובים:</h4>
             <div className="upcoming-row">{upcomingAppointments()}</div>
           </div>

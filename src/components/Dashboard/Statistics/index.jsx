@@ -3,6 +3,7 @@ import ShowChartIcon from "@mui/icons-material/ShowChart";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import { Typography } from "@mui/material";
 import { useContext, useEffect } from "react";
+import Chart from "react-apexcharts";
 import { useDispatch, useSelector } from "react-redux";
 import { ColorModeContext } from "..";
 import {
@@ -13,8 +14,8 @@ import {
 } from "../../../features/appointSlice";
 import { _fetchTotalMonthlyIncome } from "../../../features/businessSlice";
 import UserContext from "../UserContext";
-import Chart from "react-apexcharts";
 import StatisticsCard from "./Card";
+import QueryStatsIcon from "@mui/icons-material/QueryStats";
 
 export default function Statistics() {
   const colorMode = useContext(ColorModeContext);
@@ -28,19 +29,20 @@ export default function Statistics() {
     (state) => state.business.totalMonthlyIncome
   );
   const servicesCount = useSelector((state) => state.appoint?.servicesCount);
-  const serviceProvidersCount = useSelector((state) => state.appoint?.serviceProvidersCounts);
+  const serviceProvidersCount = useSelector(
+    (state) => state.appoint?.serviceProvidersCounts
+  );
 
   useEffect(() => {
-    if (user) {
+    if (user?.business) {
       dispatch(_fetchAppointmentsByDay(user?.business?.id));
       dispatch(_fetchAppointmentsByMonth(user?.business?.id));
       dispatch(_fetchTotalMonthlyIncome(user?.business?.id));
       dispatch(_fetchAppointmentsByServices(user?.business?.id));
       dispatch(_fetchAppointmentsByServiceProviders(user?.business?.id));
     }
-  }, [user]);
+  }, [user?.business]);
 
-  console.log(servicesCount && Object.values(servicesCount));
   return (
     <div className="business-details-container">
       <div
@@ -84,27 +86,36 @@ export default function Statistics() {
         </div>
 
         <StatisticsCard title={`סה"כ מפגשים החודש לפי שירותים`}>
-          {servicesCount && (
+          {servicesCount?.length > 0 ? (
             <Chart
               options={{ labels: Object.keys(servicesCount) }}
               series={Object.values(servicesCount)}
               type="pie"
               width="400"
             />
+          ) : (
+            <div className="missing-stats">
+              <QueryStatsIcon sx={styles.statsIcon} />
+              <p style={styles.noStats}>אין סטטיסטיקה זמינה</p>
+            </div>
           )}
         </StatisticsCard>
 
         <StatisticsCard title={`סה"כ מפגשים החודש לפי נותני שירות`}>
-          {serviceProvidersCount && (
+          {serviceProvidersCount?.length > 0 ? (
             <Chart
               options={{ labels: Object.keys(serviceProvidersCount) }}
               series={Object.values(serviceProvidersCount)}
               type="donut"
               width="400"
             />
+          ) : (
+            <div className="missing-stats">
+              <QueryStatsIcon sx={styles.statsIcon} />
+              <p style={styles.noStats}>אין סטטיסטיקה זמינה</p>
+            </div>
           )}
         </StatisticsCard>
-
       </div>
     </div>
   );
@@ -115,6 +126,13 @@ const styles = {
     width: "48%",
     padding: 0,
     height: "80%",
+  },
+  noStats: {
+    fontSize: "32px",
+    fontWeight: "600",
+  },
+  statsIcon: {
+    fontSize: "120px",
   },
   widgetNumber: {
     fontWeight: "500",

@@ -20,7 +20,7 @@ export default function ServicesManagement(props) {
   const handleRemove = (params) => {
     return async () => {
       let response = await services?.remove(params?.value?.id);
-      if (response?.type == "dashboard/removeServices/fulfilled") {
+      if (response?.type.endsWith('fulfilled')) {
         services.refresh();
       }
     };

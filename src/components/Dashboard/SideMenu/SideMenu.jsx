@@ -54,15 +54,6 @@ export default function SideMenu() {
         שירותים ומוצרים
       </ListSubheader>
       <ListItemButton
-        selected={selectedTab === 0}
-        onClick={(event) => handleListItemClick(event, 0)}
-      >
-        <ListItemIcon>
-          <PeopleIcon />
-        </ListItemIcon>
-        <ListItemText primary="ניהול נותני שירות" />
-      </ListItemButton>
-      <ListItemButton
         selected={selectedTab === 1}
         onClick={(event) => handleListItemClick(event, 1)}
       >
@@ -70,6 +61,15 @@ export default function SideMenu() {
           <ListIcon />
         </ListItemIcon>
         <ListItemText primary="ניהול שירותים" />
+      </ListItemButton>
+      <ListItemButton
+        selected={selectedTab === 0}
+        onClick={(event) => handleListItemClick(event, 0)}
+      >
+        <ListItemIcon>
+          <PeopleIcon />
+        </ListItemIcon>
+        <ListItemText primary="ניהול נותני שירות" />
       </ListItemButton>
 
       <ListSubheader component="div" id="nested-list-subheader">

@@ -15,7 +15,7 @@ import { _fetchTotalMonthlyIncome } from "../../../features/businessSlice";
 import { ColorModeContext } from "..";
 
 export default function BusinessProfileManagement() {
-  const [open, setOpen] = useState();
+  const [open, setOpen] = useState(false);
   const colorMode = useContext(ColorModeContext)
   const user = useContext(UserContext);
   const dispatch = useDispatch();
@@ -24,12 +24,12 @@ export default function BusinessProfileManagement() {
   const totalMonthlyIncome = useSelector(state => state.business.totalMonthlyIncome)
 
   useEffect(() => {
-    if(user){
+    if(user.business){
       dispatch(_fetchAppointmentsByDay(user?.business?.id))
       dispatch(_fetchAppointmentsByMonth(user?.business?.id))
       dispatch(_fetchTotalMonthlyIncome(user?.business?.id))
     }
-  }, [user])
+  }, [user.business])
 
   return (
     <div className="business-details-container">

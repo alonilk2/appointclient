@@ -9,14 +9,13 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useCallback, useContext, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import UserContext from "../../UserContext";
-import { uploadFile } from "../../../../utils/FilesAPI";
-import Spinner from '../../../../images/spinner.svg'
+import Spinner from "../../../../images/spinner.svg";
 
 export default function ImageUploadDialog(props) {
   const [file, setFile] = useState([]);
   const [error, setError] = useState(false);
   const { user, update, refresh } = useContext(UserContext);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   let element = props?.element;
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -54,10 +53,10 @@ export default function ImageUploadDialog(props) {
       ...tempUser.business,
       headerImg: element === null ? file : tempUser.business?.headerImg,
       element: element,
-      newfile: element !== null ? file : null
+      newfile: element !== null ? file : null,
     };
     try {
-      setLoading(true)
+      setLoading(true);
       let response = await update(tempUser);
       if (response?.type?.endsWith("fulfilled")) {
         refresh();
@@ -72,7 +71,9 @@ export default function ImageUploadDialog(props) {
   return (
     <Dialog open={props.open} onClose={handleClose} sx={styles.container}>
       {error && <Alert severity="error">אירעה שגיאה</Alert>}
-      <DialogTitle>החלפת רקע לראש העמוד</DialogTitle>
+      <DialogTitle>
+        {element !== null ? "החלפת תמונת גלריה" : "החלפת רקע לראש העמוד"}
+      </DialogTitle>
       <DialogContent>
         <DialogContentText>
           ניתן לגרור קובץ תמונה ולהניח בתוך המסגרת, או לחילופין ללחוץ במסגרת

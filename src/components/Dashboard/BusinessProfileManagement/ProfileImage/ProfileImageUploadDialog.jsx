@@ -22,7 +22,7 @@ export default function ProfileImageUploadDialog(props) {
 
   const toggleDialog = () => props.toggle(!props.open);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   const handleClose = () => {
     toggleDialog();

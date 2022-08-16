@@ -35,12 +35,12 @@ export default function CustomerRegistration() {
 
     let response = await dispatch(_addCustomer(obj));
 
-    if (response.type == "customer/addCustomer/fulfilled") {
+    if (response.type.endsWith(`fulfilled`)) {
       dispatch(initCustomer(response.payload));
       navigate("/appoint/" + businessId + "/dashboard", {
         state: { response },
       });
-    } else if (response.type == "customer/addCustomer/rejected") {
+    } else if (response.type.endsWith(`rejected`)) {
       setError(response.error.message);
     }
   };
@@ -56,7 +56,7 @@ export default function CustomerRegistration() {
             <strong>check credentials and try again</strong>
           </Alert>
         )}
-        <img src={API_UPLOADS_URL + business?.img} alt="" width={100} />
+        <img src={business?.img} alt="" width={100} />
 
         <h1>פעם ראשונה שלך אצלנו?</h1>
 

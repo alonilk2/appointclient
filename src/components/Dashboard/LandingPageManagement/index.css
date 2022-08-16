@@ -25,6 +25,7 @@
   flex-direction: row;
   width: 100%;
   max-height: 50%;
+  min-height: 300px;
 }
 .gallery-column {
   flex:3;
@@ -165,6 +166,15 @@ lottie-player {
   height: 85%;
   flex: 1;
 }
+
+.header-background h1 {
+  font-weight: 600;
+  color: white;
+}
+.header-background button {
+  font-weight: 600;
+  color: white;
+}
 .MuiCardHeader-title {
   font-size: 18px !important;
   text-align: right;
@@ -200,8 +210,5 @@ lottie-player {
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-evenly;
-
-}
-.gallery img {
-  
+  height: 100%;
 }
