@@ -95,7 +95,7 @@ function SigninComponent(props) {
           <input type="checkbox"></input>
           זכור סיסמה
         </a>
-        <a id="forgot" style={{ justifyContent: "flex-end" }} href="/forgot">
+        <a id="forgot" style={{ justifyContent: "flex-end" }} href="/authorization/recovery">
           שכחת סיסמה?
         </a>
       </div>

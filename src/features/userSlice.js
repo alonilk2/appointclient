@@ -10,6 +10,7 @@ import {
   createProviderUser,
   recovery,
   findRecoveryToken,
+  changePassword,
 } from "../utils/AuthAPI";
 
 const sortWorkdaysArray = (arr) => {
@@ -39,7 +40,7 @@ export const _confirmEmail = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.log(error);
-      if (error != "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+      if (error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
     }
   }
 );
@@ -51,7 +52,7 @@ export const _login = createAsyncThunk(
       const response = await login(loginRequest);
       return response;
     } catch (error) {
-      if (error != "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+      if (error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
     }
   }
 );
@@ -63,7 +64,19 @@ export const _recovery = createAsyncThunk(
       const response = await recovery(recoveryRequest);
       return response;
     } catch (error) {
-      if (error != "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+      if (error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
+export const _changePassword = createAsyncThunk(
+  "user/recovery/changePassword",
+  async (recoveryRequest, thunkAPI) => {
+    try {
+      const response = await changePassword(recoveryRequest);
+      return response;
+    } catch (error) {
+      if (error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
     }
   }
 );
@@ -76,7 +89,7 @@ export const _signup = createAsyncThunk(
       return response;
     } catch (error) {
       console.log(error);
-      if (error != "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+      if (error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
     }
   }
 );
@@ -88,7 +101,7 @@ export const _createProviderUser = createAsyncThunk(
       const response = await createProviderUser(signupRequest);
       return response;
     } catch (error) {
-      if (error != "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+      if (error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
     }
   }
 );
@@ -105,7 +118,7 @@ export const _updateUser = createAsyncThunk(
       return response;
     } catch (error) {
       console.log(error)
-      if (error != "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+      if (error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
     }
   }
 );
@@ -117,7 +130,7 @@ export const _removeUser = createAsyncThunk(
       const response = await removeUser(user);
       return response;
     } catch (error) {
-      if (error != "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+      if (error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
     }
   }
 );
@@ -129,7 +142,7 @@ export const _findUserByEmail = createAsyncThunk(
       const response = await findUserByEmail(user);
       return response;
     } catch (error) {
-      if (error != "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+      if (error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
     }
   }
 );
@@ -141,7 +154,7 @@ export const _findRecoveryToken = createAsyncThunk(
       const response = await findRecoveryToken(token);
       return response;
     } catch (error) {
-      if (error != "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+      if (error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
     }
   }
 )
@@ -158,7 +171,7 @@ export const _getCurrentUser = createAsyncThunk(
       return response;
     } catch (error) {
       console.log(error)
-      if (error != "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+      if (error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
     }
   }
 );

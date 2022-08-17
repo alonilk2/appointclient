@@ -28,7 +28,6 @@ export default function useServiceProviders() {
       provider.business = tempBus
       tempUser.business = tempBus
       provider.user = tempUser;
-      console.log(provider)
       let response = await dispatch(_addServiceProvider(provider));
       return response;
     } catch (e) {

@@ -45,6 +45,22 @@ export function login(loginRequest) {
   });
 }
 
+export function recovery(recoveryRequest) {
+  return request({
+    url: API_BASE_URL + "/auth/recovery/",
+    method: "POST",
+    body: JSON.stringify(recoveryRequest),
+  });
+}
+
+export function changePassword(recoveryRequest) {
+  return request({
+    url: API_BASE_URL + "/auth/recovery/",
+    method: "PUT",
+    body: JSON.stringify(recoveryRequest),
+  });
+}
+
 export function signup(signupRequest) {
   return request({
     url: API_BASE_URL + "/auth/signup",
@@ -106,4 +122,16 @@ export function findUserByEmail(email) {
     console.log(ErrorOutlined);
   }
 }
+
+export function findRecoveryToken(token) {
+  try {
+    return request({
+      url: API_BASE_URL + "/auth/recovery/"+token,
+      method: "GET",
+    });
+  } catch (err) {
+    console.log(ErrorOutlined);
+  }
+}
+
 

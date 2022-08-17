@@ -3,7 +3,7 @@ import { CacheProvider } from "@emotion/react";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { prefixer } from "stylis";
 import rtlPlugin from "stylis-plugin-rtl";
 import App from "./App";
@@ -15,11 +15,12 @@ import PhoneRegistration from "./components/Appointment/Authentication/PhoneRegi
 import Dashboard from "./components/Dashboard";
 import Firebase, { FirebaseContext } from "./components/Firebase";
 import OAuth2RedirectHandler from "./components/Oauth2/OAuth2RedirectHandler";
-import useAuth from "./hooks/useAuth";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { store } from "./store";
 import Email from "./views/EmailConfirm";
+import RecoveryView from "./views/Recovery";
+import RecoveryTokenValidationView from "./views/RecoveryTokenValidation";
 import Signin from "./views/Signin";
 import Signup from "./views/Signup";
 
@@ -35,7 +36,6 @@ function RTL(props) {
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const CustomRoutes = () => {
-  const loggedIn = useAuth();
   return (
     <BrowserRouter>
       <Routes>
@@ -61,6 +61,11 @@ const CustomRoutes = () => {
             </Route>
             <Route path="confirm-account" element={<Email />} />
             <Route path="login" element={<Signin />} />
+            <Route path="recovery" >
+              <Route index element={<RecoveryView />} />
+              <Route path="validateToken" element={<RecoveryTokenValidationView />} />
+
+            </Route>
             <Route path="signup" element={<Signup />} />
           </Route>
           <Route path="dashboard" element={<Dashboard />} />

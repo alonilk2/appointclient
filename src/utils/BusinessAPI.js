@@ -18,7 +18,6 @@ export async function updateBusiness(obj) {
   if (!localStorage.getItem(ACCESS_TOKEN)) {
     return Promise.reject("No access token set.");
   }
-  console.log(obj)
   let response = await Axios.put(API_BASE_URL + "/business/" + obj.id, obj, {
     headers: {
       Authorization: "Bearer " + localStorage.getItem(ACCESS_TOKEN),
