@@ -124,11 +124,11 @@ $light-grey: #e2e7f7;
     min-height: 500px;
 }
 .home-section-bg {
-    clip-path: polygon(0 7%, 100% 0, 100% 100%, 0 93%);
+    clip-path: polygon(0 7%, 100% 0, 100% 93%, 0 100%);
     background-color: $light-grey;
 }
 .home-section-bg-r {
-    clip-path: polygon(0 0, 100% 7%, 100% 93%, 0 100%);
+    clip-path: polygon(0 0, 100% 7%, 100% 100%, 0 93%);
     background-color: $light-grey;
 }
 .side-bg-right {
