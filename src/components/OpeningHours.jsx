@@ -19,7 +19,7 @@ export function OpeningHours(arr, color) {
   let sortedArr = sortWorkdaysArray(arr);
   let hours = sortedArr?.map((wd) => {
     return (
-      <div className="day-column">
+      <div className="day-column" key={wd.id}>
         <h5 style={{ color: color }}>{daysArray[wd.day]}</h5>
         <p>{wd.starttime}</p>
         <p>{wd.endtime}</p>

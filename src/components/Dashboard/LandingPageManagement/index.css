@@ -206,9 +206,12 @@ lottie-player {
   max-height: 250px;
   object-fit: contain;
 }
+
 .gallery {
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-evenly;
   height: 100%;
+  gap: 10px;
+  margin: 2%;
 }

@@ -33,7 +33,7 @@ export default function BusinessProfileManagement() {
 
   return (
     <div className="business-details-container">
-      <ProfileImageUploadDialog open={open} toggle={setOpen} />
+      {open && <ProfileImageUploadDialog open={open} toggle={setOpen} />}
       <div className="header-bar" style={colorMode.mode === "dark" ? {backgroundColor: "#121212"} : null}>
         <Typography variant="h5">ניהול פרטי העסק</Typography>
       </div>

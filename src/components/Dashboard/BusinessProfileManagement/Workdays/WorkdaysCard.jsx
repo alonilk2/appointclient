@@ -69,7 +69,7 @@ export default function WorkdaysCard(props) {
   useEffect(() => {
     findFirstDayAvailable();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workdaysArr, setFirstDayAvailable]);
+  }, [workdaysArr]);
 
   return (
     <Card elevation={0} sx={styles.cardContainer}>

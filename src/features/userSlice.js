@@ -199,7 +199,7 @@ export const userSlice = createSlice({
       state.user = action.payload;
     },
     [_getCurrentUser.rejected]: (state, action) => {
-      state.user = null;
+      state.user = false;
     },
   },
 });

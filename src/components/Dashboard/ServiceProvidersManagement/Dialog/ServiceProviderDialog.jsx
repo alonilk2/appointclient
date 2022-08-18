@@ -229,10 +229,11 @@ export default function AddServiceProviderDialog(props) {
           }
           label={service?.name}
           sx={{ margin: "1%" }}
+          key={service.id}
         />
       );
     });
-    if (_services.length > 0) return services;
+    if (_services.length > 0) return _services;
     return (
       <Alert severity="warning" sx={styles.alert}>
         <AlertTitle>תחומי שירות לא הוגדרו</AlertTitle>

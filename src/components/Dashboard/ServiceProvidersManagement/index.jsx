@@ -2,7 +2,6 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Box, Divider, Button, Avatar } from "@mui/material";
 import CardHeader from "@mui/material/CardHeader";
 import useServiceProviders from "../../../hooks/Dashboard/useServiceProviders";
-import useUser from "../../../hooks/Dashboard/useUser";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";

@@ -32,7 +32,6 @@ export default function Statistics() {
   const serviceProvidersCount = useSelector(
     (state) => state.appoint?.serviceProvidersCounts
   );
-
   useEffect(() => {
     if (user?.business) {
       dispatch(_fetchAppointmentsByDay(user?.business?.id));
@@ -86,7 +85,7 @@ export default function Statistics() {
         </div>
 
         <StatisticsCard title={`סה"כ מפגשים החודש לפי שירותים`}>
-          {servicesCount?.length > 0 ? (
+          {servicesCount ? (
             <Chart
               options={{ labels: Object.keys(servicesCount) }}
               series={Object.values(servicesCount)}
@@ -102,7 +101,7 @@ export default function Statistics() {
         </StatisticsCard>
 
         <StatisticsCard title={`סה"כ מפגשים החודש לפי נותני שירות`}>
-          {serviceProvidersCount?.length > 0 ? (
+          {serviceProvidersCount ? (
             <Chart
               options={{ labels: Object.keys(serviceProvidersCount) }}
               series={Object.values(serviceProvidersCount)}

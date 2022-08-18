@@ -78,7 +78,6 @@ export default function BusinessDetailsCard() {
         {error && <Alert severity="error">יש למלא את כל שדות החובה!</Alert>}
 
         <TextField
-          fieldWidth
           required
           error={error && name.length === 0 && true}
           id="outlined-basic"
@@ -88,7 +87,6 @@ export default function BusinessDetailsCard() {
           onChange={(e) => setName(e.target.value)}
         />
         <TextField
-          fieldWidth
           required
           error={error && address.length === 0 && true}
           id="outlined-basic"
@@ -98,7 +96,6 @@ export default function BusinessDetailsCard() {
           onChange={(e) => setAddress(e.target.value)}
         />
         <TextField
-          fieldWidth
           required
           error={error && phone1.length === 0 && true}
           id="outlined-basic"
@@ -108,7 +105,6 @@ export default function BusinessDetailsCard() {
           onChange={(e) => setPhone1(e.target.value)}
         />
         <TextField
-          fieldWidth
           id="outlined-basic"
           label=" מס' טלאפון נוסף"
           variant="outlined"
@@ -116,7 +112,6 @@ export default function BusinessDetailsCard() {
           onChange={(e) => setPhone2(e.target.value)}
         />
         <TextField
-          fieldWidth
           id="outlined-basic"
           required
           error={error && email.length === 0 && true}
@@ -127,7 +122,6 @@ export default function BusinessDetailsCard() {
           onChange={(e) => setEmail(e.target.value)}
         />
         <TextField
-          fieldWidth
           id="outlined-basic"
           label="אתר אינטרנט"
           variant="outlined"

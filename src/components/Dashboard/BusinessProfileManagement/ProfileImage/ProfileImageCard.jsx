@@ -8,7 +8,6 @@ import {
   Divider
 } from "@mui/material";
 import { useContext } from "react";
-import { API_UPLOADS_URL } from "../../../../constants";
 import UserContext from "../../UserContext";
 import NoImage from '../../../../images/noimage.png'
 

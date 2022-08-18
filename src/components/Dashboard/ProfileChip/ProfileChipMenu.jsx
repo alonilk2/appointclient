@@ -10,7 +10,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
-import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import { useContext } from "react";
 
 import Brightness4Icon from "@mui/icons-material/Brightness4";

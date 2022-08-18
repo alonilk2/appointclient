@@ -22,7 +22,7 @@ export default function LandingPageManagement() {
   const user = useContext(UserContext);
   const colorMode = useContext(ColorModeContext);
   const [open, setOpen] = useState(false);
-  const [color, setColor] = useState("#f25f5c");
+  const [color, setColor] = useState(user.user?.business?.pageColor || "#f25f5c");
   const [success, setSuccess] = useState(false);
   const [element, setElement] = useState();
 
@@ -55,11 +55,11 @@ export default function LandingPageManagement() {
     setOpen(true);
   };
 
-  useEffect(() => {
-    if (user.user?.business?.pageColor) {
-      setColor(user.user?.business?.pageColor);
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user.user?.business?.pageColor) {
+  //     setColor(user.user?.business?.pageColor);
+  //   }
+  // }, [user]);
 
   return (
     <div className="landing-page-container">
@@ -151,7 +151,7 @@ export default function LandingPageManagement() {
                       ? user?.business?.gallery[0]
                       : NoImage
                   })`,
-                  ...styles.galleryImage
+                  ...styles.galleryImage,
                 }}
                 onClick={() => handleImageChange(0)}
               >
@@ -228,7 +228,7 @@ const styles = {
   },
   galleryImage: {
     minHeight: "150px",
-    backgroundSize: "200px",
+    backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
     width: '100%',

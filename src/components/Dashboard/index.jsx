@@ -1,7 +1,7 @@
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { createContext, useMemo, useState } from "react";
-import { useSelector } from "react-redux/es/exports";
+import { useSelector} from "react-redux";
 import useUser from "../../hooks/Dashboard/useUser";
 import logo from "../../images/logo.png";
 import BusinessDetailsManagement from "./BusinessProfileManagement";
@@ -14,7 +14,8 @@ import ServicesManagement from "./ServicesManagement";
 import SideMenu from "./SideMenu/SideMenu";
 import Statistics from "./Statistics";
 import UserContext from "./UserContext";
-
+import { useEffect } from "react";
+import {useNavigate} from 'react-router-dom'
 export const ColorModeContext = createContext({
   toggleColorMode: () => {},
   mode: "",
@@ -24,7 +25,7 @@ export default function Dashboard() {
   const selectedTab = useSelector((state) => state.dashboard.selectedTabIndex);
   const [mode, setMode] = useState("light");
   const user = useUser();
-
+  const navigate = useNavigate()
   const colorMode = useMemo(
     () => ({
       toggleColorMode: () => {
@@ -45,9 +46,9 @@ export default function Dashboard() {
     [mode]
   );
 
-  // useEffect(() => {
-  //   if (!user.user) return navigate("/");
-  // }, []);
+  useEffect(() => {
+    if (user.user === false) return navigate("/");
+  }, [user.user]);
 
   return (
     <UserContext.Provider value={user}>
