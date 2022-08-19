@@ -7,6 +7,7 @@ import TimeDialog from "./TimeDialog";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import { FindProviderWorkday } from "../../../Dashboard/util";
 
 export default function Schedule() {
   const location = useLocation();
@@ -18,17 +19,10 @@ export default function Schedule() {
   const [open, setOpen] = useState(false);
 
   const handleDateClick = (arg) => {
-    if (provider?.workdays && !FindProviderWorkday(arg.date.getDay()))
+    if (provider?.workdays && !FindProviderWorkday(provider, arg.date.getDay()))
       return false;
     setOpen(true);
     setChosenDate(arg.date);
-  };
-
-  const FindProviderWorkday = (day) => {
-    for (let wd of provider?.workdays) {
-      if (wd.day === day) return true;
-    }
-    return false;
   };
 
   return (

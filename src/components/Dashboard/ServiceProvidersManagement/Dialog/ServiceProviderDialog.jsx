@@ -276,7 +276,7 @@ export default function AddServiceProviderDialog(props) {
         onChange={(e) => setLastname(e.target.value)}
         fullWidth
       />
-      <TextField
+      {!providerForEdit && <TextField
         required
         value={email}
         error={error && !validEmail.test(email) && true}
@@ -286,7 +286,7 @@ export default function AddServiceProviderDialog(props) {
         sx={styles.textField}
         onChange={(e) => setEmail(e.target.value)}
         fullWidth
-      />
+      />}
       <TextField
         required
         value={phone}

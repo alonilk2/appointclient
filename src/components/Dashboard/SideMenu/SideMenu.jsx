@@ -15,7 +15,7 @@ import { selectTab } from "../../../features/dashboardSlice";
 import NoImage from "../../../images/noimage.png";
 import UserContext from "../UserContext";
 import BarChartIcon from '@mui/icons-material/BarChart';
-
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 export default function SideMenu() {
   const dispatch = useDispatch();
   const selectedTab = useSelector((state) => state.dashboard.selectedTabIndex);
@@ -50,6 +50,20 @@ export default function SideMenu() {
         </ListItemIcon>
         <ListItemText primary="ניהול דף נחיתה" />
       </ListItemButton>
+
+      <ListSubheader component="div" id="nested-list-subheader">
+        תורים
+      </ListSubheader>
+      <ListItemButton
+        selected={selectedTab === 5}
+        onClick={(event) => handleListItemClick(event, 5)}
+      >
+        <ListItemIcon>
+          <CalendarMonthIcon />
+        </ListItemIcon>
+        <ListItemText primary="ניהול תורים" />
+      </ListItemButton>
+      
       <ListSubheader component="div" id="nested-list-subheader">
         שירותים ומוצרים
       </ListSubheader>

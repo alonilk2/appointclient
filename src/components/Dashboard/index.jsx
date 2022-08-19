@@ -16,6 +16,7 @@ import Statistics from "./Statistics";
 import UserContext from "./UserContext";
 import { useEffect } from "react";
 import {useNavigate} from 'react-router-dom'
+import AppointmentsManagement from "./AppointmentsManagement";
 export const ColorModeContext = createContext({
   toggleColorMode: () => {},
   mode: "",
@@ -83,6 +84,7 @@ export default function Dashboard() {
                     ))}
                   {selectedTab === 3 && <LandingPageManagement />}
                   {selectedTab === 4 && <Statistics />}
+                  {selectedTab === 5 && <AppointmentsManagement />}
                 </div>
               </main>
               <SideMenu />
