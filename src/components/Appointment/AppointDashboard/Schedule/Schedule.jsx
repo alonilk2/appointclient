@@ -1,7 +1,6 @@
 import { Avatar } from "@mui/material";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { API_UPLOADS_URL } from "../../../../constants";
 import Breadcrumb from "../../../Breadcrumb";
 import TimeDialog from "./TimeDialog";
 import FullCalendar from "@fullcalendar/react";
@@ -17,8 +16,8 @@ export default function Schedule() {
   let customer = location?.state?.customer;
   const [chosenDate, setChosenDate] = useState();
   const [open, setOpen] = useState(false);
-
   const handleDateClick = (arg) => {
+    console.log(provider)
     if (provider?.workdays && !FindProviderWorkday(provider, arg.date.getDay()))
       return false;
     setOpen(true);
@@ -70,7 +69,7 @@ export default function Schedule() {
             initialView="dayGridMonth"
             dateClick={handleDateClick}
             dayCellClassNames={(date) =>
-              !FindProviderWorkday(date.date.getDay()) && "disabled-date"
+              !FindProviderWorkday(provider, date.date.getDay()) && "disabled-date"
             }
           />
         </div>

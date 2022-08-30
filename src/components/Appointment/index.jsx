@@ -4,7 +4,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PhoneIcon from "@mui/icons-material/Phone";
 import { useNavigate, useParams } from "react-router-dom";
 import useBusiness from "../../hooks/useBusiness";
-import headerbg from "../../images/home-header-background.png";
+import headerbg from "../../images/home-header-background.webp";
 import NoImage from "../../images/noimage.png";
 import { OpeningHours } from "../OpeningHours";
 import "./index.css";

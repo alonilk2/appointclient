@@ -233,7 +233,7 @@ export default function AddServiceProviderDialog(props) {
         />
       );
     });
-    if (_services.length > 0) return _services;
+    if (_services?.length > 0) return _services;
     return (
       <Alert severity="warning" sx={styles.alert}>
         <AlertTitle>תחומי שירות לא הוגדרו</AlertTitle>
@@ -256,7 +256,7 @@ export default function AddServiceProviderDialog(props) {
       <br />
       <TextField
         required
-        error={error && firstname.length === 0 && true}
+        error={error && firstname?.length === 0 && true}
         id="outlined-required"
         variant="outlined"
         label="שם פרטי"
@@ -267,7 +267,7 @@ export default function AddServiceProviderDialog(props) {
       />
       <TextField
         required
-        error={error && lastname.length === 0 && true}
+        error={error && lastname?.length === 0 && true}
         id="outlined-required"
         variant="outlined"
         value={lastname}

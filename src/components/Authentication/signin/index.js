@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import {
   ACCESS_TOKEN,
   FACEBOOK_AUTH_URL,
-  GOOGLE_AUTH_URL,
+  GOOGLE_AUTH_URL
 } from "../../../constants";
 import { _login } from "../../../features/userSlice";
 import useWindowSize from "../../../hooks/useWindowSize";
@@ -15,7 +15,7 @@ import googleLogo from "../../../images/google-logo.png";
 import BackgroundImage from "../../../images/login.png";
 import "./index.css";
 
-function SigninComponent(props) {
+function SigninComponent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -62,9 +62,9 @@ function SigninComponent(props) {
     </>
   );
 
-  // useEffect(() => {
-  //   if (loggedIn) navigate("/dashboard", { replace: true });
-  // }, []);
+  useEffect(() => {
+    if (loggedIn) navigate("/dashboard", { replace: true });
+  }, []);
 
   const LoginForm = (
     <form
@@ -80,6 +80,7 @@ function SigninComponent(props) {
         type="email"
         placeholder="Email Address"
         required
+        value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
       <h5>סיסמה</h5>
@@ -88,6 +89,7 @@ function SigninComponent(props) {
         type="password"
         placeholder="Password"
         required
+        value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
       <div className="forgot-row">

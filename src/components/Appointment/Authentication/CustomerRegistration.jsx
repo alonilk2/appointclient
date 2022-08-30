@@ -11,7 +11,7 @@ import { TextField } from "@mui/material";
 export default function CustomerRegistration() {
   const location = useLocation();
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState(location?.state?.replace("+972", "0"));
+  const [phone, setPhone] = useState(location?.state);
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [error, setError] = useState();

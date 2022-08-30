@@ -1,11 +1,11 @@
 import NavigationBar from "../NavigationBar";
 import "./index.scss";
 import LoginBox from "./LoginBox";
-import img1 from "../../images/1.png";
-import img2 from "../../images/2.png";
-import img3 from "../../images/3.png";
-import img4 from "../../images/4.png";
-import contactbg from "../../images/contact-bg.jpg";
+import img1 from "../../images/1.webp";
+import img2 from "../../images/2.webp";
+import img3 from "../../images/3.webp";
+import img4 from "../../images/4.webp";
+import contactbg from "../../images/contact-bg.webp";
 import shield from "../../images/shield.png";
 import point from "../../images/point.png";
 import user from "../../images/user.png";

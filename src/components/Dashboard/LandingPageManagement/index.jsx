@@ -8,9 +8,9 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { HuePicker } from "react-color";
-import headerbg from "../../../images/home-header-background.png";
+import headerbg from "../../../images/home-header-background.webp";
 import NoImage from "../../../images/noimage.png";
 import { OpeningHours } from "../../OpeningHours";
 import ImageUploadDialog from "./ImageUploadDialog";

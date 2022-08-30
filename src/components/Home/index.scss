@@ -18,7 +18,7 @@ $light-grey: #e2e7f7;
     width: -moz-fit-content;
     width: fit-content;
     margin: 5% auto;
-    background-image: url('../../images/screenshot-bg.png');
+    background-image: url('../../images/screenshot-bg.webp');
     background-repeat: no-repeat;
     background-size: contain;
 }
@@ -27,7 +27,7 @@ $light-grey: #e2e7f7;
     font-weight: 300;
 }
 .home-header {
-    background-image: url('../../images/home-header-background.png');
+    background-image: url('../../images/home-header-background.webp');
     background-position-y: 15%;
     height: 90vh;
 }
@@ -110,7 +110,7 @@ $light-grey: #e2e7f7;
 
 }
 .side-bg {
-    background-image: url('../../images/home-side-bg.png');
+    background-image: url('../../images/home-side-bg.webp');
     background-repeat: no-repeat;
     background-size: contain;
     display: flex;
@@ -132,7 +132,7 @@ $light-grey: #e2e7f7;
     background-color: $light-grey;
 }
 .side-bg-right {
-    background-image: url('../../images/home-side-bg1.png');
+    background-image: url('../../images/home-side-bg1.webp');
     background-repeat: no-repeat;
     background-size: contain;
     display: flex;

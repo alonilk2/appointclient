@@ -9,8 +9,10 @@ export const daysArray = [
 ];
 
 export const FindProviderWorkday = (provider, day) => {
-  for (let wd of provider?.workdays) {
-    if (wd.day === day) return true;
+  if(provider?.workdays) {
+    for (let wd of provider?.workdays) {
+      if (wd.day === day) return true;
+    }
   }
   return false;
 };
