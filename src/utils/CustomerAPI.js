@@ -14,7 +14,6 @@ export async function fetchCustomer(phone) {
   return response?.data;
 }
 
-
 export async function addCustomer(Customer) {
   if (!localStorage.getItem(ACCESS_TOKEN)) {
     return Promise.reject("No access token set.");

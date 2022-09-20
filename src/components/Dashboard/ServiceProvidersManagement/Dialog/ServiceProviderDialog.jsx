@@ -189,7 +189,7 @@ export default function AddServiceProviderDialog(props) {
   const findFirstDayAvailable = () => {
     for (let idx = 0; idx < 7; idx++) {
       let found = false;
-      workdaysArr.forEach((e) => {
+      workdaysArr?.forEach((e) => {
         if (e.day === idx) {
           found = true;
           return;

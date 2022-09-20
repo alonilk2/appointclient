@@ -96,6 +96,5 @@ const styles = {
     alignItems: "center",
     display: "flex",
     padding: "2% 0",
-    color: "rgba(0, 0, 0, 0.6)",
   },
 };

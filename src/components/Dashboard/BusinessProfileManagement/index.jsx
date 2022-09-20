@@ -1,18 +1,19 @@
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import ShowChartIcon from '@mui/icons-material/ShowChart';
+import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import { Typography } from "@mui/material";
-import { useContext, useState, useEffect } from "react";
-import { useDispatch, useSelector } from 'react-redux'
+import { useContext, useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { ColorModeContext } from "..";
+import { _fetchAppointmentsByDay, _fetchAppointmentsByMonth } from "../../../features/appointSlice";
+import { _fetchTotalMonthlyIncome } from "../../../features/businessSlice";
 import UserContext from "../UserContext";
+import { darkModeBox } from "../util";
 import BusinessDetailsCard from "./BusinessDetails/BusinessDetailsCard";
 import "./index.css";
 import ProfileImageCard from "./ProfileImage/ProfileImageCard";
 import ProfileImageUploadDialog from "./ProfileImage/ProfileImageUploadDialog";
 import WorkdaysCard from "./Workdays/WorkdaysCard";
-import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
-import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
-import ShowChartIcon from '@mui/icons-material/ShowChart';
-import { _fetchAppointmentsByDay, _fetchAppointmentsByMonth } from "../../../features/appointSlice";
-import { _fetchTotalMonthlyIncome } from "../../../features/businessSlice";
-import { ColorModeContext } from "..";
 
 export default function BusinessProfileManagement() {
   const [open, setOpen] = useState(false);
@@ -34,11 +35,11 @@ export default function BusinessProfileManagement() {
   return (
     <div className="business-details-container">
       {open && <ProfileImageUploadDialog open={open} toggle={setOpen} />}
-      <div className="header-bar" style={colorMode.mode === "dark" ? {backgroundColor: "#121212"} : null}>
+      <div className="header-bar" style={colorMode.mode === "dark" ? darkModeBox : null}>
         <Typography variant="h5">ניהול פרטי העסק</Typography>
       </div>
       <div className="widget-container">
-        <div className="formcontainer data-widget">
+        <div className="formcontainer data-widget" style={colorMode.mode === "dark" ? styles.bgBlueDark : styles.totalVisits}>
           <Typography variant="body1" gutterBottom sx={styles.widgetNumber}>
             {todaysAppointments || 0}
           </Typography>
@@ -47,7 +48,7 @@ export default function BusinessProfileManagement() {
           </Typography>
           <SupervisedUserCircleIcon sx={styles.userIcon} />
         </div>
-        <div className="formcontainer data-widget" style={styles.totalIncomes}>
+        <div className="formcontainer data-widget" style={colorMode.mode === "dark" ? styles.bgGreenDark : styles.totalIncomes}>
           <Typography variant="body1" gutterBottom sx={styles.widgetNumber}>
             ₪{totalMonthlyIncome}
           </Typography>
@@ -58,8 +59,7 @@ export default function BusinessProfileManagement() {
         </div>
         <div
           className="formcontainer data-widget"
-          style={styles.totalMonthVisits}
-        >
+          style={colorMode.mode === "dark" ? styles.bgVioletDark : styles.totalMonthVisits}>
           <Typography variant="body1" gutterBottom sx={styles.widgetNumber}>
             {totalMonthlyAppointments || 0}
           </Typography>
@@ -68,13 +68,13 @@ export default function BusinessProfileManagement() {
           </Typography>
           <ShowChartIcon sx={styles.monthIcon} />
         </div>
-        <div className="formcontainer">
+        <div className="formcontainer" style={colorMode.mode === "dark" ? darkModeBox : null}>
           <BusinessDetailsCard />
         </div>
-        <div className="formcontainer">
+        <div className="formcontainer" style={colorMode.mode === "dark" ? darkModeBox : null}>
           <ProfileImageCard openDialog={open} setOpenDialog={setOpen} />
         </div>
-        <div className="formcontainer">
+        <div className="formcontainer" style={colorMode.mode === "dark" ? darkModeBox : null}>
           <WorkdaysCard business={user?.business} />
         </div>
       </div>
@@ -103,6 +103,9 @@ const styles = {
     fontSize: "12vw",
     color: "rgb(128 168 255)",
   },
+  totalVisits: {
+    backgroundColor: "#2265f5"
+  },
   totalIncomes: {
     backgroundColor: "#22c93e",
   },
@@ -110,6 +113,18 @@ const styles = {
     fontWeight: "500",
     fontSize: "1.1rem",
     color: "rgb(178 255 202)",
+  },
+  bgBlueDark: {
+    backgroundColor: "#0b2252",
+    borderColor: "rgb(74, 74, 74)"
+  },
+  bgGreenDark: {
+    backgroundColor: "#1a4e23e0",
+    borderColor: "rgb(74, 74, 74)"
+  },
+  bgVioletDark: {
+    backgroundColor: "#4d0074cf",
+    borderColor: "rgb(74, 74, 74)"
   },
   dollarIcon: {
     position: "absolute",

@@ -31,13 +31,8 @@ export default function TimeDialog(props) {
   const customer = props?.customer;
   const navigate = useNavigate();
 
-  const handleChange = (event) => {
-    setChosenTime(event.target.value);
-  };
-
-  const handleClose = () => {
-    props?.setOpen(false);
-  };
+  const handleChange = (event) => setChosenTime(event.target.value);
+  const handleClose = () => props?.setOpen(false);
 
   const parseWorkingHoursForChosenDate = () => {
     serviceProvider?.workdays?.forEach((wd) => {
@@ -88,20 +83,16 @@ export default function TimeDialog(props) {
   const CalculateMenuItems = () => {
     let timesArray = [];
     let skipFlag = 0;
-    let counter = 0;
     timesArray.push(new Date(startTime.current));
-    while (true && counter < 45) {
-      counter++;
+    while (true) {
       let lastTimeObj = new Date(timesArray[timesArray.length - 1]);
-
-      // advance next time object by service duration
-      // If last iteration was unavailable time - add service.duration (skipFlag + 1) times.
-      if (skipFlag > 0) {
-        lastTimeObj?.setMinutes(
-          lastTimeObj?.getMinutes() + service?.duration * (skipFlag + 1)
-        );
-      } else
-        lastTimeObj?.setMinutes(lastTimeObj?.getMinutes() + service?.duration);
+      skipFlag > 0
+        ? lastTimeObj?.setMinutes(
+            lastTimeObj?.getMinutes() + service?.duration * (skipFlag + 1)
+          )
+        : lastTimeObj?.setMinutes(
+            lastTimeObj?.getMinutes() + service?.duration
+          );
       if (new Date(lastTimeObj) > new Date(endTime.current)) break;
       let lastSkipFlag = skipFlag;
       skipFlag = checkTimeAvailability(lastTimeObj, skipFlag);
@@ -109,11 +100,11 @@ export default function TimeDialog(props) {
       skipFlag = 0;
       timesArray.push(new Date(lastTimeObj));
     }
-    
+
     let timesList = timesArray.map((t) => {
       return (
         <MenuItem value={new Date(t).toTimeString()}>
-          {new Date(t).toTimeString().split(" ")[0]}
+          {new Date(t).toTimeString().split(" ")[0].slice(0, 5)}
         </MenuItem>
       );
     });

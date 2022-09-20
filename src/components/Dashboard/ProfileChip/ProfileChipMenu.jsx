@@ -26,7 +26,13 @@ export const ProfileChipMenu = (props) => {
   const colorMode = useContext(ColorModeContext);
 
   return (
-    <Box sx={colorMode.mode === "light" ? styles.profileMenuBoxDark : styles.profileMenuBox}>
+    <Box
+      sx={
+        colorMode.mode === "light"
+          ? styles.profileMenuBoxDark
+          : styles.profileMenuBox
+      }
+    >
       <nav aria-label="main mailbox folders">
         <List>
           <ListItem disablePadding>
@@ -53,7 +59,11 @@ export const ProfileChipMenu = (props) => {
             p: 3,
           }}
         >
-          {theme.palette.mode} mode
+          {theme.palette.mode === "dark" ? (
+            <span>Dark Mode</span>
+          ) : (
+            <span>Light Mode</span>
+          )}
           <IconButton
             sx={{ ml: 1 }}
             onClick={colorMode.toggleColorMode}
@@ -77,13 +87,13 @@ const styles = {
     maxWidth: 360,
     boxShadow: "0px 10px 41px 3px rgba(0,0,0,0.3)",
     zIndex: 3,
-    backgroundColor: '#121212'
+    backgroundColor: "#121212",
   },
   profileMenuBoxDark: {
     width: "100%",
     maxWidth: 360,
     boxShadow: "0px 10px 41px 3px rgba(0,0,0,0.3)",
     zIndex: 3,
-    backgroundColor: 'white'
+    backgroundColor: "white",
   },
 };

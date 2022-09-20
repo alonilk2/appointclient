@@ -174,9 +174,10 @@ h4 {
   align-items: center;
   height: 100%;
 }
-
+.fc-theme-standard td, .fc-theme-standard th {
+}
 .disabled-date {
-  background-color: rgb(224, 245, 235);
+  background-color: rgb(197 197 197 / 65%);
 }
 
 .service-img {
@@ -218,13 +219,12 @@ a {
   border: 1px solid var(--fc-border-color, rgba(221, 221, 221, 0.295)) !important;
 }
 
-.fc-scrollgrid thead {
-  background-color: #5fca98;
-  color: white !important;
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: rgb(213, 233, 255) !important;
+  background-color: var(--fc-today-bg-color, rgb(213, 233, 255)) !important;
 }
 
 .fc .fc-col-header-cell-cushion {
-  color: white !important;
   font-size: 15px;
   margin: 3%;
 }

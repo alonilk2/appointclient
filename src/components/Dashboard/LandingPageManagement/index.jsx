@@ -6,23 +6,26 @@ import {
   CardContent,
   CardHeader,
   Divider,
-  Typography,
+  Typography
 } from "@mui/material";
 import { useContext, useState } from "react";
 import { HuePicker } from "react-color";
+import { ColorModeContext } from "..";
 import headerbg from "../../../images/home-header-background.webp";
 import NoImage from "../../../images/noimage.png";
 import { OpeningHours } from "../../OpeningHours";
+import UserContext from "../UserContext";
+import { darkModeBox } from "../util";
 import ImageUploadDialog from "./ImageUploadDialog";
 import "./index.css";
-import { ColorModeContext } from "..";
-import UserContext from "../UserContext";
 
 export default function LandingPageManagement() {
   const user = useContext(UserContext);
   const colorMode = useContext(ColorModeContext);
   const [open, setOpen] = useState(false);
-  const [color, setColor] = useState(user.user?.business?.pageColor || "#f25f5c");
+  const [color, setColor] = useState(
+    user.user?.business?.pageColor || "#f25f5c"
+  );
   const [success, setSuccess] = useState(false);
   const [element, setElement] = useState();
 
@@ -65,17 +68,13 @@ export default function LandingPageManagement() {
     <div className="landing-page-container">
       <ImageUploadDialog open={open} toggle={setOpen} element={element} />
 
-      <div
-        className="header-bar"
-        style={
-          colorMode.mode === "dark" ? { backgroundColor: "#121212" } : null
-        }
-      >
+      <div className="header-bar" style={colorMode.mode === "dark" ? darkModeBox : null}>
+
         <Typography variant="h5">עיצוב דף נחיתה</Typography>
       </div>
       <div className="first-row">
-        <div className="landing-page-main">
-          <Card elevation={0} sx={styles.cardContainer}>
+        <div className="landing-page-main" style={colorMode.mode === "dark" ? darkModeBox : null}>
+          <Card elevation={0}>
             <CardHeader title="צבעים" />
             <Divider />
             <CardContent>
@@ -174,7 +173,7 @@ export default function LandingPageManagement() {
                       ? user?.business?.gallery[1]
                       : NoImage
                   })`,
-                  ...styles.galleryImage
+                  ...styles.galleryImage,
                 }}
                 onClick={() => handleImageChange(1)}
               >
@@ -197,7 +196,7 @@ export default function LandingPageManagement() {
                       ? user?.business?.gallery[2]
                       : NoImage
                   })`,
-                  ...styles.galleryImage
+                  ...styles.galleryImage,
                 }}
                 onClick={() => handleImageChange(2)}
               >
@@ -222,15 +221,12 @@ export default function LandingPageManagement() {
 }
 
 const styles = {
-  cardContainer: {
-    border: "1px solid #dae0e7",
-    borderRadius: "10px",
-  },
+
   galleryImage: {
     minHeight: "150px",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
-    width: '100%',
-  }
+    width: "100%",
+  },
 };

@@ -61,10 +61,12 @@ const CustomRoutes = () => {
             </Route>
             <Route path="confirm-account" element={<Email />} />
             <Route path="login" element={<Signin />} />
-            <Route path="recovery" >
+            <Route path="recovery">
               <Route index element={<RecoveryView />} />
-              <Route path="validateToken" element={<RecoveryTokenValidationView />} />
-
+              <Route
+                path="validateToken"
+                element={<RecoveryTokenValidationView />}
+              />
             </Route>
             <Route path="signup" element={<Signup />} />
           </Route>

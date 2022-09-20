@@ -1,7 +1,7 @@
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
-import { Card, CardContent, Divider, Typography } from "@mui/material";
+import { Card, CardContent, Typography } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -10,10 +10,9 @@ import { useEffect } from "react";
 import { useContext, useState } from "react";
 import { ColorModeContext } from "..";
 import UserContext from "../UserContext";
-import { FindProviderWorkday } from "../util";
+import { darkModeBox, FindProviderWorkday } from "../util";
 
 export default function AppointmentsManagement(props) {
-  const [toggleDialog, setToggleDialog] = useState(false);
   const user = useContext(UserContext);
   const [chosenDate, setChosenDate] = useState();
   const [open, setOpen] = useState(false);
@@ -22,22 +21,23 @@ export default function AppointmentsManagement(props) {
   let serviceProviders = user.user.business.serviceProviders;
 
   const handleDateClick = (arg) => {
-    if (provider && provider.workdays && !FindProviderWorkday(provider, arg.date.getDay()))
+    if (
+      provider &&
+      provider.workdays &&
+      !FindProviderWorkday(provider, arg.date.getDay())
+    )
       return false;
     setOpen(true);
     setChosenDate(arg.date);
-  };
-
-  const handleEventClick = (arg) => {
   };
 
   const handleChange = (provider) => {
     setProvider(provider);
   };
 
-  useEffect(()=>{
-    serviceProviders && setProvider(serviceProviders[0])
-  }, [])
+  useEffect(() => {
+    serviceProviders && setProvider(serviceProviders[0]);
+  }, []);
 
   return (
     <div className="landing-page-container">
@@ -46,7 +46,7 @@ export default function AppointmentsManagement(props) {
         style={
           colorMode.mode === "dark"
             ? {
-                backgroundColor: "#121212",
+                ...darkModeBox,
                 display: "flex",
                 flexDirection: "row",
               }
@@ -56,8 +56,8 @@ export default function AppointmentsManagement(props) {
         <Typography variant="h5">ניהול תורים</Typography>
       </div>
       <div className="first-row">
-        <div className="landing-page-main">
-          <Card elevation={0} sx={styles.cardContainer}>
+        <div className="landing-page-main" style={colorMode.mode === "dark" ? darkModeBox : null}>
+          <Card elevation={0}>
             <CardContent sx={styles.inputcontent}>
               <Typography variant="subtitle1" sx={{ margin: "1% 0" }}>
                 בחר נותן שירות:
@@ -87,8 +87,8 @@ export default function AppointmentsManagement(props) {
         </div>
       </div>
       <div className="first-row" style={{ height: "100%" }}>
-        <div className="landing-page-main" style={styles.main}>
-          <Card elevation={0} sx={styles.cardContainer}>
+        <div className="landing-page-main" style={colorMode.mode === "dark" ? {...darkModeBox, ...styles.main} : styles.main}>
+          <Card elevation={0}>
             <CardContent sx={{ height: "100%" }}>
               {provider && (
                 <FullCalendar
@@ -109,7 +109,8 @@ export default function AppointmentsManagement(props) {
                         "-" +
                         endHourArray[0] +
                         ":" +
-                        endHourArray[1] + " " + 
+                        endHourArray[1] +
+                        " " +
                         app.customer.firstname +
                         " " +
                         app.customer.lastname +
@@ -117,7 +118,6 @@ export default function AppointmentsManagement(props) {
                       date: app.day,
                     };
                   })}
-                  eventClick={handleEventClick}
                   dayCellClassNames={(date) =>
                     !FindProviderWorkday(provider, date.date.getDay()) &&
                     "disabled-date"
@@ -144,7 +144,7 @@ const styles = {
   inputcontent: {
     display: "flex",
     flexDirection: "row",
-    paddingBottom: "0 !important"
+    paddingBottom: "0 !important",
   },
   main: {
     height: "95%",
