@@ -11,12 +11,14 @@ import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import { useContext } from "react";
 import UserContext from "../UserContext";
+import { ColorModeContext } from ".."
 
 export default function ServiceProvidersManagement() {
   const [toggleDialog, setToggleDialog] = useState(false);
   const [providerForEdit, setProviderForEdit] = useState();
   const serviceProviders = useServiceProviders();
   const user = useContext(UserContext);
+  const colorMode = useContext(ColorModeContext);
 
   const UserProfileCell = (params) => {
     let filename = params?.value.file;
@@ -108,7 +110,9 @@ export default function ServiceProvidersManagement() {
       />
       <CardHeader
         title="ניהול נותני שירות"
-        sx={styles.CardHeader}
+        sx={colorMode.mode === "light"
+        ? {backgroundColor: 'white', ...styles.CardHeader}
+        : {backgroundColor: 'inherit', ...styles.CardHeader}}
         action={
           <Button
             variant="contained"
@@ -127,6 +131,9 @@ export default function ServiceProvidersManagement() {
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[5]}
+          sx={colorMode.mode === "light"
+          ? {backgroundColor: 'white'}
+          : {backgroundColor: 'inherit'}}
         />
       )}
     </Box>
@@ -134,10 +141,10 @@ export default function ServiceProvidersManagement() {
 }
 
 const styles = {
-  AddButton: { direction: "ltr", backgroundColor: "#0369ff" },
+  AddButton: { direction: "ltr" },
   DeleteIcon: { marginLeft: "20%", color: "red" },
   EditIcon: { marginRight: "20%" },
-  Box: { height: "100%", width: "100%", marginLeft: "2%", backgroundColor: 'white' },
+  Box: { height: "100%", width: "100%", marginLeft: "2%"},
   CardHeader: { textAlign: "right" },
   UserProfileCell: {
     display: "flex",

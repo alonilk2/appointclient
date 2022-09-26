@@ -16,6 +16,7 @@ import { _fetchTotalMonthlyIncome } from "../../../features/businessSlice";
 import UserContext from "../UserContext";
 import StatisticsCard from "./Card";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
+import { darkModeBox } from "../util";
 
 export default function Statistics() {
   const colorMode = useContext(ColorModeContext);
@@ -46,14 +47,12 @@ export default function Statistics() {
     <div className="business-details-container">
       <div
         className="header-bar"
-        style={
-          colorMode.mode === "dark" ? { backgroundColor: "#121212" } : null
-        }
+        style={colorMode.mode === "dark" ? darkModeBox : null}
       >
-        <Typography variant="h5">ניהול פרטי העסק</Typography>
+        <Typography variant="h5">סטטיסטיקות</Typography>
       </div>
       <div className="widget-container">
-        <div className="formcontainer data-widget">
+      <div className="formcontainer data-widget" style={colorMode.mode === "dark" ? styles.bgBlueDark : styles.totalVisits}>
           <Typography variant="body1" gutterBottom sx={styles.widgetNumber}>
             {todaysAppointments || 0}
           </Typography>
@@ -62,7 +61,7 @@ export default function Statistics() {
           </Typography>
           <SupervisedUserCircleIcon sx={styles.userIcon} />
         </div>
-        <div className="formcontainer data-widget" style={styles.totalIncomes}>
+        <div className="formcontainer data-widget" style={colorMode.mode === "dark" ? styles.bgGreenDark : styles.totalIncomes}>
           <Typography variant="body1" gutterBottom sx={styles.widgetNumber}>
             ₪{totalMonthlyIncome}
           </Typography>
@@ -73,8 +72,7 @@ export default function Statistics() {
         </div>
         <div
           className="formcontainer data-widget"
-          style={styles.totalMonthVisits}
-        >
+          style={colorMode.mode === "dark" ? styles.bgVioletDark : styles.totalMonthVisits}>
           <Typography variant="body1" gutterBottom sx={styles.widgetNumber}>
             {totalMonthlyAppointments || 0}
           </Typography>
@@ -84,7 +82,7 @@ export default function Statistics() {
           <ShowChartIcon sx={styles.monthIcon} />
         </div>
 
-        <StatisticsCard title={`סה"כ מפגשים החודש לפי שירותים`}>
+        <StatisticsCard title={`סה"כ מפגשים החודש לפי שירותים`} colorMode={colorMode}>
           {servicesCount ? (
             <Chart
               options={{ labels: Object.keys(servicesCount) }}
@@ -100,7 +98,7 @@ export default function Statistics() {
           )}
         </StatisticsCard>
 
-        <StatisticsCard title={`סה"כ מפגשים החודש לפי נותני שירות`}>
+        <StatisticsCard title={`סה"כ מפגשים החודש לפי נותני שירות`} colorMode={colorMode}>
           {serviceProvidersCount ? (
             <Chart
               options={{ labels: Object.keys(serviceProvidersCount) }}
@@ -175,5 +173,17 @@ const styles = {
     fontWeight: "500",
     fontSize: "1.1rem",
     color: "rgb(222 178 255)",
+  },
+  bgBlueDark: {
+    backgroundColor: "#1655d9",
+    borderColor: "rgb(74, 74, 74)"
+  },
+  bgGreenDark: {
+    backgroundColor: "#2e9b41e0",
+    borderColor: "rgb(74, 74, 74)"
+  },
+  bgVioletDark: {
+    backgroundColor: "#7b359fcf",
+    borderColor: "rgb(74, 74, 74)"
   },
 };

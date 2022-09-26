@@ -20,7 +20,7 @@ export default function useServices() {
     try {
       let fileName =
         service?.file && (await uploadFile({ file: service.file }));
-      service.img = fileName[0]?.fileUrl
+      service.img = fileName ? fileName[0]?.fileUrl : null
       let tempBus = {...service.business}
       let tempUser = {...service.user}
       tempBus.gallery = service.business.gallery && JSON.stringify(service.business.gallery)

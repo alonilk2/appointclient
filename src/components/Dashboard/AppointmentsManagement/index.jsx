@@ -14,30 +14,20 @@ import { darkModeBox, FindProviderWorkday } from "../util";
 
 export default function AppointmentsManagement(props) {
   const user = useContext(UserContext);
-  const [chosenDate, setChosenDate] = useState();
-  const [open, setOpen] = useState(false);
-  const [provider, setProvider] = useState();
   const colorMode = useContext(ColorModeContext);
   let serviceProviders = user.user.business.serviceProviders;
+  const [provider, setProvider] = useState(
+    (serviceProviders) => serviceProviders?.length > 0 && serviceProviders[0]
+  );
 
   const handleDateClick = (arg) => {
-    if (
-      provider &&
-      provider.workdays &&
-      !FindProviderWorkday(provider, arg.date.getDay())
-    )
+    if (provider?.workdays && !FindProviderWorkday(provider, arg.date.getDay()))
       return false;
-    setOpen(true);
-    setChosenDate(arg.date);
   };
 
   const handleChange = (provider) => {
     setProvider(provider);
   };
-
-  useEffect(() => {
-    serviceProviders && setProvider(serviceProviders[0]);
-  }, []);
 
   return (
     <div className="landing-page-container">
@@ -56,7 +46,10 @@ export default function AppointmentsManagement(props) {
         <Typography variant="h5">ניהול תורים</Typography>
       </div>
       <div className="first-row">
-        <div className="landing-page-main" style={colorMode.mode === "dark" ? darkModeBox : null}>
+        <div
+          className="landing-page-main"
+          style={colorMode.mode === "dark" ? darkModeBox : null}
+        >
           <Card elevation={0}>
             <CardContent sx={styles.inputcontent}>
               <Typography variant="subtitle1" sx={{ margin: "1% 0" }}>
@@ -87,7 +80,14 @@ export default function AppointmentsManagement(props) {
         </div>
       </div>
       <div className="first-row" style={{ height: "100%" }}>
-        <div className="landing-page-main" style={colorMode.mode === "dark" ? {...darkModeBox, ...styles.main} : styles.main}>
+        <div
+          className="landing-page-main"
+          style={
+            colorMode.mode === "dark"
+              ? { ...darkModeBox, ...styles.main }
+              : styles.main
+          }
+        >
           <Card elevation={0}>
             <CardContent sx={{ height: "100%" }}>
               {provider && (

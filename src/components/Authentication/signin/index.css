@@ -298,3 +298,8 @@ text-align: center;
         padding-top: 20%;
     }
 }
+
+.MuiBreadcrumbs-ol {
+    direction: rtl;
+    margin: 0 5% !important;
+}

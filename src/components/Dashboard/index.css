@@ -5,20 +5,19 @@
   overflow-x: hidden;
 }
 .MuiBox-root {
-  border-radius: 20px;
+  border-radius: 10px;
   direction: rtl;
   width: 98% !important;
   height: 96% !important;
   margin-top: 2%;
+  overflow: hidden;
 }
 .muirtl-1jilvlt {
   background-color: #18191b !important;
   border:1px solid rgba(255,255,255,0.2) !important;
   overflow: hidden;
 }
-.muirtl-1exhyd6 {
-  background-color: inherit !important;
-}
+
 .MuiToolbar-root {
   direction: ltr;
 }

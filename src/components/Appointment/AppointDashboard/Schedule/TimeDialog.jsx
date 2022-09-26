@@ -58,6 +58,7 @@ export default function TimeDialog(props) {
         business: business,
         serviceProviderSet: business?.serviceProviders,
       },
+      business: business,
     };
 
     let response = await dispatch(_addAppointment(appointment));

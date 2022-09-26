@@ -126,7 +126,7 @@ export default function AppointDashboard(props) {
   const upcomingAppointments = useCallback(() => {
     let delay = 0;
     let filteredAppointments = customer?.appointments?.filter(
-      (app) => app?.service?.business?.id == businessId
+      (app) => app?.business?.id == businessId
     );
     const appointments = filteredAppointments?.map((appointment, idx) => {
       delay += 200;

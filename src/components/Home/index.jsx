@@ -72,8 +72,8 @@ export default function Home(props) {
           </div>
         </Fade>
       </header>
-      <Zoom>
         <div className="home-first-row">
+          <Zoom>
           <h1 className="home-main-title">מערכת ניהול התורים המתקדמת בישראל</h1>
           <p>
             התחל\י לנהל את התורים של לקוחותייך באופן אוטומטי, ללא רישומים ידניים
@@ -82,6 +82,8 @@ export default function Home(props) {
           <div className="screenshot-container">
             <img src={img1} alt="" className="sample-screenshot" />
           </div>
+          </Zoom>
+
         </div>
         <div className="info-row home-section-bg-r">
           <div
@@ -134,10 +136,9 @@ export default function Home(props) {
             </Zoom>
           </div>
         </div>
-      </Zoom>
 
       <AboutUsSection />
-      <Zoom cascade>
+      <Fade left>
         <div className="contact-section">
           <div className="contact-container">
             <h1>צרו קשר לקבלת ליווי בהתנסות</h1>
@@ -177,7 +178,7 @@ export default function Home(props) {
           </div>
           <img src={contactbg} alt="" />
         </div>
-      </Zoom>
+      </Fade>
 
       <Footer />
     </div>

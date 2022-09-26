@@ -115,15 +115,15 @@ const styles = {
     color: "rgb(178 255 202)",
   },
   bgBlueDark: {
-    backgroundColor: "#0b2252",
+    backgroundColor: "#1655d9",
     borderColor: "rgb(74, 74, 74)"
   },
   bgGreenDark: {
-    backgroundColor: "#1a4e23e0",
+    backgroundColor: "#2e9b41e0",
     borderColor: "rgb(74, 74, 74)"
   },
   bgVioletDark: {
-    backgroundColor: "#4d0074cf",
+    backgroundColor: "#7b359fcf",
     borderColor: "rgb(74, 74, 74)"
   },
   dollarIcon: {
