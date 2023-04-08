@@ -16,7 +16,7 @@ import { _fetchTotalMonthlyIncome } from "../../../features/businessSlice";
 import UserContext from "../UserContext";
 import StatisticsCard from "./Card";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
-import { darkModeBox } from "../util";
+import { darkModeBox } from "../Util";
 
 export default function Statistics() {
   const colorMode = useContext(ColorModeContext);

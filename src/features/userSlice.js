@@ -11,7 +11,9 @@ import {
   recovery,
   findRecoveryToken,
   changePassword,
-} from "../utils/AuthAPI";
+  validatePassword,
+} from "../API/AuthAPI";
+
 
 const sortWorkdaysArray = (arr) => {
   if (!arr) return;
@@ -34,13 +36,12 @@ const initialState = {
 export const _confirmEmail = createAsyncThunk(
   "user/confirmemail",
   async (confirmRequest, thunkAPI) => {
-    console.log(confirmRequest);
     try {
       const response = await confirmEmail(confirmRequest);
       return response.data;
     } catch (error) {
       console.log(error);
-      if (error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -52,7 +53,7 @@ export const _login = createAsyncThunk(
       const response = await login(loginRequest);
       return response;
     } catch (error) {
-      if (error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -64,7 +65,7 @@ export const _recovery = createAsyncThunk(
       const response = await recovery(recoveryRequest);
       return response;
     } catch (error) {
-      if (error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -76,7 +77,7 @@ export const _changePassword = createAsyncThunk(
       const response = await changePassword(recoveryRequest);
       return response;
     } catch (error) {
-      if (error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -88,8 +89,7 @@ export const _signup = createAsyncThunk(
       const response = await signup(signupRequest);
       return response;
     } catch (error) {
-      console.log(error);
-      if (error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+      return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
 );
@@ -101,7 +101,7 @@ export const _createProviderUser = createAsyncThunk(
       const response = await createProviderUser(signupRequest);
       return response;
     } catch (error) {
-      if (error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -109,16 +109,16 @@ export const _createProviderUser = createAsyncThunk(
 
 export const _updateUser = createAsyncThunk(
   "user/update",
-  async (user, thunkAPI) => {
+  async (user, { rejectWithValue }) => {
     try {
-      let tempBus = { ...user.business }
-      tempBus.gallery = user.business?.gallery && JSON.stringify(user.business?.gallery);
-      user.business = tempBus
-      const response = await updateUser(user);
+      const updatedUser = { ...user };
+      if (updatedUser.business?.gallery) {
+        updatedUser.business.gallery = JSON.stringify(updatedUser.business.gallery);
+      }
+      const response = await updateUser(updatedUser);
       return response;
     } catch (error) {
-      console.log(error)
-      if (error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+      return rejectWithValue(error);
     }
   }
 );
@@ -130,7 +130,7 @@ export const _removeUser = createAsyncThunk(
       const response = await removeUser(user);
       return response;
     } catch (error) {
-      if (error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -142,7 +142,22 @@ export const _findUserByEmail = createAsyncThunk(
       const response = await findUserByEmail(user);
       return response;
     } catch (error) {
-      if (error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const _validatePassword = createAsyncThunk(
+  "user/validatePass",
+  async (user, thunkAPI) => {
+    try {
+      let tempBus = { ...user.business }
+      tempBus.gallery = user.business?.gallery && JSON.stringify(user.business?.gallery);
+      user.business = tempBus
+      const response = await validatePassword(user);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -154,7 +169,7 @@ export const _findRecoveryToken = createAsyncThunk(
       const response = await findRecoveryToken(token);
       return response;
     } catch (error) {
-      if (error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+      return thunkAPI.rejectWithValue(error);
     }
   }
 )
@@ -170,8 +185,7 @@ export const _getCurrentUser = createAsyncThunk(
       if (response?.business?.gallery) response.business.gallery = JSON.parse(response?.business?.gallery)
       return response;
     } catch (error) {
-      console.log(error)
-      if (error !== "SyntaxError: Unexpected end of JSON input") return thunkAPI.rejectWithValue();
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -182,7 +196,7 @@ export const userSlice = createSlice({
   extraReducers: {
     [_login.fulfilled]: (state, action) => {
       state.loggedIn = true;
-      state.user = action.payload;
+      state.user = action.payload.data;
     },
     [_login.rejected]: (state, action) => {
       state.loggedIn = false;
@@ -196,7 +210,7 @@ export const userSlice = createSlice({
     },
     [_getCurrentUser.fulfilled]: (state, action) => {
       state.loggedIn = true;
-      state.user = action.payload;
+      state.user = action.payload.data;
     },
     [_getCurrentUser.rejected]: (state, action) => {
       state.user = false;

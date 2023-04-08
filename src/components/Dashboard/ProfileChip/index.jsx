@@ -28,7 +28,7 @@ export default function ProfileChip(user) {
         />
       </Stack>
       {toggleMenu && (
-        <ProfileChipMenu auth={auth} navigate={(path) => navigate(path)} />
+        <ProfileChipMenu auth={auth} navigate={(path) => navigate(path)} user={user}/>
       )}
     </div>
   );

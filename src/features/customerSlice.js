@@ -3,7 +3,7 @@ import {
   addCustomer,
   fetchCustomer,
   removeCustomer,
-} from "../utils/CustomerAPI";
+} from "../API/CustomerAPI";
 
 const initialState = {
   customer: null,

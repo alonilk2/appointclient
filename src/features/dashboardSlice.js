@@ -7,7 +7,7 @@ import {
   removeServices,
   updateServices,
   updateServiceProvider
-} from "../utils/DashboardAPI";
+} from "../API/DashboardAPI";
 
 const initialState = {
   selectedTabIndex: 2,

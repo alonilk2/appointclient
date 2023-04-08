@@ -1,4 +1,4 @@
-import { daysArray } from "./Dashboard/util";
+import { daysArray } from "./Dashboard/Util";
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 

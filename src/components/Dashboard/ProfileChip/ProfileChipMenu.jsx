@@ -1,5 +1,6 @@
-import DraftsIcon from "@mui/icons-material/Drafts";
 import InboxIcon from "@mui/icons-material/Inbox";
+import SettingsIcon from "@mui/icons-material/Settings";
+import AccountSettings from './AccountSettings'
 import {
   Box,
   Divider,
@@ -12,18 +13,24 @@ import {
 import IconButton from "@mui/material/IconButton";
 import { useTheme } from "@mui/material/styles";
 import { useContext } from "react";
-
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { ColorModeContext } from "..";
+import { useState } from "react";
 
 export const ProfileChipMenu = (props) => {
+  const theme = useTheme();
+  const colorMode = useContext(ColorModeContext);
+  const [open, setOpen] = useState(false);
+
+  const handleSettingsToggle = () => {
+    setOpen(!open);
+  };
+
   const handleLogout = () => {
     props.auth.logout();
     props.navigate("/");
   };
-  const theme = useTheme();
-  const colorMode = useContext(ColorModeContext);
 
   return (
     <Box
@@ -33,8 +40,17 @@ export const ProfileChipMenu = (props) => {
           : styles.profileMenuBox
       }
     >
+      <AccountSettings open={open} setOpen={setOpen} />
       <nav aria-label="main mailbox folders">
         <List>
+          {props.user?.user?.provider === "local" && <ListItem disablePadding>
+            <ListItemButton onClick={handleSettingsToggle}>
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
+              <ListItemText primary="הגדרות חשבון" />
+            </ListItemButton>
+          </ListItem>}
           <ListItem disablePadding>
             <ListItemButton onClick={handleLogout}>
               <ListItemIcon>

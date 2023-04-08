@@ -1,9 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { fetchBusinessDetails, fetchTotalMonthlyIncome, updateBusiness } from "../utils/BusinessAPI";
+import {
+  fetchBusinessDetails,
+  fetchTotalMonthlyIncome,
+  updateBusiness,
+} from "../API/BusinessAPI";
 
 const initialState = {
   business: null,
-  totalMonthlyIncome: 0
+  totalMonthlyIncome: 0,
 };
 
 export const _fetchBusinessDetails = createAsyncThunk(
@@ -13,7 +17,7 @@ export const _fetchBusinessDetails = createAsyncThunk(
       let response = await fetchBusinessDetails(businessId);
       return response;
     } catch (error) {
-      console.log(error)
+      console.log(error);
       return thunkAPI.rejectWithValue();
     }
   }

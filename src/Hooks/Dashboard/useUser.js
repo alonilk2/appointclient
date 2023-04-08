@@ -4,44 +4,38 @@ import {
   _updateUser,
   _findUserByEmail,
 } from "../../features/userSlice";
-import { uploadFile } from "../../utils/FilesAPI";
+import { uploadFile } from "../../API/FilesAPI";
 import { _getCurrentUser } from "../../features/userSlice";
 import { useEffect } from "react";
+import { ACCESS_TOKEN } from "../../constants";
+import api from "../../API/Client";
 
 export default function useUser() {
   const user = useSelector((state) => state.user?.user);
   const dispatch = useDispatch();
 
-  const updateUser = async (_user) => {
+  const updateUser = async (user) => {
     try {
-      let newUser = _user
-      if (
-        newUser?.business?.newfile &&
-        typeof newUser?.business?.newfile === "object"
-      ) {
-        let gallery = _user.business?.gallery ? [..._user.business?.gallery] : [null, null, null];
-        let fileName = await uploadFile({ file: newUser?.business?.newfile });
-        gallery[newUser?.business?.element] =
-          fileName[0]?.fileUrl;
-        newUser.business.gallery = gallery;
-      } else if (
-        newUser?.business?.img &&
-        typeof newUser?.business?.img === "object"
-      ) {
-        let fileName = await uploadFile({ file: newUser?.business?.img });
-        newUser.business.img = fileName[0]?.fileUrl;
-      } else if (
-        newUser?.business?.headerImg &&
-        typeof newUser?.business?.headerImg === "object"
-      ) {
-        let fileName = await uploadFile({ file: newUser?.business?.headerImg });
-        newUser.business.headerImg = fileName[0]?.fileUrl;
+      const { business } = user;
+
+      if (typeof business?.newfile === "object") {
+        const gallery = business?.gallery || Array(3);
+        const [fileName] = await uploadFile({ file: business.newfile });
+        gallery[business?.element] = fileName?.fileUrl;
+        business.gallery = gallery;
+      } else if (typeof business?.img === "object") {
+        const [fileName] = await uploadFile({ file: business.img });
+        business.img = fileName?.fileUrl;
+      } else if (typeof business?.headerImg === "object") {
+        const [fileName] = await uploadFile({ file: business.headerImg });
+        business.headerImg = fileName?.fileUrl;
       }
 
-      let response = await dispatch(_updateUser(newUser));
+      user.business = business;
+      const response = await dispatch(_updateUser(user));
       return response;
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -56,7 +50,11 @@ export default function useUser() {
   };
 
   const fetchUserInstance = () => {
-    dispatch(_getCurrentUser());
+    let token = localStorage.getItem(ACCESS_TOKEN);
+    if (token) {
+      api.defaults.headers.common["Authorization"] = "Bearer " + token;
+      dispatch(_getCurrentUser());
+    }
   };
 
   useEffect(() => {

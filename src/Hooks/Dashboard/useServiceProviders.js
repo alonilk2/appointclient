@@ -6,7 +6,7 @@ import {
   _removeServiceProvider,
   _updateServiceProvider,
 } from "../../features/dashboardSlice";
-import { uploadFile } from "../../utils/FilesAPI";
+import { uploadFile } from "../../API/FilesAPI";
 
 export default function useServiceProviders() {
   const serviceProvidersList = useSelector(

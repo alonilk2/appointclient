@@ -35,7 +35,8 @@ function SigninComponent() {
 
     let response = await dispatch(_login(obj));
     if (response.type.endsWith("fulfilled")) {
-      localStorage.setItem(ACCESS_TOKEN, response.payload.accessToken);
+      
+      localStorage.setItem(ACCESS_TOKEN, response.payload.data.accessToken);
      navigate("/dashboard");
     } else if (response.type.endsWith("rejected")) {
       setError(response);

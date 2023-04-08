@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { useContext, useState } from "react";
 import { ColorModeContext } from "..";
 import UserContext from "../UserContext";
-import { darkModeBox, FindProviderWorkday } from "../util";
+import { darkModeBox, FindProviderWorkday } from "../Util";
 
 export default function AppointmentsManagement(props) {
   const user = useContext(UserContext);

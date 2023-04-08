@@ -6,7 +6,7 @@ import {
   _removeServices,
   _updateServices
 } from "../../features/dashboardSlice";
-import { uploadFile } from "../../utils/FilesAPI";
+import { uploadFile } from "../../API/FilesAPI";
 
 export default function useServices() {
   const servicesCustomer = useSelector(

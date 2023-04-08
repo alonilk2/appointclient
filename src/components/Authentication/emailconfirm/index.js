@@ -30,6 +30,7 @@ function EmailConfirm(props) {
 
   useEffect(() => {
     let token = searchParams.get("token");
+    console.log(token)
 
     let confirmRequest = {
       token: token,

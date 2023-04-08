@@ -8,7 +8,7 @@ import { ColorModeContext } from "..";
 import { _fetchAppointmentsByDay, _fetchAppointmentsByMonth } from "../../../features/appointSlice";
 import { _fetchTotalMonthlyIncome } from "../../../features/businessSlice";
 import UserContext from "../UserContext";
-import { darkModeBox } from "../util";
+import { darkModeBox } from "../Util";
 import BusinessDetailsCard from "./BusinessDetails/BusinessDetailsCard";
 import "./index.css";
 import ProfileImageCard from "./ProfileImage/ProfileImageCard";

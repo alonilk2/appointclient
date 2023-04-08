@@ -18,7 +18,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { getHours, getMinutes } from "date-fns";
 import { useState } from "react";
-import { daysArray } from "../util";
+import { daysArray } from "../Util";
 
 // eslint-disable-next-line no-extend-native
 Date.prototype.addHours = function (h) {

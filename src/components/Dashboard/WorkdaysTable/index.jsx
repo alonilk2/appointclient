@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { useMemo } from "react";
-import { daysArray } from "../util";
+import { daysArray } from "../Util";
 
 export default function WorkdaysTable(props) {
   const handleAddWorkdays = () => {

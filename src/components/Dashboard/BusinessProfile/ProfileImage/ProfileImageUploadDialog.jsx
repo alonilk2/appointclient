@@ -1,4 +1,5 @@
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { Alert } from "@mui/material";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -53,10 +54,13 @@ export default function ProfileImageUploadDialog(props) {
     };
     setLoading(true);
     let response = await update(tempUser);
+    console.log(response)
     if (response?.type === "user/update/fulfilled") {
       refresh();
       toggleDialog();
       setLoading(false);
+    } else {
+      setError(response.payload.response.data.message)
     }
   };
 
@@ -64,6 +68,7 @@ export default function ProfileImageUploadDialog(props) {
     <Dialog open={props.open} onClose={handleClose} sx={styles.container}>
       <DialogTitle>העלאת תמונת פרופיל</DialogTitle>
       <DialogContent>
+        {error && <Alert severity="error">Error: {error}</Alert>}
         <DialogContentText>
           ניתן לגרור קובץ תמונה ולהניח בתוך המסגרת, או לחילופין ללחוץ במסגרת
           לבחירת התמונה:
@@ -72,7 +77,7 @@ export default function ProfileImageUploadDialog(props) {
         {file && <p>קובץ נבחר: {file[0]?.name}</p>}
       </DialogContent>
       <DialogActions>
-        {loading && <img src={Spinner} width={50} alt=""></img>}
+        {loading && !error && <img src={Spinner} width={50} alt=""></img>}
         <Button onClick={handleClose}>ביטול</Button>
         <Button onClick={handleSubmit}>העלאה</Button>
       </DialogActions>

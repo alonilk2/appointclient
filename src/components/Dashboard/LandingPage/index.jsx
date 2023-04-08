@@ -15,7 +15,7 @@ import headerbg from "../../../images/home-header-background.webp";
 import NoImage from "../../../images/noimage.png";
 import { OpeningHours } from "../../OpeningHours";
 import UserContext from "../UserContext";
-import { darkModeBox } from "../util";
+import { darkModeBox } from "../Util";
 import ImageUploadDialog from "./ImageUploadDialog";
 import "./index.css";
 

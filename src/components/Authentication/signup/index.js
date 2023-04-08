@@ -37,11 +37,10 @@ function Signup(props) {
     };
 
     let response = await dispatch(_signup(obj));
-
     if (response.type === "user/signup/fulfilled") {
       return navigate("/authorization/login", { state: { registered: true } });
     }
-    return setError(response.error.message);
+    return setError(response.payload);
   };
 
   function SignupForm() {
@@ -55,7 +54,7 @@ function Signup(props) {
           <Alert severity="error">
             <AlertTitle>Error</AlertTitle>
             An error occured while trying to register —
-            <strong>check credentials and try again</strong>
+            <strong>{error}</strong>
           </Alert>
         )}
         <h4 id="title">הרשמה</h4>

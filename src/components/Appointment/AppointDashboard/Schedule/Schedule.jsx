@@ -1,23 +1,23 @@
 import { Avatar } from "@mui/material";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import Breadcrumb from "../../../Breadcrumb";
 import TimeDialog from "./TimeDialog";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import { FindProviderWorkday } from "../../../Dashboard/util";
+import { FindProviderWorkday } from "../../../Dashboard/Util";
 
 export default function Schedule() {
+  const [chosenDate, setChosenDate] = useState();
+  const [open, setOpen] = useState(false);
   const location = useLocation();
   let provider = location?.state?.provider;
   let business = location?.state?.business;
   let clickedService = location?.state?.clickedService;
   let customer = location?.state?.customer;
-  const [chosenDate, setChosenDate] = useState();
-  const [open, setOpen] = useState(false);
+  
   const handleDateClick = (arg) => {
-    console.log(provider)
     if (provider?.workdays && !FindProviderWorkday(provider, arg.date.getDay()))
       return false;
     setOpen(true);

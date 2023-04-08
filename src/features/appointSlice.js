@@ -7,7 +7,7 @@ import {
   fetchAppointmentsByService,
   fetchAppointmentsByServiceProviders,
   removeAppointment
-} from "../utils/AppointAPI";
+} from "../API/AppointAPI";
 
 const initialState = {
   appoint: null,
