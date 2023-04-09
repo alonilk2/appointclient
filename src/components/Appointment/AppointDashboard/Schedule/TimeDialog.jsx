@@ -71,7 +71,7 @@ export default function TimeDialog(props) {
     const appointment = {
       day: chosenDate.getTime(),
       start_hour: chosenTime,
-      end_hour: CalculateclosingTime().toTimeString(),
+      end_hour: CalculateClosingTime().toTimeString(),
       customer,
       serviceProvider,
       service: {
@@ -97,13 +97,14 @@ export default function TimeDialog(props) {
     CalculateMenuItems();
   }, [chosenDate]);
 
-  const CalculateclosingTime = () => {
+  const CalculateClosingTime = () => {
     let end = new Date(chosenDate);
     let [hours, minutes] = chosenTime.split(" ")[0].split(":");
     end.setHours(parseInt(hours));
     end.setMinutes(parseInt(minutes) + parseInt(service?.duration));
     return end;
   };
+  
   const CalculateMenuItems = () => {
     const timesArray = [new Date(openingTime.current)];
     let skipFlag = 0;

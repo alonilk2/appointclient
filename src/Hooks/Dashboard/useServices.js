@@ -7,7 +7,7 @@ import {
   _updateServices,
 } from "../../features/dashboardSlice";
 import { uploadFile } from "../../API/FilesAPI";
-import { isNullOrEmpty } from "../../common"
+import { isNullOrEmpty } from "../../common";
 export default function useServices() {
   const servicesCustomer = useSelector(
     (state) => state?.user?.user?.business.services
@@ -16,57 +16,29 @@ export default function useServices() {
   const services = user?.business?.services;
   const dispatch = useDispatch();
 
-  const uploadFileAndSetURL = async (service) => {
+  const uploadServiceImageAndSetURL = async (service) => {
     if (!isNullOrEmpty(service?.file)) {
       const [uploadedFile] = await uploadFile({ file: service.file });
       service.img = uploadedFile?.fileUrl || null;
     }
-  }
+  };
 
-  const addServices = async (service) => {
-    // Upload the file and set the image URL if there is a file to upload
-    uploadFileAndSetURL(service)
-
-    // Stringify the business gallery if it exists
+  const StringifyBusinessGalleryIfExist = (service) => {
     if (service.business.gallery) {
       service.business.gallery = JSON.stringify(service.business.gallery);
     }
+  };
 
-    // Create copies of the business and user objects
-    const tempBus = { ...service.business };
-    const tempUser = { ...service.user };
-
-    // Update the service, business, and user objects with the copied business object
-    service.business = tempBus;
-    tempUser.business = tempBus;
-    service.user = tempUser;
-
-    // Dispatch the action and return the response
-    const response = dispatch(_addServices(service));
-    return response;
+  const addServices = async (service) => {
+    uploadServiceImageAndSetURL(service);
+    StringifyBusinessGalleryIfExist(service);
+    return dispatch(_addServices(service));
   };
 
   const updateServices = (service) => {
-    // Upload the file and set the image URL if there is a file to upload
-    uploadFileAndSetURL(service)
-  
-    // Stringify the business gallery if it exists
-    if (service.business.gallery) {
-      service.business.gallery = JSON.stringify(service.business.gallery);
-    }
-  
-    // Create copies of the business and user objects
-    const tempBus = { ...service.business };
-    const tempUser = { ...service.user };
-  
-    // Update the service, business, and user objects with the copied business object
-    service.business = tempBus;
-    tempUser.business = tempBus;
-    service.user = tempUser;
-  
-    // Dispatch the action and return the response
-    const response = dispatch(_updateServices(service));
-    return response;
+    uploadServiceImageAndSetURL(service);
+    StringifyBusinessGalleryIfExist(service);
+    return dispatch(_updateServices(service));
   };
 
   const refreshServices = async () => {
