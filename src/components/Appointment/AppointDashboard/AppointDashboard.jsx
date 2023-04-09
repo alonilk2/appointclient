@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import DeleteIcon from "@mui/icons-material/EventBusy";
 import { Avatar, Divider } from "@mui/material";
@@ -13,8 +14,19 @@ import useCustomer from "../../../hooks/useCustomer";
 import Breadcrumb from "../../Breadcrumb";
 import "./AppointDashboard.css";
 import randomColor from "random-material-color";
+import {
+  BUSINESS_PAGE_TEXT,
+  LOBBY_TEXT,
+  WELCOME_TEXT,
+  INTRO_TEXT,
+  UPCOMING_MEETINGS_TEXT,
+  CHOOSE_SERVICE_TEXT,
+  CHOOSE_PROVIDER_TEXT,
+  NEAR_APPOINTMENTS_NOT_FOUND,
+  NO_SERVICE_PROVIDERS_FOUND,
+} from "../../../constants/AppointConstants";
 
-export default function AppointDashboard(props) {
+export default function AppointDashboard() {
   const [showProviders, setShowProviders] = useState(false);
   const [clickedService, setClickedService] = useState(); // +1 added
   const { businessId } = useParams();
@@ -35,7 +47,7 @@ export default function AppointDashboard(props) {
     let filteredProviders = [];
     business?.serviceProviders?.forEach((provider) => {
       provider.services?.forEach((service) => {
-        if (service?.id === business?.services[clickedService - 1]?.id)
+        if (service.id === business?.services[clickedService - 1]?.id)
           filteredProviders.push(provider);
       });
     });
@@ -43,8 +55,8 @@ export default function AppointDashboard(props) {
   };
 
   const handleCancelAppointment = async (appointment) => {
-    let response = await dispatch(_removeAppointment(appointment?.id));
-    if (response?.type?.endsWith("fulfilled")) {
+    let response = await dispatch(_removeAppointment(appointment.id));
+    if (response?.type.endsWith("fulfilled")) {
       refresh();
     }
   };
@@ -60,7 +72,7 @@ export default function AppointDashboard(props) {
                 idx !== business.services.length - 1
                   ? {
                       borderLeft: "3px solid white",
-                      backgroundColor: randomColor.getColor()
+                      backgroundColor: randomColor.getColor(),
                     }
                   : { backgroundColor: randomColor.getColor() }
               }
@@ -116,7 +128,8 @@ export default function AppointDashboard(props) {
         </Slide>
       );
     });
-    return providers;
+    if (providers?.length > 0) return providers;
+    return <p>{NO_SERVICE_PROVIDERS_FOUND}</p>;
   }, [FilterProvidersByService]);
 
   useEffect(() => {
@@ -126,7 +139,7 @@ export default function AppointDashboard(props) {
   const upcomingAppointments = useCallback(() => {
     let delay = 0;
     let filteredAppointments = customer?.appointments?.filter(
-      (app) => app?.business?.id == businessId
+      (appointment) => appointment?.business?.id == businessId
     );
     const appointments = filteredAppointments?.map((appointment, idx) => {
       delay += 200;
@@ -171,7 +184,8 @@ export default function AppointDashboard(props) {
         </Slide>
       );
     });
-    return appointments;
+    if (appointments?.length > 0) return appointments;
+    return <p>{NEAR_APPOINTMENTS_NOT_FOUND}</p>;
   }, [customer?.appointments]);
 
   return (
@@ -180,11 +194,11 @@ export default function AppointDashboard(props) {
         <Breadcrumb
           pageArr={[
             {
-              name: business?.name + " - עמוד העסק",
+              name: business?.name + BUSINESS_PAGE_TEXT,
               url: "/appoint/" + business?.id,
             },
             {
-              name: "לובי זימון תורים",
+              name: LOBBY_TEXT,
             },
           ]}
           sx={{ position: "absolute", top: "3%", left: "3%" }}
@@ -192,27 +206,21 @@ export default function AppointDashboard(props) {
         <div className="col introduction">
           <img src={business?.img} alt="company logo" width={100} />
           <h5>{business?.name}</h5>
-          <h2> ברוך\ה הבא\ה {customer?.firstname}</h2>
-          <p>
-            ברוכים הבאים לפאנל ניהול התורים.
-            כאן תוכלו לצפות בתורים שלכם, לבטל תורים במידת הצורך, ולהזמין
-            תורים חדשים.
-             על מנת לקבוע תור חדש, יש לבחור בשירות המבוקש בצד שמאל, ולאחר
-            מכן בנותן השירות.
-          </p>
+          <h2>
+            {" "}
+            {WELCOME_TEXT} {customer?.firstname}
+          </h2>
+          <p>{INTRO_TEXT}</p>
           <div className="upcoming-meetings">
-            <h4>תורים קרובים:</h4>
+            <h4>{UPCOMING_MEETINGS_TEXT}</h4>
             <div className="upcoming-row">{upcomingAppointments()}</div>
           </div>
         </div>
         <Divider orientation="vertical" flexItem sx={{ height: "100%" }} />
-
         <div className="col service-providers-container">
-          <h4> בחר שירות מבוקש:</h4>
-
+          <h4>{CHOOSE_SERVICE_TEXT}</h4>
           <div className="services-row">{Services}</div>
-          <h4> בחר נותן שירות:</h4>
-
+          <h4>{CHOOSE_PROVIDER_TEXT}</h4>
           <div className="providers-row">{ServiceProviders()}</div>
         </div>
       </div>

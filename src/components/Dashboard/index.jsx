@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN } from "../../constants";
 import useUser from "../../hooks/Dashboard/useUser";
-import logo from "../../images/logo.png";
 import AppointmentsManagement from "./Appointments";
 import BusinessDetailsManagement from "./BusinessProfile";
 import "./index.css";

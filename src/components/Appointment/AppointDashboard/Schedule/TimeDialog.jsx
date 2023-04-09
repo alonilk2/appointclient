@@ -14,6 +14,17 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { _addAppointment } from "../../../../features/appointSlice";
+import {
+  DIALOG_TITLE,
+  SELECTED_DATE_LABEL,
+  SELECT_TIME_LABEL,
+  SELECT_TIME_INPUT_LABEL,
+  CANCEL_BUTTON_LABEL,
+  CONFIRM_BUTTON_LABEL,
+  NO_CHOSEN_TIME,
+  GENERIC_ERROR,
+} from "../../../../constants/AppointConstants";
+import { isFulfilled } from "../../../../common";
 
 export default function TimeDialog(props) {
   const [error, setError] = useState();
@@ -23,49 +34,62 @@ export default function TimeDialog(props) {
   const service = props?.service;
   const chosenDate = props?.chosenDate;
   const business = props?.business;
-  let providerAppointments = serviceProvider?.appointments;
-  // Business open & close times
-  const startTime = useRef();
-  const endTime = useRef();
+  const openingTime = useRef();
+  const closingTime = useRef();
   const dispatch = useDispatch();
   const customer = props?.customer;
   const navigate = useNavigate();
 
   const handleChange = (event) => setChosenTime(event.target.value);
+  
   const handleClose = () => props?.setOpen(false);
 
   const parseWorkingHoursForChosenDate = () => {
     serviceProvider?.workdays?.forEach((wd) => {
-      if (wd.day === chosenDate?.getDay() && wd.starttime != null) {
-        startTime.current = parse(wd.starttime, "HH:mm", new Date(chosenDate));
-        endTime.current = parse(wd.endtime, "HH:mm", new Date(chosenDate));
+      if (wd.day === chosenDate?.getDay() && wd.openingTime != null) {
+        openingTime.current = parse(
+          wd.openingTime,
+          "HH:mm",
+          new Date(chosenDate)
+        );
+        closingTime.current = parse(
+          wd.closingTime,
+          "HH:mm",
+          new Date(chosenDate)
+        );
         return;
       }
     });
   };
 
   const handleSubmit = async () => {
-    if (!chosenTime) return setError("יש לבחור שעת פגישה מהרשימה!");
+    if (!chosenTime) {
+      setError(NO_CHOSEN_TIME);
+      return;
+    }
 
-    let appointment = {
+    const appointment = {
       day: chosenDate.getTime(),
       start_hour: chosenTime,
-      end_hour: CalculateEndTime().toTimeString(),
-      customer: customer,
-      serviceProvider: serviceProvider,
+      end_hour: CalculateclosingTime().toTimeString(),
+      customer,
+      serviceProvider,
       service: {
         ...service,
-        business: business,
+        business,
         serviceProviderSet: business?.serviceProviders,
       },
-      business: business,
+      business,
     };
 
-    let response = await dispatch(_addAppointment(appointment));
-    if (response?.type?.endsWith("fulfilled")) {
+    const response = await dispatch(_addAppointment(appointment));
+
+    if (isFulfilled(response)) {
       handleClose();
       navigate(-1, { replace: true });
-    } else setError("Error: operation failed.");
+    } else {
+      setError(GENERIC_ERROR);
+    }
   };
 
   useEffect(() => {
@@ -73,58 +97,77 @@ export default function TimeDialog(props) {
     CalculateMenuItems();
   }, [chosenDate]);
 
-  const CalculateEndTime = () => {
+  const CalculateclosingTime = () => {
     let end = new Date(chosenDate);
     let [hours, minutes] = chosenTime.split(" ")[0].split(":");
     end.setHours(parseInt(hours));
     end.setMinutes(parseInt(minutes) + parseInt(service?.duration));
     return end;
   };
-
   const CalculateMenuItems = () => {
-    let timesArray = [];
+    const timesArray = [new Date(openingTime.current)];
     let skipFlag = 0;
-    timesArray.push(new Date(startTime.current));
+
+    // Loop through time slots until end time is reached
     while (true) {
-      let lastTimeObj = new Date(timesArray[timesArray.length - 1]);
-      skipFlag > 0
-        ? lastTimeObj?.setMinutes(
-            lastTimeObj?.getMinutes() + service?.duration * (skipFlag + 1)
-          )
-        : lastTimeObj?.setMinutes(
-            lastTimeObj?.getMinutes() + service?.duration
-          );
-      if (new Date(lastTimeObj) > new Date(endTime.current)) break;
-      let lastSkipFlag = skipFlag;
-      skipFlag = checkTimeAvailability(lastTimeObj, skipFlag);
-      if (skipFlag > lastSkipFlag) continue;
+      const lastTime = new Date(timesArray[timesArray.length - 1]);
+
+      // Calculate time of next slot, taking into account skipped slots
+      const slotDuration =
+        service?.duration * (skipFlag + 1) || service?.duration;
+      lastTime.setMinutes(lastTime.getMinutes() + slotDuration);
+
+      // Exit loop if end time has been reached
+      if (lastTime > new Date(closingTime.current)) {
+        break;
+      }
+
+      // Check if current slot is available, skip if necessary
+      const lastSkipFlag = skipFlag;
+      skipFlag = checkTimeAvailability(lastTime, skipFlag);
+      if (skipFlag > lastSkipFlag) {
+        continue;
+      }
+
+      // Add current slot to array of available times
       skipFlag = 0;
-      timesArray.push(new Date(lastTimeObj));
+      timesArray.push(new Date(lastTime));
     }
 
-    let timesList = timesArray.map((t) => {
+    // Render available times as menu items
+    const timesList = timesArray.map((time) => {
+      const timeString = new Date(time).toTimeString();
+      const timeDisplay = timeString.split(" ")[0].slice(0, 5);
+
       return (
-        <MenuItem value={new Date(t).toTimeString()}>
-          {new Date(t).toTimeString().split(" ")[0].slice(0, 5)}
+        <MenuItem key={timeString} value={timeString}>
+          {timeDisplay}
         </MenuItem>
       );
     });
 
+    // Set state with available times
     setTimesArray(timesList);
   };
 
-  const checkTimeAvailability = (newTimeObj, skipFlag) => {
-    providerAppointments.forEach((pa) => {
-      let day = parse(pa.day, "yyyy-MM-dd", new Date(chosenDate));
-      // If same day & start-time of an appointment - skip adding time to select list
-      if (
-        chosenDate.toDateString() === day.toDateString() &&
-        new Date(newTimeObj).toTimeString() === pa.start_hour
-      ) {
-        return skipFlag++;
-      }
-    });
-    return skipFlag;
+  const checkTimeAvailability = (newTimeObj, skipCount) => {
+    const isSameTimeSlot = (appointment) => {
+      const appointmentDate = parse(
+        appointment.day,
+        "yyyy-MM-dd",
+        new Date(chosenDate)
+      );
+      const appointmentTime = appointment.start_hour;
+      const newTime = newTimeObj.toTimeString().slice(0, 5);
+
+      return (
+        chosenDate.toDateString() === appointmentDate.toDateString() &&
+        newTime === appointmentTime
+      );
+    };
+
+    const hasConflict = serviceProvider?.appointments.some(isSameTimeSlot);
+    return hasConflict ? skipCount + 1 : skipCount;
   };
 
   return (
@@ -134,20 +177,23 @@ export default function TimeDialog(props) {
           {error}
         </Alert>
       )}
-      <DialogTitle>בחירת שעה</DialogTitle>
+      <DialogTitle>{DIALOG_TITLE}</DialogTitle>
       <DialogContent>
         <DialogContentText sx={{ direction: "ltr" }}>
-          בחרת בתאריך: <b>{chosenDate?.toDateString()}</b> <br />
-          יש לבחור את השעה הנוחה לך לפגישה מהרשימה הבאה:
+          {SELECTED_DATE_LABEL} <b>{chosenDate?.toDateString()}</b>
+          <br />
+          {SELECT_TIME_LABEL}
         </DialogContentText>
-        {startTime.current && (
+        {openingTime.current && (
           <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">שעה</InputLabel>
+            <InputLabel id="demo-simple-select-label">
+              {SELECT_TIME_INPUT_LABEL}
+            </InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={chosenTime}
-              label="Hour"
+              label={SELECT_TIME_INPUT_LABEL}
               onChange={handleChange}
             >
               {timesArray}
@@ -156,8 +202,8 @@ export default function TimeDialog(props) {
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>ביטול</Button>
-        <Button onClick={handleSubmit}>קביעת תור</Button>
+        <Button onClick={handleClose}>{CANCEL_BUTTON_LABEL}</Button>
+        <Button onClick={handleSubmit}>{CONFIRM_BUTTON_LABEL}</Button>
       </DialogActions>
     </Dialog>
   );

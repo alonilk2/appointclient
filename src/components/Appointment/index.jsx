@@ -9,16 +9,16 @@ import NoImage from "../../images/noimage.png";
 import { OpeningHours } from "../OpeningHours";
 import "./index.css";
 
-export default function Appointment(props) {
+export default function Appointment() {
   const { businessId } = useParams();
   const { business } = useBusiness(businessId);
-  let businessImg = business?.img;
-  let navigate = useNavigate();
-  let phone1 = business?.phone1 || "";
-  let phone2 = business?.phone2 || "";
-  let address = business?.address || "";
-  let email = business?.email || "";
-  let website = business?.website || "";
+  const navigate = useNavigate();
+  const businessImg = business?.img;
+  const phone1 = business?.phone1 || "";
+  const phone2 = business?.phone2 || "";
+  const address = business?.address || "";
+  const email = business?.email || "";
+  const website = business?.website || "";
 
   const handleClickAppoint = () => {
     navigate("../authorization");
@@ -94,6 +94,3 @@ export default function Appointment(props) {
   );
 }
 
-const styles = {
-  imageContainer: {},
-};

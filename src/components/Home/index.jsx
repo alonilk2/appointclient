@@ -13,6 +13,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Fade, Zoom } from "react-reveal";
 import Footer from "./Footer";
+
 const AboutUsSection = () => {
   return (
     <section className="about-us-container">

@@ -15,47 +15,61 @@ export default function useServiceProviders() {
   const dispatch = useDispatch();
 
   const initialize = async () => {
-    await dispatch(_fetchServiceProviders());
+    dispatch(_fetchServiceProviders());
   };
 
   const addServiceProvider = async (provider) => {
-    try {
-      let fileName = await uploadFile({ file: provider.file });
-      provider.filename = fileName[0]?.fileUrl || "";
-      let tempBus = {...provider.business}
-      let tempUser = {...provider.user}
-      tempBus.gallery = provider.business.gallery && JSON.stringify(provider.business.gallery)
-      provider.business = tempBus
-      tempUser.business = tempBus
-      provider.user = tempUser;
-      let response = await dispatch(_addServiceProvider(provider));
-      return response;
-    } catch (e) {
-      console.log(e);
+    // Upload the file and set the image URL
+    const [fileName] = await uploadFile({ file: provider.file });
+    provider.filename = fileName?.fileUrl || "";
+
+    // Stringify the business gallery if it exists
+    if (provider.business.gallery) {
+      provider.business.gallery = JSON.stringify(provider.business.gallery);
     }
+
+    // Create copies of the business and user objects
+    const tempBus = { ...provider.business };
+    const tempUser = { ...provider.user };
+
+    // Update the provider, business, and user objects with the copied business object
+    provider.business = tempBus;
+    tempUser.business = tempBus;
+    provider.user = tempUser;
+
+    // Dispatch the action and return the response
+    const response = dispatch(_addServiceProvider(provider));
+    return response;
   };
 
   const updateServiceProvider = async (provider) => {
-    try {
-      if (provider.file.length > 0) {
-        let fileName = await uploadFile({ file: provider.file });
-        provider.filename = fileName[0]?.fileUrl || "";
-      }
-      let tempBus = {...provider.business}
-      let tempUser = {...provider.user}
-      tempBus.gallery = provider.business.gallery && JSON.stringify(provider.business.gallery)
-      provider.business = tempBus
-      tempUser.business = tempBus
-      provider.user = tempUser;
-      let response = await dispatch(_updateServiceProvider(provider));
-      return response;
-    } catch (e) {
-      console.log(e);
+    // Upload the file and set the image URL if a file exists
+    if (provider.file?.length > 0) {
+      const [fileName] = await uploadFile({ file: provider.file });
+      provider.filename = fileName?.fileUrl || "";
     }
+
+    // Stringify the business gallery if it exists
+    if (provider.business.gallery) {
+      provider.business.gallery = JSON.stringify(provider.business.gallery);
+    }
+
+    // Create copies of the business and user objects
+    const tempBus = { ...provider.business };
+    const tempUser = { ...provider.user };
+
+    // Update the provider, business, and user objects with the copied business object
+    provider.business = tempBus;
+    tempUser.business = tempBus;
+    provider.user = tempUser;
+
+    // Dispatch the action and return the response
+    const response = dispatch(_updateServiceProvider(provider));
+    return response;
   };
 
-  const removeServiceProvider = async (id) => {
-    let response = await dispatch(_removeServiceProvider(id));
+  const removeServiceProvider = (id) => {
+    let response = dispatch(_removeServiceProvider(id));
     return response;
   };
 

@@ -115,6 +115,7 @@ export default function AddServiceProviderDialog(props) {
       lastname: lastname,
       email: email,
       password: password,
+      phone: phone
     };
     setLoading(true);
 
@@ -125,7 +126,7 @@ export default function AddServiceProviderDialog(props) {
       response = await dispatch(_updateUser({ ...existingUser, ...newUser }));
     } else response = await dispatch(_createProviderUser(newUser));
 
-    let userResponse = response?.payload;
+    let userResponse = response?.payload.data;
     if (response.type.endsWith("fulfilled")) {
       const workdays = workdaysArr.map((wd) => {
         return {

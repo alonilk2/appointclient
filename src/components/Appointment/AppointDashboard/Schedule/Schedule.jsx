@@ -7,7 +7,14 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { FindProviderWorkday } from "../../../Dashboard/Util";
-
+import {
+  BUSINESS_PAGE_TEXT,
+  LOBBY_TITLE,
+  DATE_PICKER_TITLE,
+  APPOINTMENT_SELECTION_TITLE,
+  CALENDAR_INSTRUCTIONS,
+  DISABLED_DATE_CLASS,
+} from '../../../../constants/AppointConstants';
 export default function Schedule() {
   const [chosenDate, setChosenDate] = useState();
   const [open, setOpen] = useState(false);
@@ -30,14 +37,14 @@ export default function Schedule() {
         <Breadcrumb
           pageArr={[
             {
-              name: business?.name + " - עמוד העסק",
+              name: business?.name + BUSINESS_PAGE_TEXT,
               url: "/appoint/" + business?.id,
             },
             {
-              name: "לובי זימון תורים",
+              name: LOBBY_TITLE,
               url: "/appoint/" + business?.id + "/dashboard",
             },
-            { name: "בחירת תאריך" },
+            { name: DATE_PICKER_TITLE },
           ]}
           sx={{ position: "absolute", top: "3%", left: "3%" }}
         />
@@ -47,9 +54,9 @@ export default function Schedule() {
           src={provider?.filename}
         ></Avatar>
         <div className="right-column">
-          <h5>בחרת לקבוע תור ל{business?.services[clickedService]?.name}</h5>
+          <h5>{APPOINTMENT_SELECTION_TITLE}{business?.services[clickedService]?.name}</h5>
           <h5>אצל {provider?.firstname + " " + provider?.lastname}</h5>
-          <h1>לחץ\י על היום הרצוי בלוח השנה:</h1>
+          <h1>{CALENDAR_INSTRUCTIONS}</h1>
         </div>
         {open && (
           <TimeDialog
@@ -69,11 +76,12 @@ export default function Schedule() {
             initialView="dayGridMonth"
             dateClick={handleDateClick}
             dayCellClassNames={(date) =>
-              !FindProviderWorkday(provider, date.date.getDay()) && "disabled-date"
+              !FindProviderWorkday(provider, date.date.getDay()) && DISABLED_DATE_CLASS
             }
           />
         </div>
       </div>
     </div>
+    
   );
 }

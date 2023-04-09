@@ -9,34 +9,35 @@ import { _getCurrentUser } from "../../features/userSlice";
 import { useEffect } from "react";
 import { ACCESS_TOKEN } from "../../constants";
 import api from "../../API/Client";
+import { isNullOrEmpty } from "../../common";
 
 export default function useUser() {
   const user = useSelector((state) => state.user?.user);
   const dispatch = useDispatch();
 
   const updateUser = async (user) => {
-    try {
-      const { business } = user;
+    const { business } = user;
+    // If new image added for landing page
+    if (!isNullOrEmpty(business?.newfile)) {
+      const gallery = business?.gallery || Array(3);
+      const [fileName] = await uploadFile({ file: business.newfile });
+      gallery[business?.element] = fileName?.fileUrl;
+      business.gallery = gallery;
+      
+      // If logo is changed
+    } else if (!isNullOrEmpty(business?.img)) {
+      const [fileName] = await uploadFile({ file: business.img });
+      business.img = fileName?.fileUrl;
 
-      if (typeof business?.newfile === "object") {
-        const gallery = business?.gallery || Array(3);
-        const [fileName] = await uploadFile({ file: business.newfile });
-        gallery[business?.element] = fileName?.fileUrl;
-        business.gallery = gallery;
-      } else if (typeof business?.img === "object") {
-        const [fileName] = await uploadFile({ file: business.img });
-        business.img = fileName?.fileUrl;
-      } else if (typeof business?.headerImg === "object") {
-        const [fileName] = await uploadFile({ file: business.headerImg });
-        business.headerImg = fileName?.fileUrl;
-      }
-
-      user.business = business;
-      const response = await dispatch(_updateUser(user));
-      return response;
-    } catch (error) {
-      console.error(error);
+      // If landing page header is changed
+    } else if (!isNullOrEmpty(business?.headerImg)) {
+      const [fileName] = await uploadFile({ file: business.headerImg });
+      business.headerImg = fileName?.fileUrl;
     }
+
+    user.business = business;
+    const response = dispatch(_updateUser(user));
+    return response;
   };
 
   const remove = async (user) => {
