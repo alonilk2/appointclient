@@ -19,6 +19,8 @@ export default function useServiceProviders() {
   };
 
   const addServiceProvider = async (provider) => {
+    
+
     // Upload the file and set the image URL
     const [fileName] = await uploadFile({ file: provider.file });
     provider.filename = fileName?.fileUrl || "";

@@ -46,14 +46,14 @@ export default function TimeDialog(props) {
 
   const parseWorkingHoursForChosenDate = () => {
     serviceProvider?.workdays?.forEach((wd) => {
-      if (wd.day === chosenDate?.getDay() && wd.openingTime != null) {
+      if (wd.day === chosenDate?.getDay() && wd.starttime != null) {
         openingTime.current = parse(
-          wd.openingTime,
+          wd.starttime,
           "HH:mm",
           new Date(chosenDate)
         );
         closingTime.current = parse(
-          wd.closingTime,
+          wd.endtime,
           "HH:mm",
           new Date(chosenDate)
         );
@@ -158,9 +158,8 @@ export default function TimeDialog(props) {
         "yyyy-MM-dd",
         new Date(chosenDate)
       );
-      const appointmentTime = appointment.start_hour;
+      const appointmentTime = appointment.start_hour.slice(0,5);
       const newTime = newTimeObj.toTimeString().slice(0, 5);
-
       return (
         chosenDate.toDateString() === appointmentDate.toDateString() &&
         newTime === appointmentTime

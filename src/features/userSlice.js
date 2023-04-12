@@ -111,7 +111,8 @@ export const _updateUser = createAsyncThunk(
   "user/update",
   async (user, { rejectWithValue }) => {
     try {
-      const updatedUser = { ...user };
+      let updatedUser = { ...user, business: {...user.business} };
+      
       if (updatedUser.business?.gallery) {
         updatedUser.business.gallery = JSON.stringify(updatedUser.business.gallery);
       }

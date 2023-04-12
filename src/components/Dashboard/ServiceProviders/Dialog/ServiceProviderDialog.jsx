@@ -147,7 +147,7 @@ export default function AddServiceProviderDialog(props) {
         filename: providerForEdit?.filename || "",
         workdays: workdays,
         services: chosenServices,
-        business: user?.business,
+        business: {...user?.business},
         appointments: providerForEdit?.appointments || [],
         user: user?.user || providerForEdit?.user,
       };
@@ -157,7 +157,7 @@ export default function AddServiceProviderDialog(props) {
       else response = await props?.providers.add(newProvider);
       userResponse.serviceProvider = response.payload;
       userResponse = { ...userResponse, ...newUser, business: user?.business };
-      console.log(userResponse);
+      console.log(response);
       response = await dispatch(_updateUser(userResponse));
 
       if (response.type.endsWith("fulfilled")) {

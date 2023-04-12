@@ -129,8 +129,8 @@ export default function ServiceProvidersManagement() {
         <DataGrid
           rows={rows}
           columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
+          pageSize={12}
+          rowsPerPageOptions={[12]}
           sx={colorMode.mode === "light"
           ? {backgroundColor: 'white'}
           : {backgroundColor: 'inherit'}}
