@@ -10,7 +10,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { parse } from "date-fns";
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { _addAppointment } from "../../../../features/appointSlice";
@@ -23,13 +23,20 @@ import {
   CONFIRM_BUTTON_LABEL,
   NO_CHOSEN_TIME,
   GENERIC_ERROR,
+  CONFIRM_DIALOG_TITLE,
 } from "../../../../constants/AppointConstants";
 import { isFulfilled } from "../../../../common";
+import Box from "@mui/material/Box";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import Typography from "@mui/material/Typography";
 
 export default function TimeDialog(props) {
   const [error, setError] = useState();
   const [chosenTime, setChosenTime] = useState();
   const [timesArray, setTimesArray] = useState();
+  const [activeStep, setActiveStep] = useState(0);
   const serviceProvider = props?.serviceProvider;
   const service = props?.service;
   const chosenDate = props?.chosenDate;
@@ -37,12 +44,17 @@ export default function TimeDialog(props) {
   const openingTime = useRef();
   const closingTime = useRef();
   const dispatch = useDispatch();
-  const customer = props?.customer;
   const navigate = useNavigate();
 
   const handleChange = (event) => setChosenTime(event.target.value);
-  
+
   const handleClose = () => props?.setOpen(false);
+
+  const handleNext = () =>
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
+  const handleBack = () =>
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
 
   const parseWorkingHoursForChosenDate = () => {
     serviceProvider?.workdays?.forEach((wd) => {
@@ -52,11 +64,7 @@ export default function TimeDialog(props) {
           "HH:mm",
           new Date(chosenDate)
         );
-        closingTime.current = parse(
-          wd.endtime,
-          "HH:mm",
-          new Date(chosenDate)
-        );
+        closingTime.current = parse(wd.endtime, "HH:mm", new Date(chosenDate));
         return;
       }
     });
@@ -72,7 +80,7 @@ export default function TimeDialog(props) {
       day: chosenDate.getTime(),
       start_hour: chosenTime,
       end_hour: CalculateClosingTime().toTimeString(),
-      customer,
+      customer: props?.customer,
       serviceProvider,
       service: {
         ...service,
@@ -104,7 +112,7 @@ export default function TimeDialog(props) {
     end.setMinutes(parseInt(minutes) + parseInt(service?.duration));
     return end;
   };
-  
+
   const CalculateMenuItems = () => {
     const timesArray = [new Date(openingTime.current)];
     let skipFlag = 0;
@@ -115,7 +123,7 @@ export default function TimeDialog(props) {
 
       // Calculate time of next slot, taking into account skipped slots
       const slotDuration =
-        service?.duration * (skipFlag + 1) || service?.duration;
+        service.duration * (skipFlag + 1) || service.duration;
       lastTime.setMinutes(lastTime.getMinutes() + slotDuration);
 
       // Exit loop if end time has been reached
@@ -158,7 +166,7 @@ export default function TimeDialog(props) {
         "yyyy-MM-dd",
         new Date(chosenDate)
       );
-      const appointmentTime = appointment.start_hour.slice(0,5);
+      const appointmentTime = appointment.start_hour.slice(0, 5);
       const newTime = newTimeObj.toTimeString().slice(0, 5);
       return (
         chosenDate.toDateString() === appointmentDate.toDateString() &&
@@ -179,31 +187,63 @@ export default function TimeDialog(props) {
       )}
       <DialogTitle>{DIALOG_TITLE}</DialogTitle>
       <DialogContent>
-        <DialogContentText sx={{ direction: "ltr" }}>
-          {SELECTED_DATE_LABEL} <b>{chosenDate?.toDateString()}</b>
-          <br />
-          {SELECT_TIME_LABEL}
-        </DialogContentText>
-        {openingTime.current && (
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">
-              {SELECT_TIME_INPUT_LABEL}
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={chosenTime}
-              label={SELECT_TIME_INPUT_LABEL}
-              onChange={handleChange}
-            >
-              {timesArray}
-            </Select>
-          </FormControl>
+        <Stepper activeStep={activeStep}>
+          <Step key={DIALOG_TITLE}>
+            {" "}
+            <StepLabel>{DIALOG_TITLE}</StepLabel>
+          </Step>
+          <Step key={CONFIRM_DIALOG_TITLE}>
+            <StepLabel>{CONFIRM_DIALOG_TITLE}</StepLabel>
+          </Step>
+        </Stepper>
+
+        {activeStep === 0 && (
+          <Fragment>
+            <DialogContentText sx={{ direction: "ltr" }}>
+              {SELECTED_DATE_LABEL} <b>{chosenDate?.toDateString()}</b>
+              <br />
+              {SELECT_TIME_LABEL}
+            </DialogContentText>
+            {openingTime.current && (
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  {SELECT_TIME_INPUT_LABEL}
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={chosenTime}
+                  label={SELECT_TIME_INPUT_LABEL}
+                  onChange={handleChange}
+                >
+                  {timesArray}
+                </Select>
+              </FormControl>
+            )}
+          </Fragment>
+        )}
+        {activeStep === 1 && (
+          <Fragment>
+            <DialogContentText sx={{ direction: "ltr" }}>
+              {SELECTED_DATE_LABEL} <b>{chosenDate?.toDateString()}</b>
+              <br />
+              {SELECT_TIME_LABEL}
+            </DialogContentText>
+          </Fragment>
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>{CANCEL_BUTTON_LABEL}</Button>
-        <Button onClick={handleSubmit}>{CONFIRM_BUTTON_LABEL}</Button>
+        {activeStep === 0 ? (
+          <>
+            <Button onClick={handleClose}>{CANCEL_BUTTON_LABEL}</Button>
+            <Button onClick={handleNext}>אישור פרטים</Button>
+          </>
+        ) : (
+          <>
+            <Button onClick={handleBack}>חזרה</Button>
+            <Button onClick={handleSubmit}>{CONFIRM_BUTTON_LABEL}</Button>
+          </>
+        )}
       </DialogActions>
     </Dialog>
   );

@@ -20,3 +20,4 @@ export const DATE_PICKER_TITLE = "בחירת תאריך";
 export const APPOINTMENT_SELECTION_TITLE = "בחרת לקבוע תור ל";
 export const CALENDAR_INSTRUCTIONS = "לחץ\\י על היום הרצוי בלוח השנה:";
 export const DISABLED_DATE_CLASS = "disabled-date";
+export const CONFIRM_DIALOG_TITLE = "אישור בחירה";
