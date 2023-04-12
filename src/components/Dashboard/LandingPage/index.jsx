@@ -1,15 +1,5 @@
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  Divider,
-  Typography
-} from "@mui/material";
+import { Typography } from "@mui/material";
 import { useContext, useState } from "react";
-import { HuePicker } from "react-color";
 import { ColorModeContext } from "..";
 import headerbg from "../../../images/home-header-background.webp";
 import NoImage from "../../../images/noimage.png";
@@ -18,6 +8,11 @@ import UserContext from "../UserContext";
 import { darkModeBox } from "../Util";
 import ImageUploadDialog from "./ImageUploadDialog";
 import "./index.css";
+import { LandingHuePicker } from "./LandingHuePicker";
+import {
+  APPOINT_TEXT,
+  CHANGE_IMAGE_TEXT,
+} from "../../../constants/LandingPageConstants";
 
 export default function LandingPageManagement() {
   const user = useContext(UserContext);
@@ -28,7 +23,7 @@ export default function LandingPageManagement() {
   );
   const [success, setSuccess] = useState(false);
   const [element, setElement] = useState();
-
+  
   const handleHeaderClick = () => {
     setElement(null);
     setOpen(!open);
@@ -40,6 +35,7 @@ export default function LandingPageManagement() {
 
   const handleSubmit = async () => {
     let tempUser = { ...user?.user };
+    console.log(tempUser);
     tempUser.business = {
       ...tempUser.business,
       pageColor: color,
@@ -58,46 +54,22 @@ export default function LandingPageManagement() {
     setOpen(true);
   };
 
-  // useEffect(() => {
-  //   if (user.user?.business?.pageColor) {
-  //     setColor(user.user?.business?.pageColor);
-  //   }
-  // }, [user]);
-
   return (
     <div className="landing-page-container">
       <ImageUploadDialog open={open} toggle={setOpen} element={element} />
 
-      <div className="header-bar" style={colorMode.mode === "dark" ? darkModeBox : null}>
-
+      <div
+        className="header-bar"
+        style={colorMode.mode === "dark" ? darkModeBox : null}
+      >
         <Typography variant="h5">עיצוב דף נחיתה</Typography>
       </div>
       <div className="first-row">
-        <div className="landing-page-main" style={colorMode.mode === "dark" ? darkModeBox : null}>
-          <Card elevation={0}>
-            <CardHeader title="צבעים" />
-            <Divider />
-            <CardContent>
-              <HuePicker
-                color={color}
-                onChange={handleChangeColor}
-                width={"100%"}
-              />
-            </CardContent>
-            <CardActions>
-              <Button variant="contained" onClick={handleSubmit}>
-                שמירה
-              </Button>
-              {success && (
-                <>
-                  <CheckCircleOutlineIcon
-                    sx={{ color: "green", marginRight: "5px" }}
-                  />
-                  נשמר
-                </>
-              )}
-            </CardActions>
-          </Card>
+        <div
+          className="landing-page-main"
+          style={colorMode.mode === "dark" ? darkModeBox : null}
+        >
+          {LandingHuePicker(color, handleChangeColor, handleSubmit, success)}
         </div>
       </div>
       <div className="landing-page-main">
@@ -106,7 +78,7 @@ export default function LandingPageManagement() {
           onClick={handleHeaderClick}
           style={{
             backgroundImage: `url(${
-              user?.business?.headerImg ? user?.business?.headerImg : headerbg
+              user?.business?.headerImg ? user.business.headerImg : headerbg
             })`,
             backgroundSize: "cover",
             width: "100%",
@@ -116,7 +88,7 @@ export default function LandingPageManagement() {
           <h1>{user?.business?.name}</h1>
           <h5>{user?.business?.subtitle}</h5>
           <img
-            src={user?.business?.img ? user?.business?.img : NoImage}
+            src={user?.business?.img ? user.business.img : NoImage}
             alt="logo"
             className="business-logo"
           />
@@ -124,7 +96,7 @@ export default function LandingPageManagement() {
             className="appoint-btn-demo"
             style={{ backgroundColor: color }}
           >
-            קביעת תור
+            {APPOINT_TEXT}
           </button>
           <div className="cover">
             <lottie-player
@@ -135,7 +107,7 @@ export default function LandingPageManagement() {
               loop
               autoplay
             ></lottie-player>
-            <p>לחץ לשינוי התמונה</p>
+            <p>{CHANGE_IMAGE_TEXT}</p>
           </div>
           <div></div>
         </div>
@@ -143,75 +115,27 @@ export default function LandingPageManagement() {
           <div className="form-container">
             {OpeningHours(user?.business?.workdays, color)}
             <div className="gallery">
-              <div
-                style={{
-                  backgroundImage: `url(${
-                    user?.business?.gallery && user?.business?.gallery[0]
-                      ? user?.business?.gallery[0]
-                      : NoImage
-                  })`,
-                  ...styles.galleryImage,
-                }}
-                onClick={() => handleImageChange(0)}
-              >
-                <div className="cover">
-                  <lottie-player
-                    src="https://assets7.lottiefiles.com/packages/lf20_asjtsvwm.json"
-                    background="transparent"
-                    speed="1"
-                    style={{ width: "50%", height: "50%" }}
-                    loop
-                    autoplay
-                  ></lottie-player>
-                  <p>לחץ לשינוי התמונה</p>
+              {user?.business?.gallery?.map((image, idx) => (
+                <div
+                  style={{
+                    backgroundImage: `url(${image ? image : NoImage})`,
+                    ...styles.galleryImage,
+                  }}
+                  onClick={() => handleImageChange(idx)}
+                >
+                  <div className="cover">
+                    <lottie-player
+                      src="https://assets7.lottiefiles.com/packages/lf20_asjtsvwm.json"
+                      background="transparent"
+                      speed="1"
+                      style={{ width: "50%", height: "50%" }}
+                      loop
+                      autoplay
+                    ></lottie-player>
+                    <p>{CHANGE_IMAGE_TEXT}</p>
+                  </div>
                 </div>
-              </div>
-              <div
-                style={{
-                  backgroundImage: `url(${
-                    user?.business?.gallery && user?.business?.gallery[1]
-                      ? user?.business?.gallery[1]
-                      : NoImage
-                  })`,
-                  ...styles.galleryImage,
-                }}
-                onClick={() => handleImageChange(1)}
-              >
-                <div className="cover">
-                  <lottie-player
-                    src="https://assets7.lottiefiles.com/packages/lf20_asjtsvwm.json"
-                    background="transparent"
-                    speed="1"
-                    style={{ width: "50%", height: "50%" }}
-                    loop
-                    autoplay
-                  ></lottie-player>
-                  <p>לחץ לשינוי התמונה</p>
-                </div>
-              </div>
-              <div
-                style={{
-                  backgroundImage: `url(${
-                    user?.business?.gallery && user?.business?.gallery[2]
-                      ? user?.business?.gallery[2]
-                      : NoImage
-                  })`,
-                  ...styles.galleryImage,
-                }}
-                onClick={() => handleImageChange(2)}
-              >
-                <div className="cover">
-                  <lottie-player
-                    src="https://assets7.lottiefiles.com/packages/lf20_asjtsvwm.json"
-                    background="transparent"
-                    speed="1"
-                    style={{ width: "50%", height: "50%" }}
-                    loop
-                    autoplay
-                  ></lottie-player>
-                  <p>לחץ לשינוי התמונה</p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
@@ -221,12 +145,13 @@ export default function LandingPageManagement() {
 }
 
 const styles = {
-
   galleryImage: {
     minHeight: "150px",
-    backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
+    backgroundSize: "contain",
     backgroundPosition: "center",
     width: "100%",
+    border: "1px dashed grey",
+    borderRadius: "5px",
   },
 };

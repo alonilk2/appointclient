@@ -179,10 +179,10 @@ export const _getCurrentUser = createAsyncThunk(
   async (thunkAPI) => {
     try {
       let response = await getCurrentUser();
-      if (response?.business?.workdays) {
-        response.business.workdays = sortWorkdaysArray(response.business.workdays)
+      if (response?.data.business?.workdays) {
+        response.data.business.workdays = sortWorkdaysArray(response.data.business.workdays)
       }
-      if (response?.business?.gallery) response.business.gallery = JSON.parse(response?.business?.gallery)
+      if (response?.data.business?.gallery) response.data.business.gallery = JSON.parse(response.data.business.gallery)
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

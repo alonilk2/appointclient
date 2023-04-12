@@ -8,6 +8,7 @@ import headerbg from "../../images/home-header-background.webp";
 import NoImage from "../../images/noimage.png";
 import { OpeningHours } from "../OpeningHours";
 import "./index.css";
+import { APPOINT_TEXT } from "../../constants/LandingPageConstants";
 
 export default function Appointment() {
   const { businessId } = useParams();
@@ -34,7 +35,7 @@ export default function Appointment() {
           })`,
           backgroundSize: "cover",
           backgroundPositionY: "50%",
-          backgroundPositionX: "1px"
+          backgroundPositionX: "1px",
         }}
       >
         <div className="darken-home" />
@@ -49,7 +50,7 @@ export default function Appointment() {
           style={{ backgroundColor: business?.pageColor }}
           onClick={handleClickAppoint}
         >
-          זימון תור
+          {APPOINT_TEXT}
         </button>
         <div className="details-box">
           <div className="details-row">
@@ -93,4 +94,3 @@ export default function Appointment() {
     </div>
   );
 }
-

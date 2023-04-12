@@ -49,6 +49,7 @@ export default function ImageUploadDialog(props) {
   const handleSubmit = async () => {
     if (file.length === 0) return setError(true);
     let tempUser = { ...user };
+    console.log(tempUser)
     tempUser.business = {
       ...tempUser.business,
       headerImg: element === null ? file : tempUser.business?.headerImg,

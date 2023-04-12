@@ -19,9 +19,9 @@ export default function useUser() {
     const { business } = user;
     // If new image added for landing page
     if (!isNullOrEmpty(business?.newfile)) {
-      const gallery = business?.gallery || Array(3);
-      const [fileName] = await uploadFile({ file: business.newfile });
-      gallery[business?.element] = fileName?.fileUrl;
+      const [fileResp] = await uploadFile({ file: business.newfile });
+      var gallery = [...business?.gallery] || Array(3);
+      gallery[business?.element] = fileResp?.fileUrl;
       business.gallery = gallery;
       
       // If logo is changed
