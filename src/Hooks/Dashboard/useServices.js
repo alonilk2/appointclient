@@ -8,6 +8,7 @@ import {
 } from "../../features/dashboardSlice";
 import { uploadFile } from "../../API/FilesAPI";
 import { isNullOrEmpty } from "../../common";
+
 export default function useServices() {
   const servicesCustomer = useSelector(
     (state) => state?.user?.user?.business.services
@@ -25,11 +26,13 @@ export default function useServices() {
 
   const StringifyBusinessGalleryIfExist = (service) => {
     if (service.business.gallery) {
-      service.business.gallery = JSON.stringify(service.business.gallery);
+      let businessCopy = { ...service.business };
+      businessCopy.gallery = JSON.stringify(businessCopy.gallery);
+      service.business = businessCopy;
     }
   };
 
-  const addServices = async (service) => {
+  const addServices = (service) => {
     uploadServiceImageAndSetURL(service);
     StringifyBusinessGalleryIfExist(service);
     return dispatch(_addServices(service));

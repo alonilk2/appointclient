@@ -224,7 +224,7 @@ export default function AddServiceProviderDialog(props) {
         <FormControlLabel
           control={
             <Checkbox
-              checked={chosenServices.some((_ser) => _ser.id === service.id)}
+              checked={chosenServices?.some((_ser) => _ser.id === service.id)}
               onChange={(e) => handleCheck(e, service)}
             />
           }

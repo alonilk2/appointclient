@@ -1,5 +1,5 @@
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Divider, Button, Avatar } from "@mui/material";
+import { Box, Divider, Button, Avatar, Alert } from "@mui/material";
 import CardHeader from "@mui/material/CardHeader";
 import useServiceProviders from "../../../hooks/Dashboard/useServiceProviders";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -11,11 +11,20 @@ import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import { useContext } from "react";
 import UserContext from "../UserContext";
-import { ColorModeContext } from ".."
+import { ColorModeContext } from "..";
+import React from "react";
+import ErrorHandler from "../../../API/ErrorHandler";
+import ConfirmationDialog from "../Common/ConfirmationDialog";
+import {
+  DELETE_PROVIDER_TEXT,
+  DELETE_PROVIDER_TITLE,
+} from "../../../constants/ServiceProvidersConstants";
 
 export default function ServiceProvidersManagement() {
   const [toggleDialog, setToggleDialog] = useState(false);
   const [providerForEdit, setProviderForEdit] = useState();
+  const [error, setError] = useState();
+  const [toggleConfirmDialog, setToggleConfirmDialog] = useState(false);
   const serviceProviders = useServiceProviders();
   const user = useContext(UserContext);
   const colorMode = useContext(ColorModeContext);
@@ -30,10 +39,20 @@ export default function ServiceProvidersManagement() {
     );
   };
 
-  const handleRemove = async (params) => {
-    let response = await user?.findUserByEmail(params?.value?.email);
-    if (response) response = await user?.remove(response);
-    user.refresh();
+  const handleClickRemoveProvider = (params) => {
+    setProviderForEdit(params);
+    setToggleConfirmDialog(true);
+  };
+
+  const handleRemove = async () => {
+    let response = await user?.findUserByEmail(providerForEdit?.value?.email);
+    if (ErrorHandler(response, setError)) {
+      response = await user?.remove(response.data);
+      if (ErrorHandler(response, setError)) {
+        await user.refresh();
+        setToggleConfirmDialog(false);
+      }
+    }
   };
 
   const handleEdit = (params) => {
@@ -49,7 +68,7 @@ export default function ServiceProvidersManagement() {
         <IconButton
           aria-label="delete"
           color="error"
-          onClick={() => handleRemove(params)}
+          onClick={() => handleClickRemoveProvider(params)}
         >
           <DeleteIcon />
         </IconButton>
@@ -67,6 +86,11 @@ export default function ServiceProvidersManagement() {
   const handleAddServiceProvider = () => {
     setProviderForEdit(null);
     setToggleDialog(true);
+  };
+
+  const handleCloseConfirmationDialog = () => {
+    setToggleConfirmDialog(false);
+    setError();
   };
 
   const columns = [
@@ -108,11 +132,24 @@ export default function ServiceProvidersManagement() {
         providers={serviceProviders}
         providerForEdit={providerForEdit}
       />
+      <ConfirmationDialog
+        title={DELETE_PROVIDER_TITLE}
+        text={DELETE_PROVIDER_TEXT}
+        error={error}
+        name={
+          providerForEdit?.value?.firstname + providerForEdit?.value?.lastname
+        }
+        open={toggleConfirmDialog}
+        handleClose={handleCloseConfirmationDialog}
+        handleConfirm={handleRemove}
+      />
       <CardHeader
         title="ניהול נותני שירות"
-        sx={colorMode.mode === "light"
-        ? {backgroundColor: 'white', ...styles.CardHeader}
-        : {backgroundColor: 'inherit', ...styles.CardHeader}}
+        sx={
+          colorMode.mode === "light"
+            ? { backgroundColor: "white", ...styles.CardHeader }
+            : { backgroundColor: "inherit", ...styles.CardHeader }
+        }
         action={
           <Button
             variant="contained"
@@ -131,9 +168,11 @@ export default function ServiceProvidersManagement() {
           columns={columns}
           pageSize={12}
           rowsPerPageOptions={[12]}
-          sx={colorMode.mode === "light"
-          ? {backgroundColor: 'white'}
-          : {backgroundColor: 'inherit'}}
+          sx={
+            colorMode.mode === "light"
+              ? { backgroundColor: "white" }
+              : { backgroundColor: "inherit" }
+          }
         />
       )}
     </Box>
@@ -144,7 +183,7 @@ const styles = {
   AddButton: { direction: "ltr" },
   DeleteIcon: { marginLeft: "20%", color: "red" },
   EditIcon: { marginRight: "20%" },
-  Box: { height: "100%", width: "100%", marginLeft: "2%"},
+  Box: { height: "100%", width: "100%", marginLeft: "2%" },
   CardHeader: { textAlign: "right" },
   UserProfileCell: {
     display: "flex",

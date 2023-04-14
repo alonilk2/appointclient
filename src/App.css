@@ -5,7 +5,9 @@
   font-family: 'Assistant', 'Roboto', sans-serif;
   direction: rtl;
 }
-
+.MuiPaper-root, .MuiDialogActions-root {
+  direction: rtl;
+}
 #root {
   height: 100%;
 }

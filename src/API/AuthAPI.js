@@ -44,7 +44,8 @@ export function updateUser(user) {
 
 export function removeUser(user) {
   try {
-    let str = JSON.stringify(user);
+    console.log(user)
+    let str = JSON.stringify(user.data);
     return api.delete("/users/" + user.id, str)
   } catch (err) {
     console.log(ErrorOutlined);

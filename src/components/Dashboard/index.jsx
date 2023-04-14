@@ -7,7 +7,6 @@ import { ACCESS_TOKEN } from "../../constants";
 import useUser from "../../hooks/Dashboard/useUser";
 import AppointmentsManagement from "./Appointments";
 import BusinessDetailsManagement from "./BusinessProfile";
-import "./index.css";
 import LandingPageManagement from "./LandingPage";
 import ProfileChip from "./ProfileChip";
 import ServiceProvidersManagement from "./ServiceProviders";
@@ -16,6 +15,7 @@ import ServicesManagement from "./Services";
 import SideMenu from "./Sidemenu/SideMenu";
 import Statistics from "./Statistics";
 import UserContext from "./UserContext";
+import "./index.css";
 
 export const ColorModeContext = createContext({
   toggleColorMode: () => {},
@@ -82,29 +82,31 @@ export default function Dashboard() {
               </a>
               {ProfileChip(user)}
             </header>
-            <section className="row main-section">
-              <main className="col-10 main">
-                <div
-                  className="main-container"
-                  style={
-                    mode === "dark" ? { backgroundColor: "#28333e" } : null
-                  }
-                >
-                  {selectedTab === 0 && <ServiceProvidersManagement />}
-                  {selectedTab === 1 && <ServicesManagement />}
-                  {selectedTab === 2 &&
-                    (!user.user?.serviceProvider ? (
-                      <BusinessDetailsManagement />
-                    ) : (
-                      <ServiceProviderView />
-                    ))}
-                  {selectedTab === 3 && <LandingPageManagement />}
-                  {selectedTab === 4 && <Statistics />}
-                  {selectedTab === 5 && <AppointmentsManagement />}
-                </div>
-              </main>
-              <SideMenu />
-            </section>
+            {user.user && (
+              <section className="row main-section">
+                <main className="col-10 main">
+                  <div
+                    className="main-container"
+                    style={
+                      mode === "dark" ? { backgroundColor: "#28333e" } : null
+                    }
+                  >
+                    {selectedTab === 0 && <ServiceProvidersManagement />}
+                    {selectedTab === 1 && <ServicesManagement />}
+                    {selectedTab === 2 &&
+                      (!user.user?.serviceProvider ? (
+                        <BusinessDetailsManagement />
+                      ) : (
+                        <ServiceProviderView />
+                      ))}
+                    {selectedTab === 3 && <LandingPageManagement />}
+                    {selectedTab === 4 && <Statistics />}
+                    {selectedTab === 5 && <AppointmentsManagement />}
+                  </div>
+                </main>
+                <SideMenu />
+              </section>
+            )}
           </div>
         </ThemeProvider>
       </ColorModeContext.Provider>
