@@ -39,7 +39,7 @@ export default function SideMenu() {
         <ListItemIcon>
           <SettingsIcon />
         </ListItemIcon>
-        <ListItemText primary="ניהול פרטי העסק" />
+        <ListItemText primary="ניהול העסק" />
       </ListItemButton>
       <ListItemButton
         selected={selectedTab === 3}

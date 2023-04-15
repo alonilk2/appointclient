@@ -14,22 +14,27 @@ import {
   APPOINTMENT_SELECTION_TITLE,
   CALENDAR_INSTRUCTIONS,
   DISABLED_DATE_CLASS,
-} from '../../../../constants/AppointConstants';
+} from "../../../../constants/AppointConstants";
+import { getMonth, setMonth }  from 'date-fns'
+
 export default function Schedule() {
   const [chosenDate, setChosenDate] = useState();
   const [open, setOpen] = useState(false);
   const location = useLocation();
-  let provider = location?.state?.provider;
-  let business = location?.state?.business;
-  let clickedService = location?.state?.clickedService;
-  let customer = location?.state?.customer;
-  
+  const today = new Date();
+  const provider = location?.state?.provider;
+  const business = location?.state?.business;
+  const clickedService = location?.state?.clickedService;
+  const customer = location?.state?.customer;
+  const weeksRange = business?.dateRange * 7;
+
   const handleDateClick = (arg) => {
     if (provider?.workdays && !FindProviderWorkday(provider, arg.date.getDay()))
       return false;
     setOpen(true);
     setChosenDate(arg.date);
   };
+
 
   return (
     <div className="appoint-dashboard-container">
@@ -54,7 +59,10 @@ export default function Schedule() {
           src={provider?.filename}
         ></Avatar>
         <div className="right-column">
-          <h5>{APPOINTMENT_SELECTION_TITLE}{business?.services[clickedService]?.name}</h5>
+          <h5>
+            {APPOINTMENT_SELECTION_TITLE}
+            {business?.services[clickedService]?.name}
+          </h5>
           <h5>אצל {provider?.firstname + " " + provider?.lastname}</h5>
           <h1>{CALENDAR_INSTRUCTIONS}</h1>
         </div>
@@ -76,12 +84,16 @@ export default function Schedule() {
             initialView="dayGridMonth"
             dateClick={handleDateClick}
             dayCellClassNames={(date) =>
-              !FindProviderWorkday(provider, date.date.getDay()) && DISABLED_DATE_CLASS
+              !FindProviderWorkday(provider, date.date.getDay()) &&
+              DISABLED_DATE_CLASS
             }
+            validRange={{
+              start: today,
+              end: new Date(today.getFullYear(), today.getMonth(), today.getDate()+(weeksRange)),
+            }}
           />
         </div>
       </div>
     </div>
-    
   );
 }

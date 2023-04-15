@@ -14,6 +14,8 @@ import "./index.css";
 import ProfileImageCard from "./ProfileImage/ProfileImageCard";
 import ProfileImageUploadDialog from "./ProfileImage/ProfileImageUploadDialog";
 import WorkdaysCard from "./Workdays/WorkdaysCard";
+import Settings from "./Settings";
+import SettingsCard from "./Settings";
 
 export default function BusinessProfileManagement() {
   const [open, setOpen] = useState(false);
@@ -67,6 +69,9 @@ export default function BusinessProfileManagement() {
             סה"כ ביקורים החודש
           </Typography>
           <ShowChartIcon sx={styles.monthIcon} />
+        </div>
+        <div className="formcontainer settings-widget" style={colorMode.mode === "dark" ? darkModeBox : null}>
+          <SettingsCard />
         </div>
         <div className="formcontainer" style={colorMode.mode === "dark" ? darkModeBox : null}>
           <BusinessDetailsCard />

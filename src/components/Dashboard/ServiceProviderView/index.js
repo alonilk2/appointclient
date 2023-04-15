@@ -23,33 +23,6 @@ export default function ServiceProviderView() {
         <Typography variant="h5">ברוך שובך, {user?.user?.firstname}</Typography>
       </div>
       <div className="widget-container">
-        <div className="formcontainer data-widget">
-          <Typography variant="body1" gutterBottom sx={styles.widgetNumber}>
-            28
-          </Typography>
-          <Typography variant="body1" gutterBottom sx={styles.widgetTitle}>
-            מספר הביקורים להיום
-          </Typography>
-          <SupervisedUserCircleIcon sx={styles.userIcon} />
-        </div>
-        <div className="formcontainer data-widget" style={styles.totalIncomes}>
-          <Typography variant="body1" gutterBottom sx={styles.widgetNumber}>
-            ₪30,285
-          </Typography>
-          <Typography variant="body1" gutterBottom sx={styles.totalIncomeTitle}>
-            סה"כ הכנסות החודש
-          </Typography>
-          <MonetizationOnIcon sx={styles.dollarIcon} />
-        </div>
-        <div className="formcontainer data-widget" style={styles.totalMonthVisits}>
-          <Typography variant="body1" gutterBottom sx={styles.widgetNumber}>
-            132
-          </Typography>
-          <Typography variant="body1" gutterBottom sx={styles.totalMonthTitle}>
-            סה"כ ביקורים החודש
-          </Typography>
-          <ShowChartIcon sx={styles.monthIcon} />
-        </div>
         <div className="formcontainer upcoming" style={styles.formcontainer}>
           <UpcomingAppointmentsCard />
         </div>
@@ -61,7 +34,7 @@ export default function ServiceProviderView() {
 
 const styles = {
   formcontainer: {
-    width: "48%",
+    width: "98%",
     padding: 0,
     height: "80%"
   },

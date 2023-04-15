@@ -28,6 +28,9 @@
     flex-direction: row;
     padding: 2%;
 }
+.settings-widget {
+    width: 98% !important; 
+}
 .business-details-container .formcontainer {
     width: 31.33%;
 

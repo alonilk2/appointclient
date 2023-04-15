@@ -24,13 +24,12 @@ import {
   NO_CHOSEN_TIME,
   GENERIC_ERROR,
   CONFIRM_DIALOG_TITLE,
+  SELECT_TIME_CONFIRM,
 } from "../../../../constants/AppointConstants";
 import { isFulfilled } from "../../../../common";
-import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import Typography from "@mui/material/Typography";
 
 export default function TimeDialog(props) {
   const [error, setError] = useState();
@@ -50,11 +49,15 @@ export default function TimeDialog(props) {
 
   const handleClose = () => props?.setOpen(false);
 
-  const handleNext = () =>
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  const handleNext = () => {
+    if (chosenTime) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    }
+  };
 
-  const handleBack = () =>
+  const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
 
   const parseWorkingHoursForChosenDate = () => {
     serviceProvider?.workdays?.forEach((wd) => {
@@ -189,7 +192,6 @@ export default function TimeDialog(props) {
       <DialogContent>
         <Stepper activeStep={activeStep}>
           <Step key={DIALOG_TITLE}>
-            {" "}
             <StepLabel>{DIALOG_TITLE}</StepLabel>
           </Step>
           <Step key={CONFIRM_DIALOG_TITLE}>
@@ -225,9 +227,10 @@ export default function TimeDialog(props) {
         {activeStep === 1 && (
           <Fragment>
             <DialogContentText sx={{ direction: "ltr" }}>
+              <br />
               {SELECTED_DATE_LABEL} <b>{chosenDate?.toDateString()}</b>
               <br />
-              {SELECT_TIME_LABEL}
+              <b>{SELECT_TIME_CONFIRM}</b>
             </DialogContentText>
           </Fragment>
         )}

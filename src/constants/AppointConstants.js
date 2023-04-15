@@ -11,6 +11,7 @@ export const DIALOG_TITLE = "בחירת שעה";
 export const SELECTED_DATE_LABEL = "בחרת בתאריך:";
 export const SELECT_TIME_LABEL = "יש לבחור את השעה הנוחה לך לפגישה מהרשימה הבאה:";
 export const SELECT_TIME_INPUT_LABEL = "שעה";
+export const SELECT_TIME_CONFIRM = "האם לקבוע את התור?";
 export const CANCEL_BUTTON_LABEL = "ביטול";
 export const CONFIRM_BUTTON_LABEL = "קביעת תור";
 export const NO_CHOSEN_TIME = "יש לבחור שעת פגישה מהרשימה!";

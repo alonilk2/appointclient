@@ -27,15 +27,12 @@ export default function UpcomingAppointmentsCard(props) {
   const [open, setOpen] = useState(false);
 
   const handleConfirm = async () => {
-    try {
-      let response = await dispatch(_removeAppointment(open));
-      setOpen(false);
-      if (response?.type?.endsWith("fulfilled")) {
-        user.refresh();
-      }
-    } catch (e) {
-      console.log(e);
+    let response = await dispatch(_removeAppointment(open));
+    setOpen(false);
+    if (response?.type?.endsWith("fulfilled")) {
+      user.refresh();
     }
+
   };
 
   const handleCancelAppointment = (appointment) => {
@@ -70,7 +67,7 @@ export default function UpcomingAppointmentsCard(props) {
       {ConfirmationDialog}
       <CardHeader title="התורים הקרובים שלך" />
       <Divider />
-      <CardContent>
+      <CardContent sx={styles.cardContent}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table" size="small">
             <TableHead>
@@ -104,6 +101,7 @@ export default function UpcomingAppointmentsCard(props) {
                     <Chip
                       label="ביטול פגישה"
                       onDelete={() => handleCancelAppointment(row.id)}
+                      onClick={() => handleCancelAppointment(row.id)}
                       color="error"
                       deleteIcon={<DeleteIcon />}
                       variant="outlined"
@@ -150,4 +148,7 @@ const styles = {
     padding: "2% 0",
     color: "rgba(0, 0, 0, 0.6)",
   },
+  cardContent: {
+    padding: '0'
+  }
 };
