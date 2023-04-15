@@ -15,7 +15,6 @@ import {
   CALENDAR_INSTRUCTIONS,
   DISABLED_DATE_CLASS,
 } from "../../../../constants/AppointConstants";
-import { getMonth, setMonth }  from 'date-fns'
 
 export default function Schedule() {
   const [chosenDate, setChosenDate] = useState();
@@ -35,6 +34,13 @@ export default function Schedule() {
     setChosenDate(arg.date);
   };
 
+  const getRangeEndDate = (today) => {
+    return new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() + weeksRange
+    );
+  };
 
   return (
     <div className="appoint-dashboard-container">
@@ -89,7 +95,7 @@ export default function Schedule() {
             }
             validRange={{
               start: today,
-              end: new Date(today.getFullYear(), today.getMonth(), today.getDate()+(weeksRange)),
+              end: getRangeEndDate(today),
             }}
           />
         </div>
