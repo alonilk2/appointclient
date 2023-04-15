@@ -171,8 +171,8 @@ export default function ServiceProvidersManagement() {
           sx={
             colorMode.mode === "light"
               ? { backgroundColor: "white" }
-              : { backgroundColor: "inherit" }
-          }
+              : { backgroundColor: "inherit", border: 'none' }
+            }
         />
       )}
     </Box>
@@ -183,7 +183,7 @@ const styles = {
   AddButton: { direction: "ltr" },
   DeleteIcon: { marginLeft: "20%", color: "red" },
   EditIcon: { marginRight: "20%" },
-  Box: { height: "100%", width: "100%", marginLeft: "2%" },
+  Box: { height: "100%", width: "100%", marginLeft: "2%", backgroundColor: 'rgb(27, 38, 53)'},
   CardHeader: { textAlign: "right" },
   UserProfileCell: {
     display: "flex",

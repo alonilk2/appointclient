@@ -17,4 +17,4 @@ export const FindProviderWorkday = (provider, day) => {
   return false;
 };
 
-export const darkModeBox = { backgroundColor: "#18191b", border: "rgb(74, 74, 74)", color: 'white' };
+export const darkModeBox = { backgroundColor: "rgb(27, 38, 53)", border: "rgb(74, 74, 74)", color: 'white' };

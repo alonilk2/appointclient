@@ -44,8 +44,8 @@ export default function Dashboard() {
           mode,
           ...(mode === "dark" && {
             background: {
-              default: "#18191b",
-              paper: "#18191b",
+              default: "rgb(27, 38, 53)",
+              paper: "rgb(27, 38, 53)",
             },
           }),
         },
@@ -68,7 +68,7 @@ export default function Dashboard() {
           <div className="dashboard-container">
             <header
               className="dashboard-header"
-              style={mode === "dark" ? { backgroundColor: "#18191b" } : null}
+              style={mode === "dark" ? { backgroundColor: "rgb(27, 38, 53)" } : null}
             >
               <a href="/">
                 <h1

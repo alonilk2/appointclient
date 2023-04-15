@@ -1,5 +1,13 @@
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Divider, Button, Avatar, styled } from "@mui/material";
+import {
+  Box,
+  Divider,
+  Button,
+  Avatar,
+  styled,
+  createTheme,
+  ThemeProvider,
+} from "@mui/material";
 import CardHeader from "@mui/material/CardHeader";
 import useServices from "../../../hooks/Dashboard/useServices";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -10,19 +18,19 @@ import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import ServicesDialog from "./ServicesDialog";
 import UserContext from "../UserContext";
-import { ColorModeContext } from ".."
+import { ColorModeContext } from "..";
 
 export default function ServicesManagement(props) {
   const [toggleDialog, setToggleDialog] = useState(false);
   const [serviceForEdit, setServiceForEdit] = useState();
-  const user = useContext(UserContext)
+  const user = useContext(UserContext);
   const services = useServices(user);
   const colorMode = useContext(ColorModeContext);
 
   const handleRemove = (params) => {
     return async () => {
       let response = await services?.remove(params?.value?.id);
-      if (response?.type.endsWith('fulfilled')) {
+      if (response?.type.endsWith("fulfilled")) {
         services.refresh();
       }
     };
@@ -59,7 +67,7 @@ export default function ServicesManagement(props) {
   const handleAddService = () => {
     setServiceForEdit(null);
     setToggleDialog(true);
-  };
+  }
 
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
@@ -101,9 +109,11 @@ export default function ServicesManagement(props) {
       />
       <CardHeader
         title="ניהול שירותים"
-        sx={colorMode.mode === "light"
-        ? {backgroundColor: 'white'}
-        : {backgroundColor: 'inherit'}}
+        sx={
+          colorMode.mode === "light"
+            ? { backgroundColor: "white" }
+            : { backgroundColor: "inherit" }
+        }
         action={
           <Button
             variant="contained"
@@ -117,15 +127,17 @@ export default function ServicesManagement(props) {
       />
       <Divider />
       {rows && (
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
-          sx={colorMode.mode === "light"
-          ? {backgroundColor: 'white'}
-          : {backgroundColor: 'inherit'}}
-        />
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            pageSize={5}
+            rowsPerPageOptions={[5]}
+            sx={
+              colorMode.mode === "light"
+                ? { backgroundColor: "white" }
+                : { backgroundColor: "inherit", border: 'none' }
+            }
+          />
       )}
     </Box>
   );
@@ -135,7 +147,12 @@ const styles = {
   AddButton: { direction: "ltr" },
   DeleteIcon: { marginLeft: "20%", color: "red" },
   EditIcon: { marginRight: "20%" },
-  Box: { height: "100%", width: "100%", marginLeft: "2%"},
+  Box: {
+    height: "100%",
+    width: "100%",
+    marginLeft: "2%",
+    backgroundColor: "rgb(27, 38, 53)",
+  },
   CardHeader: { textAlign: "right" },
   UserProfileCell: {
     display: "flex",
