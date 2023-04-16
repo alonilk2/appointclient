@@ -6,7 +6,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import UserContext from "../UserContext";
 import "./index.css";
 import Chip from "@mui/material/Chip";
@@ -20,11 +20,14 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-export default function UpcomingAppointmentsCard(props) {
+export default function UpcomingAppointmentsCard() {
+  const [open, setOpen] = useState(false);
   const user = useContext(UserContext);
   const dispatch = useDispatch();
-  let appointments = user?.user?.serviceProvider?.appointments;
-  const [open, setOpen] = useState(false);
+  let appointments = useMemo(
+    () => [...user?.user?.serviceProvider?.appointments],
+    [user]
+  );
 
   const handleConfirm = async () => {
     let response = await dispatch(_removeAppointment(open));
@@ -32,20 +35,33 @@ export default function UpcomingAppointmentsCard(props) {
     if (response?.type?.endsWith("fulfilled")) {
       user.refresh();
     }
-
   };
 
   const handleCancelAppointment = (appointment) => {
     setOpen(appointment);
   };
 
+  useEffect(() => {
+    const sortAppointmentsByDayAndStartTime = () => {
+      appointments.sort((a, b) => {
+        return (
+          a.day.localeCompare(b.day) && a.start_hour.localeCompare(b.start_hour)
+        );
+      });
+    };
+
+    if (appointments?.length > 0) {
+      sortAppointmentsByDayAndStartTime();
+    }
+  }, [appointments]);
+
   const ConfirmationDialog = (
     <Dialog
       open={open}
-      onClose={()=>setOpen(false)}
+      onClose={() => setOpen(false)}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
-      sx={{direction: 'ltr'}}
+      sx={{ direction: "ltr" }}
     >
       <DialogTitle id="alert-dialog-title">האם לבטל את התור ?</DialogTitle>
       <DialogContent>
@@ -54,7 +70,7 @@ export default function UpcomingAppointmentsCard(props) {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={()=>setOpen(false)} autoFocus>
+        <Button onClick={() => setOpen(false)} autoFocus>
           חזרה
         </Button>
         <Button onClick={handleConfirm}>ביטול התור</Button>
@@ -149,6 +165,6 @@ const styles = {
     color: "rgba(0, 0, 0, 0.6)",
   },
   cardContent: {
-    padding: '0'
-  }
+    padding: "0",
+  },
 };

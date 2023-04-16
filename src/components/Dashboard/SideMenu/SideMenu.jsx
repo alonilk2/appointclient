@@ -14,18 +14,44 @@ import { FRONT_BASE_URL } from "../../../constants";
 import { selectTab } from "../../../features/dashboardSlice";
 import NoImage from "../../../images/noimage.png";
 import UserContext from "../UserContext";
-import BarChartIcon from '@mui/icons-material/BarChart';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import BarChartIcon from "@mui/icons-material/BarChart";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import MoreTimeIcon from '@mui/icons-material/MoreTime';
+import {
+  BUSINESS_PROFILE_TAB,
+  LANDING_PAGE_TAB,
+  APPOINTMENTS_TAB,
+  SERVICES_TAB,
+  SERVICE_PROVIDERS_TAB,
+  STATISTICS_TAB,
+  ADD_APPOINTMENT_TAB
+} from "../../../constants";
+
 export default function SideMenu() {
   const dispatch = useDispatch();
   const selectedTab = useSelector((state) => state.dashboard.selectedTabIndex);
   const user = useContext(UserContext);
 
-  const handleListItemClick = (event, index) => {
+  const handleListItemClick = (_event, index) => {
     dispatch(selectTab(index));
   };
 
-  const serviceProviderMenu = <></>;
+  const serviceProviderMenu = (
+    <>
+      <ListSubheader component="div" id="nested-list-subheader">
+        הוספת אירוע
+      </ListSubheader>
+      <ListItemButton
+        selected={selectedTab === ADD_APPOINTMENT_TAB}
+        onClick={(event) => handleListItemClick(event, ADD_APPOINTMENT_TAB)}
+      >
+        <ListItemIcon>
+          <MoreTimeIcon />
+        </ListItemIcon>
+        <ListItemText primary="הוספת אירוע" />
+      </ListItemButton>
+    </>
+  );
 
   const adminMenu = (
     <>
@@ -33,8 +59,8 @@ export default function SideMenu() {
         פרופיל העסק
       </ListSubheader>
       <ListItemButton
-        selected={selectedTab === 2}
-        onClick={(event) => handleListItemClick(event, 2)}
+        selected={selectedTab === BUSINESS_PROFILE_TAB}
+        onClick={(event) => handleListItemClick(event, BUSINESS_PROFILE_TAB)}
       >
         <ListItemIcon>
           <SettingsIcon />
@@ -42,34 +68,34 @@ export default function SideMenu() {
         <ListItemText primary="ניהול העסק" />
       </ListItemButton>
       <ListItemButton
-        selected={selectedTab === 3}
-        onClick={(event) => handleListItemClick(event, 3)}
+        selected={selectedTab === LANDING_PAGE_TAB}
+        onClick={(event) => handleListItemClick(event, LANDING_PAGE_TAB)}
       >
         <ListItemIcon>
           <HomeIcon />
         </ListItemIcon>
         <ListItemText primary="ניהול דף נחיתה" />
       </ListItemButton>
-
+    
       <ListSubheader component="div" id="nested-list-subheader">
         תורים
       </ListSubheader>
       <ListItemButton
-        selected={selectedTab === 5}
-        onClick={(event) => handleListItemClick(event, 5)}
+        selected={selectedTab === APPOINTMENTS_TAB}
+        onClick={(event) => handleListItemClick(event, APPOINTMENTS_TAB)}
       >
         <ListItemIcon>
           <CalendarMonthIcon />
         </ListItemIcon>
         <ListItemText primary="ניהול תורים" />
       </ListItemButton>
-      
+    
       <ListSubheader component="div" id="nested-list-subheader">
         שירותים ומוצרים
       </ListSubheader>
       <ListItemButton
-        selected={selectedTab === 1}
-        onClick={(event) => handleListItemClick(event, 1)}
+        selected={selectedTab === SERVICES_TAB}
+        onClick={(event) => handleListItemClick(event, SERVICES_TAB)}
       >
         <ListItemIcon>
           <ListIcon />
@@ -77,21 +103,21 @@ export default function SideMenu() {
         <ListItemText primary="ניהול שירותים" />
       </ListItemButton>
       <ListItemButton
-        selected={selectedTab === 0}
-        onClick={(event) => handleListItemClick(event, 0)}
+        selected={selectedTab === SERVICE_PROVIDERS_TAB}
+        onClick={(event) => handleListItemClick(event, SERVICE_PROVIDERS_TAB)}
       >
         <ListItemIcon>
           <PeopleIcon />
         </ListItemIcon>
         <ListItemText primary="ניהול נותני שירות" />
       </ListItemButton>
-
+    
       <ListSubheader component="div" id="nested-list-subheader">
         מידע
       </ListSubheader>
       <ListItemButton
-        selected={selectedTab === 4}
-        onClick={(event) => handleListItemClick(event, 4)}
+        selected={selectedTab === STATISTICS_TAB}
+        onClick={(event) => handleListItemClick(event, STATISTICS_TAB)}
       >
         <ListItemIcon>
           <BarChartIcon />

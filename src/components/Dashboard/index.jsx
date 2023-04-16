@@ -1,12 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { createContext, useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN } from "../../constants";
 import useUser from "../../hooks/Dashboard/useUser";
 import AppointmentsManagement from "./Appointments";
 import BusinessDetailsManagement from "./BusinessProfile";
+import "./index.css";
 import LandingPageManagement from "./LandingPage";
 import ProfileChip from "./ProfileChip";
 import ServiceProvidersManagement from "./ServiceProviders";
@@ -15,7 +17,8 @@ import ServicesManagement from "./Services";
 import SideMenu from "./Sidemenu/SideMenu";
 import Statistics from "./Statistics";
 import UserContext from "./UserContext";
-import "./index.css";
+import { selectTab } from "../../features/dashboardSlice";
+import AddAppointmentDialog from "./AddAppointmentDialog";
 
 export const ColorModeContext = createContext({
   toggleColorMode: () => {},
@@ -25,8 +28,16 @@ export const ColorModeContext = createContext({
 export default function Dashboard() {
   const selectedTab = useSelector((state) => state.dashboard.selectedTabIndex);
   const [mode, setMode] = useState("light");
+  const [open, setOpen] = useState(false);
   const user = useUser();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleClose = () => {
+    setOpen(false);
+    dispatch(selectTab(2));
+  };
+
   const colorMode = useMemo(
     () => ({
       toggleColorMode: () => {
@@ -60,6 +71,12 @@ export default function Dashboard() {
     }
   }, [user.user]);
 
+  useEffect(() => {
+    if (selectedTab === 6) {
+      setOpen(true);
+    }
+  }, [selectedTab]);
+
   return (
     <UserContext.Provider value={user}>
       <ColorModeContext.Provider value={colorMode}>
@@ -68,7 +85,9 @@ export default function Dashboard() {
           <div className="dashboard-container">
             <header
               className="dashboard-header"
-              style={mode === "dark" ? { backgroundColor: "rgb(27, 38, 53)" } : null}
+              style={
+                mode === "dark" ? { backgroundColor: "rgb(27, 38, 53)" } : null
+              }
             >
               <a href="/">
                 <h1
@@ -102,6 +121,9 @@ export default function Dashboard() {
                     {selectedTab === 3 && <LandingPageManagement />}
                     {selectedTab === 4 && <Statistics />}
                     {selectedTab === 5 && <AppointmentsManagement />}
+                    {selectedTab === 6 && (
+                      <AddAppointmentDialog open={open} onClose={handleClose} />
+                    )}
                   </div>
                 </main>
                 <SideMenu />

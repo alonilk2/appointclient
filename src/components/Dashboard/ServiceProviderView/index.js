@@ -2,21 +2,11 @@ import { Typography } from "@mui/material";
 import { useContext, useState } from "react";
 import UserContext from "../UserContext";
 import UpcomingAppointmentsCard from "./UpcomingAppointmentsCard";
-import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
-import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
-import ShowChartIcon from '@mui/icons-material/ShowChart';
+
 
 export default function ServiceProviderView() {
   const user = useContext(UserContext);
-  // const todaysAppointments = useSelector(state => state.appoint?.appoint)
-  // const totalMonthlyIncome = useSelector(state => state.business.totalMonthlyIncome)
-  // // let appointmentsToday = user?.business?.serviceProviders?.
-  // useEffect(() => {
-  //   if(user){
-  //     dispatch(_fetchAppointmentsByDay(user?.user?.id))
-  //     dispatch(_fetchTotalMonthlyIncome(user?.user?.id))
-  //   }
-  // }, [user])
+
   return (
     <div className="business-details-container">
       <div className="header-bar">
@@ -36,7 +26,7 @@ const styles = {
   formcontainer: {
     width: "98%",
     padding: 0,
-    height: "80%"
+    height: "96%"
   },
   widgetNumber: {
     fontWeight: "500",
