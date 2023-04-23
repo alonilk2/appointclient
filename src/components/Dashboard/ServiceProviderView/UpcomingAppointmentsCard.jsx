@@ -112,7 +112,7 @@ export default function UpcomingAppointmentsCard() {
                   </TableCell>
                   <TableCell>{row.start_hour.split(" ")[0]}</TableCell>
                   <TableCell>{row.end_hour.split(" ")[0]}</TableCell>
-                  <TableCell>{row.service.name}</TableCell>
+                  <TableCell>{row?.service?.name}</TableCell>
                   <TableCell>
                     <Chip
                       label="ביטול פגישה"
