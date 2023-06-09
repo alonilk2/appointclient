@@ -9,6 +9,8 @@ import NoImage from "../../images/noimage.png";
 import { OpeningHours } from "../OpeningHours";
 import "./index.css";
 import { APPOINT_TEXT } from "../../constants/LandingPageConstants";
+import { useMemo } from "react";
+import { ThemeProvider, createTheme } from "@mui/material";
 
 export default function Appointment() {
   const { businessId } = useParams();
