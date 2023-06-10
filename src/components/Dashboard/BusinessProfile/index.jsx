@@ -14,7 +14,6 @@ import "./index.css";
 import ProfileImageCard from "./ProfileImage/ProfileImageCard";
 import ProfileImageUploadDialog from "./ProfileImage/ProfileImageUploadDialog";
 import WorkdaysCard from "./Workdays/WorkdaysCard";
-import Settings from "./Settings";
 import SettingsCard from "./Settings";
 
 export default function BusinessProfileManagement() {
@@ -73,13 +72,13 @@ export default function BusinessProfileManagement() {
         <div className="formcontainer settings-widget" style={colorMode.mode === "dark" ? darkModeBox : null}>
           <SettingsCard />
         </div>
-        <div className="formcontainer" style={colorMode.mode === "dark" ? darkModeBox : null}>
+        <div className="formcontainer-3" style={colorMode.mode === "dark" ? darkModeBox : null}>
           <BusinessDetailsCard />
         </div>
-        <div className="formcontainer" style={colorMode.mode === "dark" ? darkModeBox : null}>
+        <div className="formcontainer-3" style={colorMode.mode === "dark" ? darkModeBox : null}>
           <ProfileImageCard openDialog={open} setOpenDialog={setOpen} />
         </div>
-        <div className="formcontainer" style={colorMode.mode === "dark" ? darkModeBox : null}>
+        <div className="formcontainer-3" style={colorMode.mode === "dark" ? darkModeBox : null}>
           <WorkdaysCard business={user?.business} />
         </div>
       </div>

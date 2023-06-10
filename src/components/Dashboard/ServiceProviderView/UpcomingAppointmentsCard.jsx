@@ -78,6 +78,51 @@ export default function UpcomingAppointmentsCard() {
     </Dialog>
   );
 
+  const appointmentsList = (
+    <TableBody>
+      {appointments
+        .sort((a, b) => {
+          return a.day === b.day
+            ? a.start_hour.localeCompare(b.start_hour)
+            : new Date(a.day) - new Date(b.day);
+        })
+        .map((row) => (
+          <TableRow
+            key={row.name}
+            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+          >
+            <TableCell component="th" scope="row">
+              {row?.customer
+                ? row?.customer?.firstname + " " + row?.customer?.lastname
+                : row?.title}
+            </TableCell>
+            <TableCell>
+              {!row?.customer
+                ? row?.details
+                : [
+                    `דוא"ל: ` + row?.customer?.email,
+                    <br />,
+                    `טלפון: ` + row?.customer?.phone.replace("+972", "0"),
+                  ]}
+            </TableCell>
+            <TableCell>{row.day}</TableCell>
+            <TableCell>{row.start_hour.split(" ")[0]}</TableCell>
+            <TableCell>{row.end_hour.split(" ")[0]}</TableCell>
+            <TableCell>{row?.service?.name}</TableCell>
+            <TableCell>
+              <Chip
+                label="ביטול פגישה"
+                onDelete={() => handleCancelAppointment(row.id)}
+                onClick={() => handleCancelAppointment(row.id)}
+                color="error"
+                deleteIcon={<DeleteIcon />}
+                variant="outlined"
+              />
+            </TableCell>
+          </TableRow>
+        ))}
+    </TableBody>
+  );
   return (
     <Card elevation={0} sx={styles.cardContainer}>
       {ConfirmationDialog}
@@ -88,44 +133,16 @@ export default function UpcomingAppointmentsCard() {
           <Table sx={{ minWidth: 650 }} aria-label="simple table" size="small">
             <TableHead>
               <TableRow>
-                <TableCell>שם האורח</TableCell>
-                <TableCell>פרטי התקשרות</TableCell>
+                <TableCell>שם האורח\אירוע</TableCell>
+                <TableCell>פרטי התקשרות\תיאור אירוע</TableCell>
+                <TableCell>תאריך</TableCell>
                 <TableCell>שעת התחלה</TableCell>
                 <TableCell>שעת סיום</TableCell>
                 <TableCell>שירות</TableCell>
                 <TableCell>ביטול</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {appointments.map((row) => (
-                <TableRow
-                  key={row.name}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {row?.customer?.firstname + " " + row?.customer?.lastname}
-                  </TableCell>
-                  <TableCell>
-                    {`דוא"ל: ` + row?.customer?.email}
-                    <br />
-                    {`טלפון: ` + row?.customer?.phone.replace("+972", "0")}
-                  </TableCell>
-                  <TableCell>{row.start_hour.split(" ")[0]}</TableCell>
-                  <TableCell>{row.end_hour.split(" ")[0]}</TableCell>
-                  <TableCell>{row?.service?.name}</TableCell>
-                  <TableCell>
-                    <Chip
-                      label="ביטול פגישה"
-                      onDelete={() => handleCancelAppointment(row.id)}
-                      onClick={() => handleCancelAppointment(row.id)}
-                      color="error"
-                      deleteIcon={<DeleteIcon />}
-                      variant="outlined"
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
+            {appointmentsList}
           </Table>
         </TableContainer>
       </CardContent>

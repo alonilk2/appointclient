@@ -65,30 +65,15 @@ export default function AppointDashboard() {
     () =>
       business?.services?.map((service, idx) => {
         return (
-          <Slide big left>
-            <div
-              className="service-col"
-              style={
-                idx !== business.services.length - 1
-                  ? {
-                      borderLeft: "3px solid white",
-                      backgroundColor: randomColor.getColor(),
-                    }
-                  : { backgroundColor: randomColor.getColor() }
-              }
-              onClick={() => handleClick(idx + 1)}
-            >
-              {service?.img && (
-                <img
-                  className="service-img"
-                  src={service?.img}
-                  alt="service"
-                ></img>
-              )}
-              <div className="darken"></div>
-              <p className="service-name">{service?.name}</p>
-            </div>
-          </Slide>
+          <Button
+            fullWidth
+            variant="outlined"
+            color="primary"
+            size="large"
+            onClick={() => handleClick(idx + 1)}
+          >
+            {service?.name}
+          </Button>
         );
       }),
     [business?.services]
@@ -107,25 +92,12 @@ export default function AppointDashboard() {
 
   const ServiceProviders = useCallback(() => {
     let filteredProviders = FilterProvidersByService();
-    let delay = 0;
     const providers = filteredProviders.map((provider) => {
-      delay += 200;
       return (
-        <Slide bottom big delay={delay} duration={600} when={showProviders}>
-          <div
-            className="provider-col"
-            onClick={() => handleProviderClick(provider)}
-          >
-            <Avatar
-              alt=""
-              sx={{ width: 80, height: 80 }}
-              src={provider?.filename}
-            ></Avatar>
-            <p className="provider-name">
-              {provider.firstname + " " + provider.lastname}
-            </p>
-          </div>
-        </Slide>
+        <Button fullWidth variant="outlined" onClick={() => handleProviderClick(provider)} sx={styles.buttons}>
+          <Avatar alt="" sx={styles.avatar} src={provider?.filename} />
+            {provider.firstname + " " + provider.lastname}
+        </Button>
       );
     });
     if (providers?.length > 0) return providers;
@@ -227,3 +199,8 @@ export default function AppointDashboard() {
     </div>
   );
 }
+
+const styles = {
+  avatar: { width: 40, height: 40 },
+  buttons: { gap: "0.5rem"}
+};

@@ -86,7 +86,9 @@
 .image-container > h3 {
   font-weight: 100;
 }
-
+.MuiButton-root {
+  border-radius: 50px !important;
+}
 .appoint-btn {
   width: 200px;
   border: 0px;

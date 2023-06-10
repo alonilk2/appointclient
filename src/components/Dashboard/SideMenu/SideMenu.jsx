@@ -16,7 +16,7 @@ import NoImage from "../../../images/noimage.png";
 import UserContext from "../UserContext";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import MoreTimeIcon from '@mui/icons-material/MoreTime';
+import MoreTimeIcon from "@mui/icons-material/MoreTime";
 import {
   BUSINESS_PROFILE_TAB,
   LANDING_PAGE_TAB,
@@ -24,10 +24,9 @@ import {
   SERVICES_TAB,
   SERVICE_PROVIDERS_TAB,
   STATISTICS_TAB,
-  ADD_APPOINTMENT_TAB
 } from "../../../constants";
 
-export default function SideMenu() {
+export default function SideMenu({ toggleAddEvent }) {
   const dispatch = useDispatch();
   const selectedTab = useSelector((state) => state.dashboard.selectedTabIndex);
   const user = useContext(UserContext);
@@ -42,10 +41,18 @@ export default function SideMenu() {
         הוספת אירוע
       </ListSubheader>
       <ListItemButton
-        selected={selectedTab === ADD_APPOINTMENT_TAB}
-        onClick={(event) => handleListItemClick(event, ADD_APPOINTMENT_TAB)}
+        sx={{
+          minHeight: 48,
+          px: 2.5,
+        }}
+        onClick={() => toggleAddEvent(true)}
       >
-        <ListItemIcon>
+        <ListItemIcon
+          sx={{
+            minWidth: 0,
+            justifyContent: "center",
+          }}
+        >
           <MoreTimeIcon />
         </ListItemIcon>
         <ListItemText primary="הוספת אירוע" />
@@ -59,67 +66,124 @@ export default function SideMenu() {
         פרופיל העסק
       </ListSubheader>
       <ListItemButton
+        sx={{
+          minHeight: 48,
+          px: 2.5,
+        }}
         selected={selectedTab === BUSINESS_PROFILE_TAB}
         onClick={(event) => handleListItemClick(event, BUSINESS_PROFILE_TAB)}
       >
-        <ListItemIcon>
+        <ListItemIcon
+          sx={{
+            minWidth: 0,
+            justifyContent: "center",
+          }}
+        >
           <SettingsIcon />
         </ListItemIcon>
         <ListItemText primary="ניהול העסק" />
       </ListItemButton>
       <ListItemButton
+        sx={{
+          minHeight: 48,
+          px: 2.5,
+        }}
         selected={selectedTab === LANDING_PAGE_TAB}
         onClick={(event) => handleListItemClick(event, LANDING_PAGE_TAB)}
       >
-        <ListItemIcon>
+        <ListItemIcon
+          sx={{
+            minWidth: 0,
+            justifyContent: "center",
+          }}
+        >
           <HomeIcon />
         </ListItemIcon>
         <ListItemText primary="ניהול דף נחיתה" />
       </ListItemButton>
-    
+
       <ListSubheader component="div" id="nested-list-subheader">
         תורים
       </ListSubheader>
       <ListItemButton
+        sx={{
+          minHeight: 48,
+          px: 2.5,
+        }}
         selected={selectedTab === APPOINTMENTS_TAB}
         onClick={(event) => handleListItemClick(event, APPOINTMENTS_TAB)}
       >
-        <ListItemIcon>
+        <ListItemIcon
+          sx={{
+            minWidth: 0,
+            justifyContent: "center",
+          }}
+        >
           <CalendarMonthIcon />
         </ListItemIcon>
         <ListItemText primary="ניהול תורים" />
       </ListItemButton>
-    
+
       <ListSubheader component="div" id="nested-list-subheader">
         שירותים ומוצרים
       </ListSubheader>
       <ListItemButton
+        sx={{
+          minHeight: 48,
+          px: 2.5,
+        }}
         selected={selectedTab === SERVICES_TAB}
         onClick={(event) => handleListItemClick(event, SERVICES_TAB)}
       >
-        <ListItemIcon>
+        <ListItemIcon
+          sx={{
+            minWidth: 0,
+            justifyContent: "center",
+          }}
+        >
           <ListIcon />
         </ListItemIcon>
         <ListItemText primary="ניהול שירותים" />
       </ListItemButton>
       <ListItemButton
+        sx={{
+          minHeight: 48,
+          px: 2.5,
+        }}
         selected={selectedTab === SERVICE_PROVIDERS_TAB}
         onClick={(event) => handleListItemClick(event, SERVICE_PROVIDERS_TAB)}
       >
-        <ListItemIcon>
+        <ListItemIcon
+          sx={{
+            minWidth: 0,
+            justifyContent: "center",
+          }}
+        >
           <PeopleIcon />
         </ListItemIcon>
-        <ListItemText primary="ניהול נותני שירות" />
+        <ListItemText
+        
+          primary="ניהול נותני שירות"
+        />
       </ListItemButton>
-    
+
       <ListSubheader component="div" id="nested-list-subheader">
         מידע
       </ListSubheader>
       <ListItemButton
+        sx={{
+          minHeight: 48,
+          px: 2.5,
+        }}
         selected={selectedTab === STATISTICS_TAB}
         onClick={(event) => handleListItemClick(event, STATISTICS_TAB)}
       >
-        <ListItemIcon>
+        <ListItemIcon
+          sx={{
+            minWidth: 0,
+            justifyContent: "center",
+          }}
+        >
           <BarChartIcon />
         </ListItemIcon>
         <ListItemText primary="סטטיסטיקות" />
@@ -128,9 +192,9 @@ export default function SideMenu() {
   );
 
   return (
-    <div className="col-2 sidemenu-container">
+    <>
       <List
-        sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+        sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper"}}
         component="nav"
         aria-labelledby="nested-list-subheader"
         subheader={<li />}
@@ -139,8 +203,14 @@ export default function SideMenu() {
           עמוד העסק
         </ListSubheader>
         <div className="business-link-row">
+        <img
+            src={user?.business?.img ? user?.business?.img : NoImage}
+            className="business-logo"
+            alt="business logo"
+          />
           <div className="links">
             <div className="row">{user?.business?.name}</div>
+            <div className="row role">חשבון מנהל</div>
             <div className="row">
               <a
                 href={FRONT_BASE_URL + "appoint/" + user?.business?.id}
@@ -154,15 +224,11 @@ export default function SideMenu() {
               </a>
             </div>
           </div>
-          <img
-            src={user?.business?.img ? user?.business?.img : NoImage}
-            className="business-logo"
-            alt="business logo"
-          />
         </div>
         <Divider />
-        {user.user?.serviceProvider ? serviceProviderMenu : adminMenu}
+      {user.user?.serviceProvider ? serviceProviderMenu : adminMenu}
       </List>
-    </div>
+
+    </>
   );
 }

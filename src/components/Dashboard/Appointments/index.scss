@@ -1,0 +1,38 @@
+.floatingDialog-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 22%;
+    height: 17%;
+    background-color: white;
+    box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+    border-radius: 25px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+
+.floatingDialog-container .actions-row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding: 5%;
+}
+
+.floatingDialog-container .action-icon {
+    font-size: 50px;
+}
+.dark {
+    background-color: rgb(27, 38, 53) !important;
+}
+.floatingDialog-container .action-button {
+    flex: 1;
+    background-color: white;
+    border: unset;
+}
+.floatingDialog-container .action-button p {
+    margin-bottom: 0;
+}

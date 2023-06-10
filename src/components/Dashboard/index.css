@@ -1,7 +1,6 @@
 .dashboard-container {
   display: flex;
   flex-direction: column;
-  max-height: 100vh;
   overflow-x: hidden;
 }
 .MuiBox-root {
@@ -42,16 +41,45 @@
 .dashboard-header {
   min-height: 100px;
   display: flex;
+  position: fixed;
+  top: 0;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
   padding: 0 2%;
   direction: rtl;
   width: 100%;
   background-color: white;
-  position: fixed;
-  top: 0;
   z-index: 2;
+}
+.links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.role {
+  color: rgb(72, 99, 99);
+  font-size: 11px;
+  font-weight: 300;
+  margin: auto;
+  border-top: 1px rgba(0, 0, 0, 0.6) solid;
+  border-bottom: 1px rgba(0, 0, 0, 0.6) solid;
+  display: flex;
+  justify-content: center;
+}
+
+.business-link-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1%;
+  margin-bottom: 2%;
+  direction: rtl;
+}
+.MuiDrawer-paper {
+  top: 100px !important;
+  width: 17% !important;
+  border-left: 0px !important;
 }
 .MuiDialog-paper {
   width: 600px;
@@ -110,9 +138,13 @@
 }
 .main {
   padding: 0% 1% 0% 2%;
+  width: 83%;
 }
 .tab-title {
   text-align: center;
+}
+.business-logo {
+  max-width: 50px;
 }
 .css-r11z79-MuiDataGrid-root {
   height: 90% !important;
@@ -125,16 +157,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 100px;
   padding-left: 2%;
   padding-bottom: 2%;
-  height: 90%;
   overflow-y: auto;
+  min-height: 88vh;
+  height: 100%;
 
 }
 .main-section {
-  min-height: 100vh;
   overflow: hidden;
+  margin-top: 100px;
 }
 
 .main-title {
@@ -184,7 +216,7 @@
 }
 
 .sidemenu-container .business-logo {
-  width: 60px;
+  width: 30px;
   margin: 2%;
 }
 
@@ -200,4 +232,22 @@
   width: 100%;
   justify-content: center;
   align-items: center;
+}
+
+
+/* On screens that are 992px or less, set the background color to blue */
+@media screen and (max-width: 992px) {
+  .MuiDrawer-paper {
+    max-width: 360px !important;
+    width: 50% !important;
+  }
+  .main {
+    padding: 0 4%;
+    width: 100%;
+  }
+}
+
+/* On screens that are 600px or less, set the background color to olive */
+@media screen and (max-width: 600px) {
+
 }

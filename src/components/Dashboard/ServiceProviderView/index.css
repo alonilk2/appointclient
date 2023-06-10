@@ -17,3 +17,14 @@
   padding: 3%;
   position: relative;
 }
+
+@media screen and (max-width: 992px) {
+  .data-widget {
+    width: 100%;
+  }
+}
+
+/* On screens that are 600px or less, set the background color to olive */
+@media screen and (max-width: 600px) {
+
+}

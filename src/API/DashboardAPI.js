@@ -11,6 +11,7 @@ export async function addServiceProvider(serviceProvider) {
 }
 
 export async function updateServiceProvider(serviceProvider) {
+  console.log(serviceProvider)
   let response = await api.put(
     "/serviceproviders/" + serviceProvider?.id,
     serviceProvider

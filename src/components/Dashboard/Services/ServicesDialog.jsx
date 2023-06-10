@@ -144,11 +144,11 @@ export default function ServicesDialog(props) {
           <ButtonGroup
             size="large"
             aria-label="large button group"
-            sx={{ direction: "ltr", margin: "2% 0", justifySelf: "center" }}
+            sx={{ direction: "ltr", gap: "0.5rem", justifySelf: "center", margin: "1rem" }}
           >
-            <Button onClick={handleAddDuration}>+</Button>
-            <Button>{duration}</Button>
-            <Button onClick={handleSubDuration}>-</Button>
+            <Button onClick={handleAddDuration} variant="contained">+</Button>
+            <Button variant="contained">{duration}</Button>
+            <Button onClick={handleSubDuration} variant="contained">-</Button>
           </ButtonGroup>
         </div>
         <Divider />

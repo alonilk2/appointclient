@@ -93,9 +93,9 @@ export const _addAppointment = createAsyncThunk(
 
 export const _removeAppointment = createAsyncThunk(
   "appoint/removeappointment",
-  async (appointment, thunkAPI) => {
+  async (appointmentId, thunkAPI) => {
     try {
-      const response = await removeAppointment(appointment);
+      const response = await removeAppointment(appointmentId);
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue();

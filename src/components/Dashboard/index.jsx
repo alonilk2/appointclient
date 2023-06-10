@@ -2,7 +2,7 @@
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { createContext, useEffect, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN } from "../../constants";
 import useUser from "../../hooks/Dashboard/useUser";
@@ -17,9 +17,10 @@ import ServicesManagement from "./Services";
 import SideMenu from "./Sidemenu/SideMenu";
 import Statistics from "./Statistics";
 import UserContext from "./UserContext";
-import { selectTab } from "../../features/dashboardSlice";
-import AddAppointmentDialog from "./AddAppointmentDialog";
-
+import { IconButton } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import MuiDrawer from "@mui/material/Drawer";
+import useWindowSize from "../../hooks/useWindowSize";
 export const ColorModeContext = createContext({
   toggleColorMode: () => {},
   mode: "",
@@ -28,15 +29,11 @@ export const ColorModeContext = createContext({
 export default function Dashboard() {
   const selectedTab = useSelector((state) => state.dashboard.selectedTabIndex);
   const [mode, setMode] = useState("light");
-  const [open, setOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
+  const [toggleAddEvent, setToggleAddEvent] = useState(false);
   const user = useUser();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const handleClose = () => {
-    setOpen(false);
-    dispatch(selectTab(2));
-  };
+  const windowSize = useWindowSize();
 
   const colorMode = useMemo(
     () => ({
@@ -53,6 +50,18 @@ export default function Dashboard() {
       createTheme({
         palette: {
           mode,
+          primary: {
+            light: '#757ce8',
+            main: mode === "dark" ? '#7e5dc0' : '#5e35b1',
+            dark: '#002884',
+            contrastText: '#fff',
+          },
+          secondary: {
+            light: '#ff7961',
+            main: '#f44336',
+            dark: '#ba000d',
+            contrastText: '#000',
+          },
           ...(mode === "dark" && {
             background: {
               default: "rgb(27, 38, 53)",
@@ -64,6 +73,10 @@ export default function Dashboard() {
     [mode]
   );
 
+  const handleOpenMenu = () => {
+    setOpenMenu(!openMenu);
+  };
+
   useEffect(() => {
     if (user.user === false) {
       localStorage.removeItem(ACCESS_TOKEN);
@@ -72,9 +85,7 @@ export default function Dashboard() {
   }, [user.user]);
 
   useEffect(() => {
-    if (selectedTab === 6) {
-      setOpen(true);
-    }
+    setOpenMenu(false);
   }, [selectedTab]);
 
   return (
@@ -85,25 +96,37 @@ export default function Dashboard() {
           <div className="dashboard-container">
             <header
               className="dashboard-header"
-              style={
-                mode === "dark" ? { backgroundColor: "rgb(27, 38, 53)" } : null
-              }
+              style={{
+                backgroundColor: mode === "dark" ? "rgb(27, 38, 53)" : null,
+                zIndex: 1201,
+              }}
             >
-              <a href="/">
-                <h1
-                  className="main-title"
-                  style={
-                    mode === "dark" ? { color: "white" } : { color: "black" }
-                  }
+              <h1
+                className="main-title"
+                style={
+                  mode === "dark" ? { color: "white" } : { color: "black" }
+                }
+              >
+                Torgate
+              </h1>
+              {windowSize.width <= 1000 && (
+                <IconButton
+                  size="large"
+                  edge="start"
+                  color="inherit"
+                  aria-label="menu"
+                  sx={{ mr: 2, zIndex: 4 }}
+                  onClick={handleOpenMenu}
                 >
-                  Torgate
-                </h1>
-              </a>
+                  <MenuIcon />
+                </IconButton>
+              )}
+
               {ProfileChip(user)}
             </header>
             {user.user && (
               <section className="row main-section">
-                <main className="col-10 main">
+                <main className="main">
                   <div
                     className="main-container"
                     style={
@@ -116,18 +139,26 @@ export default function Dashboard() {
                       (!user.user?.serviceProvider ? (
                         <BusinessDetailsManagement />
                       ) : (
-                        <ServiceProviderView />
+                        <ServiceProviderView
+                          setToggleAddEvent={setToggleAddEvent}
+                          toggleAddEvent={toggleAddEvent}
+                        />
                       ))}
                     {selectedTab === 3 && <LandingPageManagement />}
                     {selectedTab === 4 && <Statistics />}
                     {selectedTab === 5 && <AppointmentsManagement />}
-                    {selectedTab === 6 && (
-                      <AddAppointmentDialog open={open} onClose={handleClose} />
-                    )}
                   </div>
                 </main>
-                <SideMenu />
               </section>
+            )}
+            {windowSize.width > 1000 ? (
+              <MuiDrawer anchor={"left"} variant="persistent" open={true}>
+                <SideMenu open={openMenu} toggleAddEvent={setToggleAddEvent} />
+              </MuiDrawer>
+            ) : (
+              <MuiDrawer anchor={"left"} open={openMenu}>
+                <SideMenu open={openMenu} />
+              </MuiDrawer>
             )}
           </div>
         </ThemeProvider>

@@ -51,8 +51,8 @@ export default function SettingsCard() {
       <Divider />
       <CardContent>
         {error && <Alert severity="error">יש למלא את כל שדות החובה!</Alert>}
-        <FormControl sx={{width: '29%'}}>
-          <InputLabel id="demo-simple-select-label">טווח זמנים לקביעת תורים</InputLabel>
+        <FormControl >
+          <InputLabel id="demo-simple-select-label">לכמה שבועות לפתוח תורים החל מהיום?</InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"

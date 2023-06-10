@@ -5,14 +5,13 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  Divider
+  Divider,
 } from "@mui/material";
 import { useContext } from "react";
 import UserContext from "../../UserContext";
-import NoImage from '../../../../images/noimage.png'
-
+import CloudUploadTwoToneIcon from "@mui/icons-material/CloudUploadTwoTone";
 export default function ProfileImageCard(props) {
-  const user = useContext(UserContext)
+  const user = useContext(UserContext);
   let openDialog = props?.openDialog;
   let setOpenDialog = props?.setOpenDialog;
 
@@ -25,11 +24,15 @@ export default function ProfileImageCard(props) {
       <CardHeader title="תמונת פרופיל" />
       <Divider />
       <CardContent sx={styles.content}>
-        <img
-          src={user?.business?.img ? user?.business?.img : NoImage}
-          className="profile-logo"
-          alt="פרופיל עסק"
-        />
+        {!user?.business?.img ? (
+          <CloudUploadTwoToneIcon sx={{fontSize: "5rem"}}/>
+        ) : (
+          <img
+            src={user?.business?.img}
+            className="profile-logo"
+            alt="פרופיל עסק"
+          />
+        )}
       </CardContent>
       <CardActions>
         <Button
@@ -50,7 +53,9 @@ const styles = {
     borderRadius: "10px",
   },
   content: {
-    margin: '10% 0'
+    margin: "10% 0",
+    display: 'flex',
+    alignItems: 'center'
   },
   AddButton: {
     margin: "auto",

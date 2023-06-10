@@ -180,11 +180,12 @@ export const _getCurrentUser = createAsyncThunk(
   async (thunkAPI) => {
     try {
       let response = await getCurrentUser();
-      if (response?.data.business?.workdays) {
-        response.data.business.workdays = sortWorkdaysArray(response.data.business.workdays)
+      let data = response?.data;
+      if (data?.business?.workdays) {
+        data.business.workdays = sortWorkdaysArray(data.business.workdays)
       }
-      if (response?.data.business?.gallery) response.data.business.gallery = JSON.parse(response.data.business.gallery)
-      return response;
+      if (data?.business?.gallery) data.business.gallery = JSON.parse(data.business.gallery)
+      return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -211,7 +212,7 @@ export const userSlice = createSlice({
     },
     [_getCurrentUser.fulfilled]: (state, action) => {
       state.loggedIn = true;
-      state.user = action.payload.data;
+      state.user = action.payload;
     },
     [_getCurrentUser.rejected]: (state, action) => {
       state.user = false;

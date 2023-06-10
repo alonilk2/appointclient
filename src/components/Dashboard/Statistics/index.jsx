@@ -82,7 +82,7 @@ export default function Statistics() {
           <ShowChartIcon sx={styles.monthIcon} />
         </div>
 
-        <StatisticsCard title={`סה"כ מפגשים החודש לפי שירותים`} colorMode={colorMode}>
+        <StatisticsCard title={`סה"כ מפגשים החודש לפי שירותים`} colorMode={colorMode} fullWidth>
           {servicesCount ? (
             <Chart
               options={{ labels: Object.keys(servicesCount) }}
@@ -98,7 +98,7 @@ export default function Statistics() {
           )}
         </StatisticsCard>
 
-        <StatisticsCard title={`סה"כ מפגשים החודש לפי נותני שירות`} colorMode={colorMode}>
+        <StatisticsCard title={`סה"כ מפגשים החודש לפי נותני שירות`} colorMode={colorMode} fullWidth>
           {serviceProvidersCount ? (
             <Chart
               options={{ labels: Object.keys(serviceProvidersCount) }}

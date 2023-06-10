@@ -1,5 +1,4 @@
 import { Alert } from "@mui/material";
-import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -30,6 +29,7 @@ import { isFulfilled } from "../../../../common";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
+import Button from "@mui/material/Button";
 
 export default function TimeDialog(props) {
   const [error, setError] = useState();
@@ -45,13 +45,16 @@ export default function TimeDialog(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleChange = (event) => setChosenTime(event.target.value);
-
+  const handleChange = (value) => {
+    console.log("ABC")
+    setChosenTime(value);
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  }
   const handleClose = () => props?.setOpen(false);
 
   const handleNext = () => {
     if (chosenTime) {
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      
     }
   };
 
@@ -117,12 +120,12 @@ export default function TimeDialog(props) {
   };
 
   const CalculateMenuItems = () => {
-    const timesArray = [new Date(openingTime.current)];
+    const times = [new Date(openingTime.current)];
     let skipFlag = 0;
 
     // Loop through time slots until end time is reached
     while (true) {
-      const lastTime = new Date(timesArray[timesArray.length - 1]);
+      const lastTime = new Date(times[times.length - 1]);
 
       // Calculate time of next slot, taking into account skipped slots
       const slotDuration =
@@ -143,11 +146,11 @@ export default function TimeDialog(props) {
 
       // Add current slot to array of available times
       skipFlag = 0;
-      timesArray.push(new Date(lastTime));
+      times.push(new Date(lastTime));
     }
 
     // Render available times as menu items
-    const timesList = timesArray.map((time) => {
+    const timesList = times.map((time) => {
       const timeString = new Date(time).toTimeString();
       const timeDisplay = timeString.split(" ")[0].slice(0, 5);
 
@@ -207,19 +210,14 @@ export default function TimeDialog(props) {
               {SELECT_TIME_LABEL}
             </DialogContentText>
             {openingTime.current && (
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  {SELECT_TIME_INPUT_LABEL}
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={chosenTime}
-                  label={SELECT_TIME_INPUT_LABEL}
-                  onChange={handleChange}
-                >
-                  {timesArray}
-                </Select>
+              <FormControl fullWidth sx={styles.timesArray}>
+                {timesArray?.map((time) => {
+                  return (
+                    <Button key={time.key} color="primary" variant="contained" size={"small"} onClick={(time)=>handleChange(time)}>
+                      {time}
+                    </Button>
+                  );
+                })}
               </FormControl>
             )}
           </Fragment>
@@ -238,16 +236,20 @@ export default function TimeDialog(props) {
       <DialogActions>
         {activeStep === 0 ? (
           <>
-            <Button onClick={handleClose}>{CANCEL_BUTTON_LABEL}</Button>
-            <Button onClick={handleNext}>אישור פרטים</Button>
+            <Button onClick={()=>handleClose()}>{CANCEL_BUTTON_LABEL}</Button>
+            <Button onClick={()=>handleNext()}>אישור פרטים</Button>
           </>
         ) : (
           <>
-            <Button onClick={handleBack}>חזרה</Button>
-            <Button onClick={handleSubmit}>{CONFIRM_BUTTON_LABEL}</Button>
+            <Button onClick={()=>handleBack()}>חזרה</Button>
+            <Button onClick={()=>handleSubmit()}>{CONFIRM_BUTTON_LABEL}</Button>
           </>
         )}
       </DialogActions>
     </Dialog>
   );
+}
+
+const styles = {
+  timesArray: { flexDirection: "row", justifyContent: 'center', gap: '0.5em' }
 }

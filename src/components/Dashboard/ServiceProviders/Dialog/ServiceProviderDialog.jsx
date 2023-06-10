@@ -119,7 +119,8 @@ export default function AddServiceProviderDialog(props) {
     };
     setLoading(true);
 
-    let existingUser = await user.findUserByEmail(email);
+    let existingUserResponse = await user.findUserByEmail(email);
+    let existingUser = existingUserResponse?.data;
     let response;
 
     if (providerForEdit) {
@@ -157,7 +158,6 @@ export default function AddServiceProviderDialog(props) {
       else response = await props?.providers.add(newProvider);
       userResponse.serviceProvider = response.payload;
       userResponse = { ...userResponse, ...newUser, business: user?.business };
-      console.log(response);
       response = await dispatch(_updateUser(userResponse));
 
       if (response.type.endsWith("fulfilled")) {

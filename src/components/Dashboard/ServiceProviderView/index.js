@@ -2,10 +2,15 @@ import { Typography } from "@mui/material";
 import { useContext, useState } from "react";
 import UserContext from "../UserContext";
 import UpcomingAppointmentsCard from "./UpcomingAppointmentsCard";
+import AddAppointmentDialog from "../AddAppointmentDialog";
 
 
-export default function ServiceProviderView() {
+export default function ServiceProviderView({toggleAddEvent, setToggleAddEvent}) {
   const user = useContext(UserContext);
+
+  const handleClose = () => {
+    setToggleAddEvent(false);
+  };
 
   return (
     <div className="business-details-container">
@@ -18,6 +23,8 @@ export default function ServiceProviderView() {
         </div>
 
       </div>
+      <AddAppointmentDialog open={toggleAddEvent} onClose={handleClose} />
+
     </div>
   );
 }

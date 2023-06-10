@@ -13,6 +13,7 @@ import {
   APPOINT_TEXT,
   CHANGE_IMAGE_TEXT,
 } from "../../../constants/LandingPageConstants";
+import useWindowSize from "../../../hooks/useWindowSize";
 
 export default function LandingPageManagement() {
   const user = useContext(UserContext);
@@ -23,7 +24,8 @@ export default function LandingPageManagement() {
   );
   const [success, setSuccess] = useState(false);
   const [element, setElement] = useState();
-  
+  const windowSize = useWindowSize();
+
   const handleHeaderClick = () => {
     setElement(null);
     setOpen(!open);
@@ -64,82 +66,93 @@ export default function LandingPageManagement() {
       >
         <Typography variant="h5">עיצוב דף נחיתה</Typography>
       </div>
-      <div className="first-row">
-        <div
-          className="landing-page-main"
-          style={colorMode.mode === "dark" ? darkModeBox : null}
-        >
-          {LandingHuePicker(color, handleChangeColor, handleSubmit, success)}
-        </div>
-      </div>
-      <div className="landing-page-main">
-        <div
-          className="header-background"
-          onClick={handleHeaderClick}
-          style={{
-            backgroundImage: `url(${
-              user?.business?.headerImg ? user.business.headerImg : headerbg
-            })`,
-            backgroundSize: "cover",
-            width: "100%",
-            height: "60%",
-          }}
-        >
-          <h1>{user?.business?.name}</h1>
-          <h5>{user?.business?.subtitle}</h5>
-          <img
-            src={user?.business?.img ? user.business.img : NoImage}
-            alt="logo"
-            className="business-logo"
-          />
-          <button
-            className="appoint-btn-demo"
-            style={{ backgroundColor: color }}
-          >
-            {APPOINT_TEXT}
-          </button>
-          <div className="cover">
-            <lottie-player
-              src="https://assets7.lottiefiles.com/packages/lf20_asjtsvwm.json"
-              background="transparent"
-              speed="1"
-              style={{ width: "50%", height: "50%" }}
-              loop
-              autoplay
-            ></lottie-player>
-            <p>{CHANGE_IMAGE_TEXT}</p>
-          </div>
-          <div></div>
-        </div>
-        <div className="second-row">
-          <div className="form-container">
-            {OpeningHours(user?.business?.workdays, color)}
-            <div className="gallery">
-              {user?.business?.gallery?.map((image, idx) => (
-                <div
-                  style={{
-                    backgroundImage: `url(${image ? image : NoImage})`,
-                    ...styles.galleryImage,
-                  }}
-                  onClick={() => handleImageChange(idx)}
-                >
-                  <div className="cover">
-                    <lottie-player
-                      src="https://assets7.lottiefiles.com/packages/lf20_asjtsvwm.json"
-                      background="transparent"
-                      speed="1"
-                      style={{ width: "50%", height: "50%" }}
-                      loop
-                      autoplay
-                    ></lottie-player>
-                    <p>{CHANGE_IMAGE_TEXT}</p>
-                  </div>
-                </div>
-              ))}
+      {windowSize.width < 769 ? (
+        <p className="pc-only-text">דף זה זמין לצפייה במחשב בלבד</p>
+      ) : (
+        <>
+          <div className="first-row">
+            <div
+              className="landing-page-main"
+              style={colorMode.mode === "dark" ? darkModeBox : null}
+            >
+              {LandingHuePicker(
+                color,
+                handleChangeColor,
+                handleSubmit,
+                success
+              )}
             </div>
           </div>
-        </div>
-      </div>
+          <div className="landing-page-main">
+            <div
+              className="header-background"
+              onClick={handleHeaderClick}
+              style={{
+                backgroundImage: `url(${
+                  user?.business?.headerImg ? user.business.headerImg : headerbg
+                })`,
+                backgroundSize: "cover",
+                width: "100%",
+                height: "60%",
+              }}
+            >
+              <h1>{user?.business?.name}</h1>
+              <h5>{user?.business?.subtitle}</h5>
+              <img
+                src={user?.business?.img ? user.business.img : NoImage}
+                alt="logo"
+                className="business-logo"
+              />
+              <button
+                className="appoint-btn-demo"
+                style={{ backgroundColor: color }}
+              >
+                {APPOINT_TEXT}
+              </button>
+              <div className="cover">
+                <lottie-player
+                  src="https://assets7.lottiefiles.com/packages/lf20_asjtsvwm.json"
+                  background="transparent"
+                  speed="1"
+                  style={{ width: "50%", height: "50%" }}
+                  loop
+                  autoplay
+                ></lottie-player>
+                <p>{CHANGE_IMAGE_TEXT}</p>
+              </div>
+              <div></div>
+            </div>
+            <div className="second-row">
+              <div className="form-container">
+                {OpeningHours(user?.business?.workdays, color)}
+                <div className="gallery">
+                  {user?.business?.gallery?.map((image, idx) => (
+                    <div
+                      style={{
+                        backgroundImage: `url(${image ? image : NoImage})`,
+                        ...styles.galleryImage,
+                      }}
+                      onClick={() => handleImageChange(idx)}
+                    >
+                      <div className="cover">
+                        <lottie-player
+                          src="https://assets7.lottiefiles.com/packages/lf20_asjtsvwm.json"
+                          background="transparent"
+                          speed="1"
+                          style={{ width: "50%", height: "50%" }}
+                          loop
+                          autoplay
+                        ></lottie-player>
+                        <p>{CHANGE_IMAGE_TEXT}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

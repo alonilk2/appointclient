@@ -1,4 +1,5 @@
 import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import { Card, CardContent, Typography } from "@mui/material";
@@ -6,23 +7,23 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import { useEffect } from "react";
 import { useContext, useState } from "react";
 import { ColorModeContext } from "..";
 import UserContext from "../UserContext";
 import { darkModeBox, FindProviderWorkday } from "../Util";
+import './index.scss';
+import FloatingDialog from "./FloatingDialog";
 
-export default function AppointmentsManagement(props) {
+export default function AppointmentsManagement() {
   const user = useContext(UserContext);
   const colorMode = useContext(ColorModeContext);
-  let serviceProviders = user.user.business.serviceProviders;
-  const [provider, setProvider] = useState(
-    (serviceProviders) => serviceProviders?.length > 0 && serviceProviders[0]
-  );
+  const serviceProviders = user.user.business.serviceProviders;
+  const [provider, setProvider] = useState(serviceProviders[0]);
+  const [eventAppointment, setEventAppointment] = useState();
 
-  const handleDateClick = (arg) => {
-    if (provider?.workdays && !FindProviderWorkday(provider, arg.date.getDay()))
-      return false;
+  const handleEventClick = (arg) => {
+    setEventAppointment(arg.event._def.extendedProps.appointment)
+    arg.el.style.backgroundColor = 'red'
   };
 
   const handleChange = (provider) => {
@@ -31,6 +32,7 @@ export default function AppointmentsManagement(props) {
 
   return (
     <div className="landing-page-container">
+      {eventAppointment && <FloatingDialog appointment={eventAppointment} setEventAppointment={setEventAppointment} />}
       <div
         className="header-bar"
         style={
@@ -68,8 +70,8 @@ export default function AppointmentsManagement(props) {
                 >
                   {serviceProviders?.map((provider) => {
                     return (
-                      <MenuItem value={provider}>
-                        {provider.firstname + " " + provider.lastname}
+                      <MenuItem value={provider} key={provider?.lastname}>
+                        {provider?.firstname + " " + provider?.lastname}
                       </MenuItem>
                     );
                   })}
@@ -79,54 +81,50 @@ export default function AppointmentsManagement(props) {
           </Card>
         </div>
       </div>
-      <div className="first-row" style={{ height: "100%" }}>
-        <div
-          className="landing-page-main"
-          style={
-            colorMode.mode === "dark"
-              ? { ...darkModeBox, ...styles.main }
-              : styles.main
-          }
-        >
-          <Card elevation={0}>
-            <CardContent sx={{ height: "100%" }}>
-              {provider && (
-                <FullCalendar
-                  plugins={[dayGridPlugin, interactionPlugin]}
-                  height="100%"
-                  initialView="dayGridMonth"
-                  dateClick={handleDateClick}
-                  events={provider?.appointments?.map((app) => {
-                    let startHourArray = app.start_hour
-                      .split(" ")[0]
-                      .split(":");
-                    let endHourArray = app.end_hour.split(" ")[0].split(":");
-                    return {
-                      title:
-                        startHourArray[0] +
-                        ":" +
-                        startHourArray[1] +
-                        "-" +
-                        endHourArray[0] +
-                        ":" +
-                        endHourArray[1] +
-                        " " +
-                        app.customer.firstname +
-                        " " +
-                        app.customer.lastname +
-                        " ",
-                      date: app.day,
-                    };
-                  })}
-                  dayCellClassNames={(date) =>
-                    !FindProviderWorkday(provider, date.date.getDay()) &&
-                    "disabled-date"
-                  }
-                />
-              )}
-            </CardContent>
-          </Card>
-        </div>
+      <div
+        className="landing-page-main"
+        style={
+          colorMode.mode === "dark"
+            ? { ...darkModeBox, ...styles.main }
+            : styles.main
+        }
+      >
+        <Card elevation={0}>
+          <CardContent>
+            {provider && (
+              <FullCalendar
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                initialView="timeGridDay"
+                eventClick={handleEventClick}
+                events={provider?.appointments?.map((app) => {
+                  let startHourArray = app.start_hour.split(" ")[0].split(":");
+                  let endHourArray = app.end_hour.split(" ")[0].split(":");
+                  return {
+                    title:
+                      startHourArray[0] +
+                      ":" +
+                      startHourArray[1] +
+                      "-" +
+                      endHourArray[0] +
+                      ":" +
+                      endHourArray[1] +
+                      " " +
+                      app.customer?.firstname +
+                      " " +
+                      app.customer?.lastname +
+                      " ",
+                    date: app.day,
+                    appointment: app
+                  };
+                })}
+                dayCellClassNames={(date) =>
+                  !FindProviderWorkday(provider, date.date.getDay()) &&
+                  "disabled-date"
+                }
+              />
+            )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

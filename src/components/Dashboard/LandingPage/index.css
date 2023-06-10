@@ -9,7 +9,12 @@
   font-family: "Assistant", "Roboto", sans-serif;
   letter-spacing: 0.8px;
 }
-
+.pc-only-text {
+  margin: auto;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  font-size: 1.5rem;
+}
 .header-bar {
   flex: 1;
   padding: 1%;
@@ -20,6 +25,8 @@
   max-height: 65px;
   margin: 2% 2% 0 0;
   position: relative;
+  display: flex;
+  align-items: center;
 }
 .second-row {
   display: flex;
@@ -49,12 +56,12 @@
 .cover h5 {
   font-weight: 100;
 }
-.business-logo {
+/* .business-logo {
   max-width: 100px;
   object-fit: contain;
   height: unset !important;
   border: unset !important;
-}
+} */
 .first-row {
   display: flex;
   flex-direction: row;
@@ -203,7 +210,7 @@ lottie-player {
 }
 
 .profile-logo {
-  max-height: 250px;
+  max-height: 150px;
   object-fit: contain;
 }
 
@@ -214,4 +221,19 @@ lottie-player {
   height: 100%;
   gap: 10px;
   margin: 2%;
+}
+
+@media screen and (max-width: 992px) {
+  .formcontainer {
+    width: 100%;
+  }
+  .header-bar {
+    padding: 4%;
+
+  }
+}
+
+/* On screens that are 600px or less, set the background color to olive */
+@media screen and (max-width: 600px) {
+
 }

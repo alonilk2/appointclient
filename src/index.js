@@ -1,28 +1,29 @@
-import createCache from '@emotion/cache';
-import { CacheProvider } from '@emotion/react';
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { Provider } from 'react-redux';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { prefixer } from 'stylis';
-import rtlPlugin from 'stylis-plugin-rtl';
-import App from './App';
-import Appointment from './components/Appointment';
-import AppointDashboard from './components/Appointment/AppointDashboard/AppointDashboard';
-import Schedule from './components/Appointment/AppointDashboard/Schedule/Schedule';
-import CustomerRegistration from './components/Appointment/Authentication/CustomerRegistration';
-import PhoneRegistration from './components/Appointment/Authentication/PhoneRegistration';
-import Dashboard from './components/Dashboard';
-import Firebase, { FirebaseContext } from './components/Firebase';
-import OAuth2RedirectHandler from './components/Oauth2/OAuth2RedirectHandler';
-import './index.css';
-import reportWebVitals from './reportWebVitals';
-import { store } from './store';
-import Email from './views/EmailConfirm';
-import RecoveryView from './views/Recovery';
-import RecoveryTokenValidationView from './views/RecoveryTokenValidation';
-import Signin from './views/Signin';
-import Signup from './views/Signup';
+import createCache from "@emotion/cache";
+import { CacheProvider } from "@emotion/react";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { prefixer } from "stylis";
+import rtlPlugin from "stylis-plugin-rtl";
+import App from "./App";
+import Appointment from "./components/Appointment";
+import AppointDashboard from "./components/Appointment/AppointDashboard/AppointDashboard";
+import Schedule from "./components/Appointment/AppointDashboard/Schedule/Schedule";
+import CustomerRegistration from "./components/Appointment/Authentication/CustomerRegistration";
+import PhoneRegistration from "./components/Appointment/Authentication/PhoneRegistration";
+import Dashboard from "./components/Dashboard";
+import Firebase, { FirebaseContext } from "./components/Firebase";
+import OAuth2RedirectHandler from "./components/Oauth2/OAuth2RedirectHandler";
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
+import { store } from "./store";
+import Email from "./views/EmailConfirm";
+import RecoveryView from "./views/Recovery";
+import RecoveryTokenValidationView from "./views/RecoveryTokenValidation";
+import Signin from "./views/Signin";
+import Signup from "./views/Signup";
+import { ThemeProvider, createTheme } from "@mui/material";
 
 const cacheRtl = createCache({
   key: "muirtl",
@@ -33,7 +34,7 @@ function RTL(props) {
   return <CacheProvider value={cacheRtl}>{props.children}</CacheProvider>;
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const CustomRoutes = () => {
   return (
@@ -76,13 +77,32 @@ const CustomRoutes = () => {
     </BrowserRouter>
   );
 };
+const theme = createTheme({
+  palette: {
+    primary: {
+      light: "#757ce8",
+      main: "#5e35b1",
+      dark: "#002884",
+      contrastText: "#fff",
+    },
+    secondary: {
+      light: "#ff7961",
+      main: "#ec407a",
+      dark: "#ba000d",
+      contrastText: "#000",
+    },
+  },
+});
+
 root.render(
   <React.StrictMode>
     <Provider store={store}>
       <FirebaseContext.Provider value={new Firebase()}>
-        <RTL>
-          <CustomRoutes />
-        </RTL>
+        <ThemeProvider theme={theme}>
+          <RTL>
+            <CustomRoutes />
+          </RTL>
+        </ThemeProvider>
       </FirebaseContext.Provider>
     </Provider>
   </React.StrictMode>
