@@ -28,7 +28,8 @@ export const ColorModeContext = createContext({
 
 export default function Dashboard() {
   const selectedTab = useSelector((state) => state.dashboard.selectedTabIndex);
-  const [mode, setMode] = useState("light");
+  const cachedColorMode = localStorage.getItem("colorMode");
+  const [mode, setMode] = useState(cachedColorMode ? cachedColorMode : "dark");
   const [openMenu, setOpenMenu] = useState(false);
   const [toggleAddEvent, setToggleAddEvent] = useState(false);
   const user = useUser();
@@ -38,6 +39,7 @@ export default function Dashboard() {
   const colorMode = useMemo(
     () => ({
       toggleColorMode: () => {
+        localStorage.setItem("colorMode", mode === "light" ? "dark" : "light")
         setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
       },
       mode: mode,
@@ -64,8 +66,8 @@ export default function Dashboard() {
           },
           ...(mode === "dark" && {
             background: {
-              default: "rgb(27, 38, 53)",
-              paper: "rgb(27, 38, 53)",
+              default: "rgb(30 30 30)",
+              paper: "rgb(30 30 30)",
             },
           }),
         },
@@ -97,7 +99,7 @@ export default function Dashboard() {
             <header
               className="dashboard-header"
               style={{
-                backgroundColor: mode === "dark" ? "rgb(27, 38, 53)" : null,
+                backgroundColor: mode === "dark" ? "rgb(30 30 30)" : null,
                 zIndex: 1201,
               }}
             >

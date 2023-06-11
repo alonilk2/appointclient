@@ -8,8 +8,14 @@
 
 #root {
   height: 100%;
+  --fc-border-color: #a6adb4;
+  --fc-today-bg-color: #dbecff;
 }
 
 .MuiPaper-root {
   border-radius: 20px !important;
+}
+
+.fc .fc-scrollgrid {
+  border-collapse: collapse !important;
 }

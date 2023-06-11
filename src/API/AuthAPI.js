@@ -6,37 +6,41 @@ export function getCurrentUser() {
   if (!localStorage.getItem(ACCESS_TOKEN)) {
     return Promise.reject("No access token set.");
   }
-  return api.get("/users/me")
+  return api.get("/users/me");
 }
 
 export function login(loginRequest) {
-  let response = api.post("/auth/login", JSON.stringify(loginRequest))  
-  return response
+  let response = api.post("/auth/login", JSON.stringify(loginRequest));
+  return response;
 }
 
 export function recovery(recoveryRequest) {
-  return api.post("/auth/recovery/", JSON.stringify(recoveryRequest))
+  return api.post("/auth/recovery/", JSON.stringify(recoveryRequest));
+}
+
+export function block(phone) {
+  return api.post("/block/" + phone);
 }
 
 export function changePassword(recoveryRequest) {
-  return api.put("/auth/recovery/", JSON.stringify(recoveryRequest))
+  return api.put("/auth/recovery/", JSON.stringify(recoveryRequest));
 }
 
 export function signup(signupRequest) {
-  return api.post("/auth/signup", JSON.stringify(signupRequest))
+  return api.post("/auth/signup", JSON.stringify(signupRequest));
 }
 
 export function createProviderUser(signupRequest) {
-  return api.post("/auth/createProviderUser", JSON.stringify(signupRequest))
+  return api.post("/auth/createProviderUser", JSON.stringify(signupRequest));
 }
 
 export function confirmEmail(confirmRequest) {
-  return api.post("/auth/confirmemail", JSON.stringify(confirmRequest))
+  return api.post("/auth/confirmemail", JSON.stringify(confirmRequest));
 }
 
 export function updateUser(user) {
   try {
-    return api.put("/users/" + user.id, JSON.stringify(user))
+    return api.put("/users/" + user.id, JSON.stringify(user));
   } catch (err) {
     console.log(ErrorOutlined);
   }
@@ -44,9 +48,9 @@ export function updateUser(user) {
 
 export function removeUser(user) {
   try {
-    console.log(user)
+    console.log(user);
     let str = JSON.stringify(user.data);
-    return api.delete("/users/" + user.id, str)
+    return api.delete("/users/" + user.id, str);
   } catch (err) {
     console.log(ErrorOutlined);
   }
@@ -54,7 +58,7 @@ export function removeUser(user) {
 
 export function findUserByEmail(email) {
   try {
-    return api.get("/users/" +email)
+    return api.get("/users/" + email);
   } catch (err) {
     console.log(ErrorOutlined);
   }
@@ -63,7 +67,7 @@ export function findUserByEmail(email) {
 export function validatePassword(user) {
   try {
     let str = JSON.stringify(user);
-    return api.post("/users/validatepass", str)
+    return api.post("/users/validatepass", str);
   } catch (err) {
     console.log(ErrorOutlined);
   }
@@ -71,7 +75,7 @@ export function validatePassword(user) {
 
 export function findRecoveryToken(token) {
   try {
-    return api.get("/auth/recovery/" + token)
+    return api.get("/auth/recovery/" + token);
   } catch (err) {
     console.log(ErrorOutlined);
   }

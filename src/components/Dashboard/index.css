@@ -1,3 +1,7 @@
+a {
+  text-decoration: none !important;
+  color: unset !important;
+}
 .dashboard-container {
   display: flex;
   flex-direction: column;
@@ -12,13 +16,18 @@
   overflow: hidden;
 }
 .muirtl-1jilvlt {
-  background: rgb(27, 38, 53);
+  background: rgb(30 30 30);
   border:1px solid rgba(255,255,255,0.2) !important;
   overflow: hidden;
 }
-
+/* .MuiDialog-container {
+  direction: rtl !important;
+} */
+.MuiTableContainer-root {
+  box-shadow: unset !important;
+}
 .MuiToolbar-root {
-  direction: ltr;
+  direction: rtl;
 }
 .MuiListSubheader-root {
   position: inherit !important;

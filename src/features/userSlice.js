@@ -136,6 +136,18 @@ export const _removeUser = createAsyncThunk(
   }
 );
 
+export const _blockUser = createAsyncThunk(
+  "user/block",
+  async (phone, thunkAPI) => {
+    try {
+      const response = await _blockUser(phone);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 export const _findUserByEmail = createAsyncThunk(
   "user/findbymail",
   async (user, thunkAPI) => {

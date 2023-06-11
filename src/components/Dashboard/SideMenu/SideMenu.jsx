@@ -210,7 +210,7 @@ export default function SideMenu({ toggleAddEvent }) {
           />
           <div className="links">
             <div className="row">{user?.business?.name}</div>
-            <div className="row role">חשבון מנהל</div>
+            <div className="row role">{user?.user?.serviceProvider ? "חשבון נותן שירות" : "חשבון מנהל"}</div>
             <div className="row">
               <a
                 href={FRONT_BASE_URL + "appoint/" + user?.business?.id}

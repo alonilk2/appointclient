@@ -46,10 +46,11 @@ export default function TimeDialog(props) {
   const navigate = useNavigate();
 
   const handleChange = (value) => {
-    console.log("ABC")
-    setChosenTime(value);
+    console.log(value)
+    setChosenTime(value.key);
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   }
+
   const handleClose = () => props?.setOpen(false);
 
   const handleNext = () => {
@@ -213,7 +214,7 @@ export default function TimeDialog(props) {
               <FormControl fullWidth sx={styles.timesArray}>
                 {timesArray?.map((time) => {
                   return (
-                    <Button key={time.key} color="primary" variant="contained" size={"small"} onClick={(time)=>handleChange(time)}>
+                    <Button key={time.key} color="primary" variant="contained" size={"small"} onClick={()=>handleChange(time)}>
                       {time}
                     </Button>
                   );

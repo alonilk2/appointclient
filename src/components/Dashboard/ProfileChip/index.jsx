@@ -1,10 +1,9 @@
 import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
-import UserContext from "../UserContext";
 import { ProfileChipMenu } from "./ProfileChipMenu";
 
 export default function ProfileChip(user) {

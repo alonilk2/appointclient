@@ -5,8 +5,7 @@ import { Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { ColorModeContext } from "..";
-import { _fetchAppointmentsByDay, _fetchAppointmentsByMonth } from "../../../features/appointSlice";
-import { _fetchTotalMonthlyIncome } from "../../../features/businessSlice";
+import { _getAppsStatistics } from "../../../features/appointSlice";
 import UserContext from "../UserContext";
 import { darkModeBox } from "../Util";
 import BusinessDetailsCard from "./BusinessDetails/BusinessDetailsCard";
@@ -23,13 +22,11 @@ export default function BusinessProfileManagement() {
   const dispatch = useDispatch();
   const todaysAppointments = useSelector(state => state.appoint?.totalToday)
   const totalMonthlyAppointments = useSelector(state => state.appoint?.totalMonth)
-  const totalMonthlyIncome = useSelector(state => state.business.totalMonthlyIncome)
+  const totalMonthlyIncome = useSelector(state => state.appoint?.totalMonthlyIncome)
 
   useEffect(() => {
-    if(user.business){
-      dispatch(_fetchAppointmentsByDay(user?.business?.id))
-      dispatch(_fetchAppointmentsByMonth(user?.business?.id))
-      dispatch(_fetchTotalMonthlyIncome(user?.business?.id))
+    if(user.business && !todaysAppointments){
+      dispatch(_getAppsStatistics(user?.business?.id))
     }
   }, [user.business])
 

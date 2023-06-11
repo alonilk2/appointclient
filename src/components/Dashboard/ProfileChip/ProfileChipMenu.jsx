@@ -103,7 +103,7 @@ const styles = {
     maxWidth: 360,
     boxShadow: "0px 10px 41px 3px rgba(0,0,0,0.3)",
     zIndex: 3,
-    backgroundColor: "rgb(27, 38, 53)",
+    backgroundColor: "rgb(30 30 30)",
   },
   profileMenuBoxDark: {
     width: "100%",

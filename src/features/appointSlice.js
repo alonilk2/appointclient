@@ -2,10 +2,10 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   addAppointment,
   fetchAppointment,
-  fetchAppointmentsByDate,
   fetchAppointmentsByMonth,
   fetchAppointmentsByService,
   fetchAppointmentsByServiceProviders,
+  getAppsStatistics,
   removeAppointment
 } from "../API/AppointAPI";
 
@@ -27,12 +27,12 @@ export const _fetchAppointment = createAsyncThunk(
   }
 );
 
-export const _fetchAppointmentsByDay = createAsyncThunk(
-  "appoint/fetchDayAppointments",
+export const _getAppsStatistics = createAsyncThunk(
+  "appoint/getAppsStatistics",
   async (businessId, thunkAPI) => {
     try {
       let day = new Date().toISOString().slice(0, 10)
-      const response = await fetchAppointmentsByDate(day, businessId);
+      const response = await getAppsStatistics(day, businessId);
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue();
@@ -118,11 +118,19 @@ export const appointSlice = createSlice({
     [_fetchAppointment.rejected]: (state, action) => {
       state.appoint = null;
     },
-    [_fetchAppointmentsByDay.fulfilled]: (state, action) => {
-      state.totalToday = action.payload;
+    [_getAppsStatistics.fulfilled]: (state, action) => {
+      state.totalToday = action.payload['appsByDay'];
+      state.totalMonth = action.payload['appsByMonthAndYear'];
+      state.servicesCount = action.payload['appsByServicesAndMonth'];
+      state.serviceProvidersCounts = action.payload['appsByServiceProviders'];
+      state.totalMonthlyIncome = action.payload['appsTotalIncome'];
     },
-    [_fetchAppointmentsByDay.rejected]: (state, action) => {
+    [_getAppsStatistics.rejected]: (state, action) => {
       state.totalToday = null;
+      state.totalMonth = null
+      state.servicesCount = null
+      state.serviceProvidersCounts = null
+      state.totalMonthlyIncome = 0;
     },
     [_fetchAppointmentsByMonth.fulfilled]: (state, action) => {
       state.totalMonth = action.payload;

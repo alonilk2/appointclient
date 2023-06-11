@@ -5,8 +5,8 @@ export async function fetchAppointment(id) {
   return response?.data;
 }
 
-export async function fetchAppointmentsByDate(day, businessId) {
-  let response = await api.get("/appoint/day/" + day + "/" + businessId);
+export async function getAppsStatistics(day, businessId) {
+  let response = await api.get("/appoint/stats/" + day + "/" + businessId);
   return response?.data;
 }
 

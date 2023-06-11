@@ -6,13 +6,7 @@ import { useContext, useEffect } from "react";
 import Chart from "react-apexcharts";
 import { useDispatch, useSelector } from "react-redux";
 import { ColorModeContext } from "..";
-import {
-  _fetchAppointmentsByDay,
-  _fetchAppointmentsByMonth,
-  _fetchAppointmentsByServiceProviders,
-  _fetchAppointmentsByServices,
-} from "../../../features/appointSlice";
-import { _fetchTotalMonthlyIncome } from "../../../features/businessSlice";
+import { _getAppsStatistics } from "../../../features/appointSlice";
 import UserContext from "../UserContext";
 import StatisticsCard from "./Card";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
@@ -27,19 +21,16 @@ export default function Statistics() {
     (state) => state.appoint?.totalMonth
   );
   const totalMonthlyIncome = useSelector(
-    (state) => state.business.totalMonthlyIncome
+    (state) => state.appoint?.totalMonthlyIncome
   );
   const servicesCount = useSelector((state) => state.appoint?.servicesCount);
   const serviceProvidersCount = useSelector(
     (state) => state.appoint?.serviceProvidersCounts
   );
+
   useEffect(() => {
-    if (user?.business) {
-      dispatch(_fetchAppointmentsByDay(user?.business?.id));
-      dispatch(_fetchAppointmentsByMonth(user?.business?.id));
-      dispatch(_fetchTotalMonthlyIncome(user?.business?.id));
-      dispatch(_fetchAppointmentsByServices(user?.business?.id));
-      dispatch(_fetchAppointmentsByServiceProviders(user?.business?.id));
+    if (user?.business && !todaysAppointments) {
+      dispatch(_getAppsStatistics(user?.business?.id));
     }
   }, [user?.business]);
 
@@ -52,7 +43,12 @@ export default function Statistics() {
         <Typography variant="h5">סטטיסטיקות</Typography>
       </div>
       <div className="widget-container">
-      <div className="formcontainer data-widget" style={colorMode.mode === "dark" ? styles.bgBlueDark : styles.totalVisits}>
+        <div
+          className="formcontainer data-widget"
+          style={
+            colorMode.mode === "dark" ? styles.bgBlueDark : styles.totalVisits
+          }
+        >
           <Typography variant="body1" gutterBottom sx={styles.widgetNumber}>
             {todaysAppointments || 0}
           </Typography>
@@ -61,7 +57,12 @@ export default function Statistics() {
           </Typography>
           <SupervisedUserCircleIcon sx={styles.userIcon} />
         </div>
-        <div className="formcontainer data-widget" style={colorMode.mode === "dark" ? styles.bgGreenDark : styles.totalIncomes}>
+        <div
+          className="formcontainer data-widget"
+          style={
+            colorMode.mode === "dark" ? styles.bgGreenDark : styles.totalIncomes
+          }
+        >
           <Typography variant="body1" gutterBottom sx={styles.widgetNumber}>
             ₪{totalMonthlyIncome}
           </Typography>
@@ -72,7 +73,12 @@ export default function Statistics() {
         </div>
         <div
           className="formcontainer data-widget"
-          style={colorMode.mode === "dark" ? styles.bgVioletDark : styles.totalMonthVisits}>
+          style={
+            colorMode.mode === "dark"
+              ? styles.bgVioletDark
+              : styles.totalMonthVisits
+          }
+        >
           <Typography variant="body1" gutterBottom sx={styles.widgetNumber}>
             {totalMonthlyAppointments || 0}
           </Typography>
@@ -82,7 +88,10 @@ export default function Statistics() {
           <ShowChartIcon sx={styles.monthIcon} />
         </div>
 
-        <StatisticsCard title={`סה"כ מפגשים החודש לפי שירותים`} colorMode={colorMode} fullWidth>
+        <StatisticsCard
+          title={`מפגשים החודש לפי שירותים`}
+          colorMode={colorMode}
+        >
           {servicesCount ? (
             <Chart
               options={{ labels: Object.keys(servicesCount) }}
@@ -98,7 +107,10 @@ export default function Statistics() {
           )}
         </StatisticsCard>
 
-        <StatisticsCard title={`סה"כ מפגשים החודש לפי נותני שירות`} colorMode={colorMode} fullWidth>
+        <StatisticsCard
+          title={`מפגשים החודש לפי נותני שירות`}
+          colorMode={colorMode}
+        >
           {serviceProvidersCount ? (
             <Chart
               options={{ labels: Object.keys(serviceProvidersCount) }}
@@ -176,14 +188,14 @@ const styles = {
   },
   bgBlueDark: {
     backgroundColor: "#1655d9",
-    borderColor: "rgb(74, 74, 74)"
+    borderColor: "rgb(74, 74, 74)",
   },
   bgGreenDark: {
     backgroundColor: "#2e9b41e0",
-    borderColor: "rgb(74, 74, 74)"
+    borderColor: "rgb(74, 74, 74)",
   },
   bgVioletDark: {
     backgroundColor: "#7b359fcf",
-    borderColor: "rgb(74, 74, 74)"
+    borderColor: "rgb(74, 74, 74)",
   },
 };

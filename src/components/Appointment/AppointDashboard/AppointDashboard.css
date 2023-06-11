@@ -177,7 +177,7 @@ h4 {
 .fc-theme-standard td, .fc-theme-standard th {
 }
 .disabled-date {
-  background-color: rgb(197 197 197 / 65%);
+  background-color: rgba(224, 224, 224, 0.65);
 }
 
 .service-img {

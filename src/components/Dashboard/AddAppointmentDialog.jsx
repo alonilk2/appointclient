@@ -31,6 +31,7 @@ import { useDispatch } from "react-redux";
 import { _addAppointment } from "../../features/appointSlice";
 import { isFulfilled } from "@reduxjs/toolkit";
 import { Navigate } from "react-router-dom";
+
 export default function AddAppointmentDialog(props) {
     const { onClose, open } = props;
     const [startDate, setStartDate] = useState();
@@ -47,12 +48,11 @@ export default function AddAppointmentDialog(props) {
     };
 
     const handleChangeService = e => {
-      console.log(e)
       setService(e.target.value);
     };
 
     const handleSubmit = async () => {
-      if (!startDate || !endDate) {
+      if (!startDate || !endDate || error) {
         setError(NO_CHOSEN_TIME);
         return;
       }
@@ -75,6 +75,7 @@ export default function AddAppointmentDialog(props) {
 
       if (isFulfilled(response)) {
         handleClose();
+        await user.refresh();
         Navigate(-1, { replace: true });
       } else {
         setError(GENERIC_ERROR);
@@ -86,10 +87,10 @@ export default function AddAppointmentDialog(props) {
     }, [startDate]);
 
     return (
-      <Dialog onClose={handleClose} open={open}>
+      <Dialog onClose={handleClose} open={open} sx={{direction: "ltr"}}>
         <DialogTitle>הוספת אירוע</DialogTitle>
-        <DialogContent>
-          {error && <Alert variant="error">error</Alert>}
+        <DialogContent >
+          {error && <Alert variant="error">יש לוודא כי כל הפרטים הוזנו במלואם.</Alert>}
           <TextField
             id="outlined-basic"
             label="שם האורח\אירוע"
@@ -122,6 +123,7 @@ export default function AddAppointmentDialog(props) {
                 value={startDate}
                 onChange={(newValue) => setStartDate(newValue)}
                 minutesStep={5}
+                onError={(newError) => setError(newError)}
               />
               <DateTimePicker
                 label="שעת סיום"
@@ -132,6 +134,7 @@ export default function AddAppointmentDialog(props) {
                 value={endDate}
                 onChange={(newValue) => setEndDate(newValue)}
                 minutesStep={5}
+                onError={(newError) => setError(newError)}
               />
             </div>
           </LocalizationProvider>

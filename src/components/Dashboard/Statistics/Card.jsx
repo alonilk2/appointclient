@@ -9,7 +9,6 @@ export default function StatisticsCard(props) {
           ? styles.cardContainerDark
           : styles.cardContainer
       }
-      width={props?.fullWidth ? "33.33%" : "100%"}
     >
       <CardHeader title={props.title} />
       <CardContent sx={styles.content}>{props?.children}</CardContent>
@@ -22,10 +21,16 @@ const styles = {
     border: "1px solid #dae0e7",
     borderRadius: "10px",
     margin: "2% 0% 0% 2%",
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center'
   },
   cardContainerDark: {
     borderRadius: "10px",
     margin: "2% 0% 0% 2%",
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center'
   },
   content: {
     margin: "1% 0",

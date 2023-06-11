@@ -19,10 +19,13 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { ColorModeContext } from "..";
 
 export default function UpcomingAppointmentsCard() {
   const [open, setOpen] = useState(false);
   const user = useContext(UserContext);
+  const colorMode = useContext(ColorModeContext)
+
   const dispatch = useDispatch();
   let appointments = useMemo(
     () => [...user?.user?.serviceProvider?.appointments],
@@ -162,7 +165,6 @@ export default function UpcomingAppointmentsCard() {
 
 const styles = {
   cardContainer: {
-    border: "1px solid #dae0e7",
     borderRadius: "10px",
   },
   AddButton: {
